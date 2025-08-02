@@ -2556,7 +2556,7 @@
 			}
 		}
 	},
-	"youHaveWithdrawnTheInvitationFor": "Вы отозвали приглашение для {user}",
+	"youHaveWithdrawnTheInvitationFor": "Вы отозвали приглашение для {user}.",
 	"@youHaveWithdrawnTheInvitationFor": {
 		"placeholders": {
 			"user": {
@@ -2809,11 +2809,29 @@
 	"@roomUpgradeDescription": {},
 	"removeDevicesDescription": "Вы выйдете с этого устройства и больше не будете получать сообщения.",
 	"@removeDevicesDescription": {},
-	"banUserDescription": "Забаненные пользователи не смогут зайти в чат.",
+	"banUserDescription": "Вы уверены что хотите забанить этого пользователя? Они больше не смогут войти в этот чат. Вы также можете указать причину.",
 	"@banUserDescription": {},
 	"unbanUserDescription": "Пользователь сможет зайти в чат снова.",
 	"@unbanUserDescription": {},
-	"kickUserDescription": "Пользователь будет выгнан из чата, но не забанен. В общедоступных чатах пользователь может перезайти когда угодно.",
+    "doYouWantToKick": "Выгнать {user}",
+  "@doYouWantToKick": {
+    "type": "String",
+    "placeholders": {
+        "user": {
+            "type": "string"
+        }
+    }
+  },
+  "doYouWantToBan": "Забанить {user}",
+  "@doYouWantToBan": {
+    "type": "String",
+    "placeholders": {
+        "user": {
+            "type": "string"
+        }
+    }
+  },
+	"kickUserDescription": "Вы уверены что хотите выгнать этого пользователя? Если чат общедоступный, они смогут перезайти. Вы также можете указать причину.",
 	"@kickUserDescription": {},
 	"makeAdminDescription": "Как только вы назначите этого пользователя администратором, пути назад не будет, так как их права доступа и ваши будут одинаковы.",
 	"@makeAdminDescription": {},

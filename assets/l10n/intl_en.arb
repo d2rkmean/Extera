@@ -2816,11 +2816,29 @@
   "@roomUpgradeDescription": {},
   "removeDevicesDescription": "You will be logged out of this device and will no longer be able to receive messages.",
   "@removeDevicesDescription": {},
-  "banUserDescription": "The user will be banned from the chat and will not be able to enter the chat again until they are unbanned.",
+  "banUserDescription": "Do you want to ban this user? They won't be able to rejoin. You also can provide a reason.",
   "@banUserDescription": {},
   "unbanUserDescription": "The user will be able to enter the chat again if they try.",
   "@unbanUserDescription": {},
-  "kickUserDescription": "The user is kicked out of the chat but not banned. In public chats, the user can rejoin at any time.",
+  "doYouWantToKick": "Kick {user}",
+  "@doYouWantToKick": {
+    "type": "String",
+    "placeholders": {
+        "user": {
+            "type": "string"
+        }
+    }
+  },
+  "doYouWantToBan": "Ban {user}",
+  "@doYouWantToBan": {
+    "type": "String",
+    "placeholders": {
+        "user": {
+            "type": "string"
+        }
+    }
+  },
+  "kickUserDescription": "Do you want to kick this user? If the room is public, they can rejoin anytime. You also can provide a reason.",
   "@kickUserDescription": {},
   "makeAdminDescription": "Once you make this user admin, you may not be able to undo this as they will then have the same permissions as you.",
   "@makeAdminDescription": {},

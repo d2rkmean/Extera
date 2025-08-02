@@ -224,7 +224,7 @@ void showMemberActionsPopupMenu({
     case _MemberActions.kick:
       final reason = await showTextInputDialog(
             context: context,
-            title: L10n.of(context).areYouSure,
+            title: L10n.of(context).doYouWantToKick(user.displayName ?? user.id),
             okLabel: L10n.of(context).yes,
             cancelLabel: L10n.of(context).no,
             message: L10n.of(context).kickUserDescription,
@@ -241,7 +241,7 @@ void showMemberActionsPopupMenu({
     case _MemberActions.ban:
       final reason = await showTextInputDialog(
             context: context,
-            title: L10n.of(context).areYouSure,
+            title: L10n.of(context).doYouWantToBan(user.displayName ?? user.id),
             okLabel: L10n.of(context).yes,
             cancelLabel: L10n.of(context).no,
             message: L10n.of(context).banUserDescription,
