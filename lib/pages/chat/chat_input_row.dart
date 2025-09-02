@@ -40,18 +40,18 @@ class ChatInputRow extends StatelessWidget {
       );
     }
 
-    if (!controller.room.otherPartyCanReceiveMessages) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Text(
-            L10n.of(context).otherPartyNotLoggedIn,
-            style: theme.textTheme.bodySmall,
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
+    // if (!controller.room.otherPartyCanReceiveMessages) {
+    //   return Center(
+    //     child: Padding(
+    //       padding: const EdgeInsets.all(12.0),
+    //       child: Text(
+    //         L10n.of(context).otherPartyNotLoggedIn,
+    //         style: theme.textTheme.bodySmall,
+    //         textAlign: TextAlign.center,
+    //       ),
+    //     ),
+    //   );
+    // }
 
 	
 
