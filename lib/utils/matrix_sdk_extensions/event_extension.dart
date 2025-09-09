@@ -27,10 +27,12 @@ extension LocalizedBody on Event {
   }
 
   void downloadInBackground(BuildContext context) async {
-    if (this.hasAttachment && this.status.isSent && !room.encrypted) {
+    if (!canDownloadInBackground) {
       final dmc = Provider.of<DownloadManagerController>(context);
       final filename = content.tryGet<String>('filename') ?? body;
       dmc.download(context, "$filename.${roomId!.substring(0, 4)}.${eventId.substring(0, 4)}.${extensionFromMime(attachmentMimetype)}", attachmentMxcUrl.toString());
+    } else {
+        throw Exception("Cannot download in background");
     }
   }
 
@@ -40,6 +42,11 @@ extension LocalizedBody on Event {
 
     matrixFile.result?.share(context);
   }
+
+  bool get canDownloadInBackground =>
+      hasAttachment &&
+      status.isSent &&
+      !room.encrypted;
 
   bool get isAttachmentSmallEnough =>
       infoMap['size'] is int &&

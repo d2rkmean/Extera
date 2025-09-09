@@ -1,3 +1,4 @@
+import 'package:extera_next/pages/download_manager/download_manager_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:extera_next/generated/l10n/l10n.dart';
@@ -53,6 +54,16 @@ class ClientChooserButton extends StatelessWidget {
             Icon(Icons.adaptive.share_outlined),
             const SizedBox(width: 18),
             Text(L10n.of(context).inviteContact),
+          ],
+        ),
+      ),
+      PopupMenuItem(
+        value: SettingsAction.downloads,
+        child: Row(
+          children: [
+            Icon(Icons.download_outlined),
+            const SizedBox(width: 18),
+            Text("Downloads"),
           ],
         ),
       ),
@@ -220,6 +231,9 @@ class ClientChooserButton extends StatelessWidget {
         case SettingsAction.setStatus:
           controller.setStatus();
           break;
+        case SettingsAction.downloads:
+          DownloadManagerView.showDownloads(context);
+          break;
       }
     }
   }
@@ -229,6 +243,7 @@ enum SettingsAction {
   addAccount,
   newGroup,
   setStatus,
+  downloads,
   invite,
   settings,
   archive,
