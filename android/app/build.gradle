@@ -30,7 +30,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
     namespace = "xyz.extera.next"
 
     sourceSets {
@@ -43,7 +43,7 @@ android {
 
     defaultConfig {
         applicationId "xyz.extera.next"
-        minSdkVersion 21
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
