@@ -26,8 +26,8 @@ dependencies:
   emoji_picker_flutter: ^3.1.0
   emojis: ^0.9.9
   #fcm_shared_isolate: ^0.2.0
-  file_picker: ^10.2.1
-  file_selector: ^1.0.3
+  file_picker: ^10.3.3
+  file_selector: ^1.0.4
   flutter:
     sdk: flutter
   flutter_cache_manager: ^3.4.1
@@ -58,7 +58,7 @@ dependencies:
   html: ^0.15.4
   http: ^1.2.0
   image: ^4.1.7
-  image_picker: ^1.1.0
+  image_picker: ^1.2.0
   intl: ^0.20.2
   just_audio: ^0.9.39
   latlong2: ^0.9.1
@@ -104,7 +104,7 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: ^3.0.0
-  flutter_native_splash: ^2.0.3+1
+  flutter_native_splash: ^2.4.6
   flutter_test:
     sdk: flutter
   import_sorter: ^4.6.0
