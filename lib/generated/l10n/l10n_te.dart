@@ -15,6 +15,13 @@ class L10nTe extends L10n {
   String get alwaysUse24HourFormat => 'తప్పుడు';
 
   @override
+  String get cleanExif => 'Clean EXIF metadata';
+
+  @override
+  String get cleanExifDescription =>
+      'Remove EXIF metadata (camera model, geolocation, time) when sending a photo.';
+
+  @override
   String get repeatPassword => 'పాస్‌వర్డ్‌ను పునరావృతం చేయండి';
 
   @override

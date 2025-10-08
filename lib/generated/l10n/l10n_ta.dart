@@ -15,6 +15,13 @@ class L10nTa extends L10n {
   String get alwaysUse24HourFormat => 'தவறு';
 
   @override
+  String get cleanExif => 'Clean EXIF metadata';
+
+  @override
+  String get cleanExifDescription =>
+      'Remove EXIF metadata (camera model, geolocation, time) when sending a photo.';
+
+  @override
   String get repeatPassword => 'கடவுச்சொல்லை மீண்டும் செய்யவும்';
 
   @override

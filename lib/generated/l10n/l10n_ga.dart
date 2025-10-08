@@ -15,6 +15,13 @@ class L10nGa extends L10n {
   String get alwaysUse24HourFormat => 'bréagach';
 
   @override
+  String get cleanExif => 'Clean EXIF metadata';
+
+  @override
+  String get cleanExifDescription =>
+      'Remove EXIF metadata (camera model, geolocation, time) when sending a photo.';
+
+  @override
   String get repeatPassword => 'Scríobh an pasfhocal arís';
 
   @override

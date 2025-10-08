@@ -13,6 +13,7 @@ abstract class AppConfig {
 
   static bool displayNavigationRail = true;
   static bool enableGradient = true;
+  static bool cleanExif = true;
 
   static String get defaultHomeserver => _defaultHomeserver;
   static double fontSizeFactor = 1;

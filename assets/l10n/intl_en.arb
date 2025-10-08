@@ -7,6 +7,16 @@
   "@alwaysUse24HourFormat": {
     "description": "Set to true to always display time of day in 24 hour format."
   },
+  "cleanExif": "Clean EXIF metadata",
+  "@cleanExif": {
+    "type": "String",
+    "placeholders": {}
+  },
+  "cleanExifDescription": "Remove EXIF metadata (camera model, geolocation, time) when sending a photo.",
+  "@cleanExifDescription": {
+    "type": "String",
+    "placeholders": {}
+  },
   "repeatPassword": "Repeat password",
   "@repeatPassword": {},
   "notAnImage": "Not an image file.",

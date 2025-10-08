@@ -147,6 +147,9 @@ class MatrixLocals extends MatrixLocalizations {
   }
 
   @override
+  String get refreshingLastEvent => l10n.loadingPleaseWait;
+
+  @override
   String get guestsAreForbidden => l10n.guestsAreForbidden;
 
   @override

@@ -205,6 +205,18 @@ abstract class L10n {
   /// **'false'**
   String get alwaysUse24HourFormat;
 
+  /// No description provided for @cleanExif.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean EXIF metadata'**
+  String get cleanExif;
+
+  /// No description provided for @cleanExifDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove EXIF metadata (camera model, geolocation, time) when sending a photo.'**
+  String get cleanExifDescription;
+
   /// No description provided for @repeatPassword.
   ///
   /// In en, this message translates to:

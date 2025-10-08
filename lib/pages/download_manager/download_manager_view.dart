@@ -43,7 +43,7 @@ class DownloadManagerView extends StatelessWidget {
       ),
       title: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 256),
-        child: const Center(child: Text("Downloads", textAlign: TextAlign.center)),
+        child: Center(child: Text(L10n.of(context).downloads, textAlign: TextAlign.center)),
       ),
     );
   }

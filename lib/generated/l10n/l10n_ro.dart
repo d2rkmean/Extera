@@ -15,6 +15,13 @@ class L10nRo extends L10n {
   String get alwaysUse24HourFormat => 'false';
 
   @override
+  String get cleanExif => 'Clean EXIF metadata';
+
+  @override
+  String get cleanExifDescription =>
+      'Remove EXIF metadata (camera model, geolocation, time) when sending a photo.';
+
+  @override
   String get repeatPassword => 'Repetați parola';
 
   @override

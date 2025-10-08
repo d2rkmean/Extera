@@ -15,6 +15,13 @@ class L10nRu extends L10n {
   String get alwaysUse24HourFormat => 'нет';
 
   @override
+  String get cleanExif => 'Очищать EXIF';
+
+  @override
+  String get cleanExifDescription =>
+      'Удалять метаданные EXIF (модель камеры, геолокация, время) из изображений еред отправкой.';
+
+  @override
   String get repeatPassword => 'Повторите пароль';
 
   @override
@@ -2251,7 +2258,7 @@ class L10nRu extends L10n {
   }
 
   @override
-  String get sendReadReceipts => 'Отправка отчётов о прочтении';
+  String get sendReadReceipts => 'Отправлять отчёты о прочтении';
 
   @override
   String get sendTypingNotificationsDescription =>

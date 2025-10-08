@@ -7,6 +7,16 @@
 	"@alwaysUse24HourFormat": {
 		"description": "Set to true to always display time of day in 24 hour format."
 	},
+  "cleanExif": "Очищать EXIF",
+  "@cleanExif": {
+    "type": "String",
+    "placeholders": {}
+  },
+  "cleanExifDescription": "Удалять метаданные EXIF (модель камеры, геолокация, время) из изображений еред отправкой.",
+  "@cleanExifDescription": {
+    "type": "String",
+    "placeholders": {}
+  },
 	"repeatPassword": "Повторите пароль",
 	"@repeatPassword": {},
 	"notAnImage": "Это не картинка.",
@@ -2993,7 +3003,7 @@
 			}
 		}
 	},
-	"sendReadReceipts": "Отправка отчётов о прочтении",
+	"sendReadReceipts": "Отправлять отчёты о прочтении",
 	"@sendReadReceipts": {},
 	"sendTypingNotificationsDescription": "Другие участники чата будут видеть, когда Вы набираете новое сообщение.",
 	"@sendTypingNotificationsDescription": {},

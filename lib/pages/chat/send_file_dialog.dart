@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:extera_next/utils/clean_exif.dart';
 import 'package:extera_next/widgets/matrix.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,9 +53,6 @@ class SendFileDialogState extends State<SendFileDialog> {
     final l10n = L10n.of(context);
 
     try {
-      if (!widget.room.otherPartyCanReceiveMessages) {
-        throw OtherPartyCanNotReceiveMessages();
-      }
       scaffoldMessenger.showLoadingSnackBar(l10n.prepareSendingAttachment);
       Navigator.of(context, rootNavigator: false).pop();
       final clientConfig = await widget.room.client.getConfig();
@@ -74,10 +74,24 @@ class SendFileDialogState extends State<SendFileDialog> {
           file = await xfile.resizeVideo();
           scaffoldMessenger.showLoadingSnackBar(l10n.generatingVideoThumbnail);
           thumbnail = await xfile.getVideoThumbnail();
+        } else if (mimeType != null &&
+            mimeType.startsWith('image') &&
+            AppConfig.cleanExif) {
+          if (length > maxUploadSize) {
+            throw FileTooBigMatrixException(length, maxUploadSize);
+          }
+
+          // Else we just create a MatrixFile
+          file = MatrixFile(
+            bytes: Uint8List.fromList(ExifCleaner.removeExifData(await xfile.readAsBytes())),
+            name: xfile.name,
+            mimeType: mimeType,
+          ).detectFileType;
         } else {
           if (length > maxUploadSize) {
             throw FileTooBigMatrixException(length, maxUploadSize);
           }
+
           // Else we just create a MatrixFile
           file = MatrixFile(
             bytes: await xfile.readAsBytes(),
@@ -108,11 +122,13 @@ class SendFileDialogState extends State<SendFileDialog> {
           extraContent['body'] = label;
           final html = markdown(
             label,
-            getEmotePacks: () => widget.room.getImagePacksFlat(ImagePackUsage.emoticon),
+            getEmotePacks: () =>
+                widget.room.getImagePacksFlat(ImagePackUsage.emoticon),
             getMention: widget.room.getMention,
-            convertLinebreaks: Matrix.of(context).client.convertLinebreaksInFormatting,
+            convertLinebreaks:
+                Matrix.of(context).client.convertLinebreaksInFormatting,
           );
-          
+
           // if the decoded html is the same as the body, there is no need in sending a formatted message
           if (HtmlUnescape()
                   .convert(html.replaceAll(RegExp(r'<br />\n?'), '\n')) !=
@@ -319,43 +335,43 @@ class SendFileDialogState extends State<SendFileDialog> {
                   //     ),
                   //   ),
                   // if (uniqueFileType != 'image')
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            uniqueFileType == null
-                                ? Icons.description_outlined
-                                : uniqueFileType == 'video'
-                                    ? Icons.video_file_outlined
-                                    : uniqueFileType == 'audio'
-                                        ? Icons.audio_file_outlined
-                                        : Icons.description_outlined,
-                            size: 32,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          uniqueFileType == null
+                              ? Icons.description_outlined
+                              : uniqueFileType == 'video'
+                                  ? Icons.video_file_outlined
+                                  : uniqueFileType == 'audio'
+                                      ? Icons.audio_file_outlined
+                                      : Icons.description_outlined,
+                          size: 32,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                fileName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                '$sizeString - $fileTypes',
+                                style: theme.textTheme.labelSmall,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  fileName,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  '$sizeString - $fileTypes',
-                                  style: theme.textTheme.labelSmall,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+                  ),
                   if (widget.files.length == 1)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
