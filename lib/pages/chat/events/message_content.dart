@@ -110,7 +110,7 @@ class MessageContent extends StatelessWidget {
     switch (event.type) {
       case PollEvents.PollStart:
         Logs().v("Got poll event ${event.type}");
-        return PollWidget(event, color: textColor, linkColor: linkColor, fontSize: fontSize);
+        return PollWidget(event, color: textColor, linkColor: linkColor, fontSize: fontSize, timeline: timeline);
       case EventTypes.Message:
       case EventTypes.Encrypted:
       case EventTypes.Sticker:

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:extera_next/config/app_config.dart';
 import 'package:extera_next/utils/clean_exif.dart';
 import 'package:extera_next/widgets/matrix.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +13,6 @@ import 'package:mime/mime.dart';
 
 import 'package:extera_next/utils/localized_exception_extension.dart';
 import 'package:extera_next/utils/matrix_sdk_extensions/matrix_file_extension.dart';
-import 'package:extera_next/utils/other_party_can_receive.dart';
 import 'package:extera_next/utils/platform_infos.dart';
 import 'package:extera_next/utils/size_string.dart';
 import 'package:extera_next/widgets/adaptive_dialogs/adaptive_dialog_action.dart';
@@ -79,7 +79,7 @@ class SendFileDialogState extends State<SendFileDialog> {
           if (length > maxUploadSize) {
             throw FileTooBigMatrixException(length, maxUploadSize);
           }
-
+        
           // Else we just create a MatrixFile
           file = MatrixFile(
             bytes: Uint8List.fromList(ExifCleaner.removeExifData(await xfile.readAsBytes())),
