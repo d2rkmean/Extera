@@ -150,7 +150,7 @@ Future<void> notificationTap(
               'Selected notification with reply action but without input',
             );
           }
-          final eventId = await room.sendTextEvent(input);
+          final eventId = await room.sendTextEvent(input, parseCommands: false);
 
           if (PlatformInfos.isAndroid) {
             final ownProfile = await room.client.fetchOwnProfile();
