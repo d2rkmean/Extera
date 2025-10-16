@@ -363,49 +363,6 @@ class BackgroundPush {
     );
   }
 
-  Future<void> goToRoom(NotificationResponse? response) async {
-    try {
-      if (response?.payload == null) return;
-      final arr = response?.payload?.split(' ');
-      final roomId = arr?[0];
-      final eventId = arr?[1];
-      Logs().v('[Push] Attempting to go to room $roomId...');
-      if (roomId == null || eventId == null) {
-        return;
-      }
-      await client.roomsLoading;
-      await client.accountDataLoading;
-      if (client.getRoomById(roomId) == null) {
-        await client
-            .waitForRoomInSync(roomId)
-            .timeout(const Duration(seconds: 30));
-      }
-      if (response?.actionId == "read") {
-        if (AppConfig.sendPublicReadReceipts) {
-          await client.setReadMarker(roomId, mRead: eventId);
-        } else {
-          await client.setReadMarker(roomId, mReadPrivate: eventId);
-        }
-        return;
-      } else if (response?.actionId == "reply") {
-        final replyText = response?.input;
-        final room = client.getRoomById(roomId);
-        if (replyText != null && room != null) {
-          await room.sendTextEvent(replyText,
-              inReplyTo: await room.getEventById(eventId));
-        }
-        return;
-      }
-      FluffyChatApp.router.go(
-        client.getRoomById(roomId)?.membership == Membership.invite
-            ? '/rooms'
-            : '/rooms/$roomId',
-      );
-    } catch (e, s) {
-      Logs().e('[Push] Failed to open room', e, s);
-    }
-  }
-
   Future<void> setupUp() async {
     await UnifiedPushUi(matrix!.context, ["default"], UPFunctions())
         .registerAppWithDialog();
