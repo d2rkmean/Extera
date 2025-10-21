@@ -105,7 +105,7 @@ class ChatController extends State<ChatPageWithRoom>
 
   late Client sendingClient;
 
-  Timeline? timeline;
+  RoomTimeline? timeline;
 
   late final String readMarkerEventId;
 
