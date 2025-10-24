@@ -37,7 +37,7 @@ class ChatEventList extends StatelessWidget {
 
     final horizontalPadding = FluffyThemes.isColumnMode(context) ? 8.0 : 0.0;
 	
-    final events = timeline.events.filterByVisibleInGui();
+    final events = timeline.events.filterByVisibleInGui().filterByThreaded(false);
     final animateInEventIndex = controller.animateInEventIndex;
 
     // create a map of eventId --> index to greatly improve performance of
@@ -120,6 +120,10 @@ class ChatEventList extends StatelessWidget {
             final animateIn = animateInEventIndex != null &&
                 timeline.events.length > animateInEventIndex &&
                 event == timeline.events[animateInEventIndex];
+              
+            final thread = (controller.threads?.containsKey(event.eventId) ?? false)
+              ? controller.threads![event.eventId]
+              : null;
 
             return AutoScrollTag(
               key: ValueKey(event.eventId),
@@ -128,6 +132,7 @@ class ChatEventList extends StatelessWidget {
               child: Message(
                 event,
                 animateIn: animateIn,
+                thread: thread,
                 resetAnimateIn: () {
                   controller.animateInEventIndex = null;
                 },

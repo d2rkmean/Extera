@@ -45,6 +45,7 @@ class Message extends StatelessWidget {
   final List<Color> colors;
   final bool gradient;
   final bool singleSelected;
+  final Thread? thread;
 
   const Message(
     this.event, {
@@ -54,6 +55,7 @@ class Message extends StatelessWidget {
     this.longPressSelect = false,
     this.gradient = false,
     this.singleSelected = false,
+    this.thread,
     required this.onSelect,
     required this.onInfoTab,
     required this.scrollToEventId,
@@ -687,6 +689,11 @@ class Message extends StatelessWidget {
                                         )
                                       : const SizedBox.shrink(),
                                 ),
+                              ),
+                              Text(
+                                thread == null
+                                    ? 'No thread'
+                                    : 'Has thread, last event: ${thread!.lastEvent != null ? thread!.lastEvent!.eventId : 'None'}',
                               ),
                             ],
                           ),

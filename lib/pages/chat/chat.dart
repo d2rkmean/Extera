@@ -317,6 +317,8 @@ class ChatController extends State<ChatPageWithRoom>
     if (kIsWeb) {
       onFocusSub = html.window.onFocus.listen((_) => setReadMarker());
     }
+
+    _getThreads();
   }
 
   void _tryLoadTimeline() async {
@@ -376,6 +378,7 @@ class ChatController extends State<ChatPageWithRoom>
   }
 
   Future<void>? loadTimelineFuture;
+  Map<String, Thread>? threads;
 
   int? animateInEventIndex;
 
@@ -416,6 +419,15 @@ class ChatController extends State<ChatPageWithRoom>
     if (room.markedUnread) room.markUnread(false);
 
     return;
+  }
+
+  Future<void> _getThreads() async {
+    try {
+      threads = await room.getThreads();
+      Logs().w('Thread amount: ${threads?.length}');
+    } catch (e, s) {
+      Logs().w('Unable to load threads in $roomId', e, s);
+    }
   }
 
   String? scrollToEventIdMarker;
@@ -754,7 +766,7 @@ class ChatController extends State<ChatPageWithRoom>
       return;
     }
 
-    Navigator.of(context).push(new MaterialPageRoute(
+    Navigator.of(context).push(MaterialPageRoute(
       builder: (BuildContext ctx) {
         return RecoveredEventDialog(
           event: recoveredEvent,
@@ -774,7 +786,7 @@ class ChatController extends State<ChatPageWithRoom>
     }
     final event = selectedEvents.single;
     var text = event.isRichMessage ? event.formattedText : event.text;
-    var content = {...event.content};
+    final content = {...event.content};
     try {
       text = await Translator.translate(
           text, PlatformDispatcher.instance.locale.languageCode);
@@ -873,18 +885,23 @@ class ChatController extends State<ChatPageWithRoom>
 
   void endPollAction() async {
     final event = selectedEvents.first;
-    if (event == null) return;
     final client = currentRoomBundle.firstWhere(
       (cl) => selectedEvents.first.senderId == cl!.userID,
       orElse: () => null,
     );
     if (client == null) return;
-    if (event.senderId != client!.userID) return;
-    await room.sendEvent({
-      'org.matrix.msc1767.text': 'Ended poll',
-      'm.relates_to': {'rel_type': 'm.reference', 'event_id': event.eventId},
-      'body': 'Ended poll'
-    }, type: 'org.matrix.msc3381.poll.end');
+    if (event.senderId != client.userID) return;
+    await room.sendEvent(
+      {
+        'org.matrix.msc1767.text': 'Ended poll',
+        'm.relates_to': {
+          'rel_type': 'm.reference',
+          'event_id': event.eventId,
+        },
+        'body': 'Ended poll',
+      },
+      type: 'org.matrix.msc3381.poll.end',
+    );
   }
 
   void redactEventsAction() async {
