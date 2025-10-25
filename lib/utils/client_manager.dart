@@ -115,7 +115,7 @@ abstract class ClientManager {
     return Client(
       clientName,
       httpClient:
-          PlatformInfos.isAndroid ? CustomHttpClient.createHTTPClient() : null,
+          CustomHttpClient.createHTTPClient(),
       verificationMethods: {
         KeyVerificationMethod.numbers,
         if (kIsWeb || PlatformInfos.isMobile || PlatformInfos.isLinux)
