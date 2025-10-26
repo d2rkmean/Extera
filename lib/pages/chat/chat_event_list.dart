@@ -39,6 +39,7 @@ class ChatEventList extends StatelessWidget {
 	
     final events = timeline.events.filterByVisibleInGui().filterByThreaded(controller.thread != null);
     final animateInEventIndex = controller.animateInEventIndex;
+    final threads = controller.room.threads;
 
     // create a map of eventId --> index to greatly improve performance of
     // ListView's findChildIndexCallback
@@ -121,8 +122,8 @@ class ChatEventList extends StatelessWidget {
                 timeline.events.length > animateInEventIndex &&
                 event == timeline.events[animateInEventIndex];
               
-            final thread = (controller.threads?.containsKey(event.eventId) ?? false)
-              ? controller.threads![event.eventId]
+            final thread = threads.containsKey(event.eventId)
+              ? threads[event.eventId]
               : null;
 
             return AutoScrollTag(

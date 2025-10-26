@@ -380,14 +380,32 @@ class ChatController extends State<ChatPageWithRoom>
         scrollUpBannerEventId = eventId;
       });
 
-  void updateView() {
+  Future<void> updateView() async {
     if (!mounted) return;
     setReadMarker();
+    await updateThreads();
     setState(() {});
   }
 
+  Future<void> updateThreads() async {
+    if (timeline?.events == null) return;
+    final lastEvent = timeline?.events[timeline!.events.length - 1];
+
+    if (lastEvent == null) return;
+    if (lastEvent.relationshipType == RelationshipTypes.thread &&
+        lastEvent.relationshipEventId != null) {
+      final thread = await room.client.database
+          .getThread(room.id, lastEvent.relationshipEventId!, room.client);
+      if (thread != null) {
+        setState(() {
+          threads?[lastEvent.eventId] = thread;
+        });
+      }
+    }
+  }
+
   Future<void>? loadTimelineFuture;
-  Map<String, Thread>? threads;
+  Map<String, Thread>? threads = {};
 
   int? animateInEventIndex;
 
@@ -437,9 +455,10 @@ class ChatController extends State<ChatPageWithRoom>
       Logs().v("Thread timeline loaded");
     } catch (e, s) {
       Logs().w(
-          'Unable to load timeline on event ID $eventContextId (in thread)',
-          e,
-          s);
+        'Unable to load timeline on event ID $eventContextId (in thread)',
+        e,
+        s,
+      );
       if (!mounted) return;
       timeline = await thread!.getTimeline(
         onUpdate: updateView,
@@ -595,13 +614,15 @@ class ChatController extends State<ChatPageWithRoom>
     }
 
     // ignore: unawaited_futures
-    room.sendTextEvent(sendController.text,
-        inReplyTo: replyEvent,
-        editEventId: editEvent?.eventId,
-        parseCommands: parseCommands,
-        threadRootEventId: thread?.rootEvent.eventId,
-        threadLastEventId:
-            thread?.lastEvent?.eventId ?? thread?.rootEvent.eventId);
+    room.sendTextEvent(
+      sendController.text,
+      inReplyTo: replyEvent,
+      editEventId: editEvent?.eventId,
+      parseCommands: parseCommands,
+      threadRootEventId: thread?.rootEvent.eventId,
+      threadLastEventId:
+          thread?.lastEvent?.eventId ?? thread?.rootEvent.eventId,
+    );
     sendController.value = TextEditingValue(
       text: pendingText,
       selection: const TextSelection.collapsed(offset: 0),
@@ -821,7 +842,8 @@ class ChatController extends State<ChatPageWithRoom>
 
     final reports = await mx.client.getEventReports();
     final report = reports.firstWhere(
-        (rep) => rep['room_id'] == roomId && rep['event_id'] == event.eventId);
+      (rep) => rep['room_id'] == roomId && rep['event_id'] == event.eventId,
+    );
     final recoveredEvent = await mx.client.getReportedEvent(report['id']);
 
     if (recoveredEvent == null) {
@@ -831,15 +853,17 @@ class ChatController extends State<ChatPageWithRoom>
       return;
     }
 
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (BuildContext ctx) {
-        return RecoveredEventDialog(
-          event: recoveredEvent,
-          timeline: timeline!,
-        );
-      },
-      fullscreenDialog: true,
-    ));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext ctx) {
+          return RecoveredEventDialog(
+            event: recoveredEvent,
+            timeline: timeline!,
+          );
+        },
+        fullscreenDialog: true,
+      ),
+    );
   }
 
   void translateEventAction() async {
@@ -854,7 +878,9 @@ class ChatController extends State<ChatPageWithRoom>
     final content = {...event.content};
     try {
       text = await Translator.translate(
-          text, PlatformDispatcher.instance.locale.languageCode);
+        text,
+        PlatformDispatcher.instance.locale.languageCode,
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(L10n.of(context).errorTranslatingMessage)),
@@ -867,19 +893,24 @@ class ChatController extends State<ChatPageWithRoom>
       content['body'] = text;
     }
     content['xyz.extera.translated'] = true;
-    Navigator.of(context).push(new MaterialPageRoute(
+    Navigator.of(context).push(
+      new MaterialPageRoute(
         builder: (BuildContext ctx) {
           return TranslatedEventDialog(
-              event: new Event(
-                  content: content,
-                  type: 'm.room.message',
-                  eventId: event.eventId,
-                  senderId: event.senderId,
-                  originServerTs: event.originServerTs,
-                  room: room),
-              timeline: timeline!);
+            event: new Event(
+              content: content,
+              type: 'm.room.message',
+              eventId: event.eventId,
+              senderId: event.senderId,
+              originServerTs: event.originServerTs,
+              room: room,
+            ),
+            timeline: timeline!,
+          );
         },
-        fullscreenDialog: true));
+        fullscreenDialog: true,
+      ),
+    );
   }
 
   void reportEventAction() async {
