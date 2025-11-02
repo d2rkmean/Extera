@@ -667,6 +667,12 @@ class L10nPl extends L10n {
   String get chatPermissions => 'Uprawnienia w czacie';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'Edytuj nazwę wyświetlaną';
 
   @override

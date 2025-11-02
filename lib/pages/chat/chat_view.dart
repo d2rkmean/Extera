@@ -328,7 +328,9 @@ class ChatView extends StatelessWidget {
                           Expanded(
                             child: GestureDetector(
                               onTap: controller.clearSingleSelectedEvent,
-                              child: ChatEventList(controller: controller),
+                              child: ChatEventList(
+                                controller: controller,
+                              ),
                             ),
                           ),
                           if (controller.showScrollDownButton)

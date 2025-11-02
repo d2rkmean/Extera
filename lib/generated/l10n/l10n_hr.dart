@@ -665,6 +665,12 @@ class L10nHr extends L10n {
   String get chatPermissions => 'Dozvole za razgovor';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'Uredi prikazano ime';
 
   @override

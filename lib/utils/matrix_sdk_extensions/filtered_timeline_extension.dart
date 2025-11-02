@@ -8,6 +8,10 @@ extension VisibleInGuiExtension on List<Event> {
     return where((e) => e.isThreaded == threaded).toList();
   }
 
+  List<Event> filterThreadRoots() {
+    return where((e) => e.room.threads.containsKey(e.eventId)).toList();
+  }
+
   List<Event> filterByVisibleInGui({String? exceptionEventId}) {
     final visibleEvents =
         where((e) => e.isVisibleInGui || e.eventId == exceptionEventId)

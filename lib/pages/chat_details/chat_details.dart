@@ -1,3 +1,4 @@
+import 'package:extera_next/pages/chat_thread/chat_threads_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';

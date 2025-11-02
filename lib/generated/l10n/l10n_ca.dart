@@ -669,6 +669,12 @@ class L10nCa extends L10n {
   String get chatPermissions => 'Permisos del xat';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'Edita l\'àlies';
 
   @override

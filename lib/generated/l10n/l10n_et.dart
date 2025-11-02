@@ -666,6 +666,12 @@ class L10nEt extends L10n {
   String get chatPermissions => 'Vestluse õigused';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'Muuda kuvatavat nime';
 
   @override

@@ -671,6 +671,12 @@ class L10nId extends L10n {
   String get chatPermissions => 'Perizinan obrolan';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'Edit nama tampilan';
 
   @override

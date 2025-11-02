@@ -660,6 +660,12 @@ class L10nAr extends L10n {
   String get chatPermissions => 'صلاحيات المحادثة';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'حرر الاسم العلني';
 
   @override

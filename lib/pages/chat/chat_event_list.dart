@@ -15,7 +15,7 @@ import 'package:extera_next/utils/platform_infos.dart';
 
 class ChatEventList extends StatelessWidget {
   final ChatController controller;
-
+  
   const ChatEventList({
     super.key,
     required this.controller,

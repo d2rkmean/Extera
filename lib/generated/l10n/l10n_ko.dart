@@ -653,6 +653,12 @@ class L10nKo extends L10n {
   String get chatPermissions => '채팅 권한';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => '표시 이름 수정';
 
   @override

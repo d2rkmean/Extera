@@ -667,6 +667,12 @@ class L10nEu extends L10n {
   String get chatPermissions => 'Txataren baimenak';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'Editatu ezizena';
 
   @override

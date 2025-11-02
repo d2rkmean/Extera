@@ -674,6 +674,12 @@ class L10nTa extends L10n {
   String get chatPermissions => 'அரட்டை அனுமதிகள்';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'காட்சி பெயர் திருத்து';
 
   @override

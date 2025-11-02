@@ -666,6 +666,12 @@ class L10nTr extends L10n {
   String get chatPermissions => 'Sohbet izinleri';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'Görünen adı düzenle';
 
   @override

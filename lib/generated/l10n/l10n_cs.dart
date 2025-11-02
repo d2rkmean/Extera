@@ -668,6 +668,12 @@ class L10nCs extends L10n {
   String get chatPermissions => 'Oprávnění konverzace';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'Změnit přezdívku';
 
   @override

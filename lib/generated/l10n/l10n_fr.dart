@@ -673,6 +673,12 @@ class L10nFr extends L10n {
   String get chatPermissions => 'Permissions du salon';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'Changer de nom d\'affichage';
 
   @override

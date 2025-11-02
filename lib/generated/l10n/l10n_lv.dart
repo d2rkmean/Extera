@@ -670,6 +670,12 @@ class L10nLv extends L10n {
   String get chatPermissions => 'Tērzēšanas atļaujas';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'Labot attēlojamo vārdu';
 
   @override

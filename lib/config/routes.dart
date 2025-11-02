@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:extera_next/pages/thread/thread.dart';
+import 'package:extera_next/pages/chat_thread/chat_threads.dart';
+import 'package:extera_next/pages/chat_thread/thread.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -152,6 +153,13 @@ abstract class AppRoutes {
                   routes: [
                     GoRoute(
                       path: 'threads',
+                      pageBuilder: (context, state) => defaultPageBuilder(
+                        context,
+                        state,
+                        ChatThreads(
+                          roomId: state.pathParameters['roomid']!,
+                        ),
+                      ),
                       redirect: loggedOutRedirect,
                       routes: [
                         GoRoute(

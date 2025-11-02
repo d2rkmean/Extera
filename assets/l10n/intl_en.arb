@@ -894,6 +894,9 @@
   },
   "chatPermissions": "Chat permissions",
   "@chatPermissions": {},
+  "chatThreads": "Threads",
+  "@chatThreads": {},
+  "chatThreadsDescription": "See all threads in this room",
   "editDisplayname": "Edit displayname",
   "@editDisplayname": {
     "type": "String",

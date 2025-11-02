@@ -666,6 +666,12 @@ class L10nNl extends L10n {
   String get chatPermissions => 'Chat toestemmingen';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'Naam wijzigen';
 
   @override

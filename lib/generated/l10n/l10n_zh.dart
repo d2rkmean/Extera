@@ -648,6 +648,12 @@ class L10nZh extends L10n {
   String get chatPermissions => '聊天权限';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => '编辑昵称';
 
   @override

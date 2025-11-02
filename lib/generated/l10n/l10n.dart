@@ -1317,6 +1317,18 @@ abstract class L10n {
   /// **'Chat permissions'**
   String get chatPermissions;
 
+  /// No description provided for @chatThreads.
+  ///
+  /// In en, this message translates to:
+  /// **'Threads'**
+  String get chatThreads;
+
+  /// No description provided for @chatThreadsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'See all threads in this room'**
+  String get chatThreadsDescription;
+
   /// No description provided for @editDisplayname.
   ///
   /// In en, this message translates to:

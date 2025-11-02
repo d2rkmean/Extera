@@ -672,6 +672,12 @@ class L10nGa extends L10n {
   String get chatPermissions => 'Ceadanna comhrá';
 
   @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
+
+  @override
   String get editDisplayname => 'Cuir ainm taispeána in eagar';
 
   @override
