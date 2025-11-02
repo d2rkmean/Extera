@@ -1201,9 +1201,11 @@ packages:
   matrix:
     dependency: "direct main"
     description:
-      path: "/home/officialdakari/repos/matrix-dart-sdk"
-      relative: false
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: f678376e3a4825a6e1a00d89585d6bae0843950c
+      url: "https://git.extera.xyz/OfficialDakari/matrix-dart-sdk.git"
+    source: git
     version: "3.0.1"
   meta:
     dependency: transitive

@@ -223,6 +223,36 @@ abstract class L10n {
   /// **'Resume'**
   String get resume;
 
+  /// No description provided for @newSubSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'New sub space'**
+  String get newSubSpace;
+
+  /// No description provided for @moveToDifferentSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to different space'**
+  String get moveToDifferentSpace;
+
+  /// No description provided for @moveUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Move up'**
+  String get moveUp;
+
+  /// No description provided for @moveDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Move down'**
+  String get moveDown;
+
+  /// No description provided for @removeFromSpaceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The chat will be removed from the space but still appear in your chat list.'**
+  String get removeFromSpaceDescription;
+
   /// No description provided for @endPoll.
   ///
   /// In en, this message translates to:

@@ -25,6 +25,22 @@ class L10nRu extends L10n {
   String get resume => 'Продолжить';
 
   @override
+  String get newSubSpace => 'New sub space';
+
+  @override
+  String get moveToDifferentSpace => 'Move to different space';
+
+  @override
+  String get moveUp => 'Move up';
+
+  @override
+  String get moveDown => 'Move down';
+
+  @override
+  String get removeFromSpaceDescription =>
+      'The chat will be removed from the space but still appear in your chat list.';
+
+  @override
   String get endPoll => 'Завершить опрос';
 
   @override
@@ -91,7 +107,7 @@ class L10nRu extends L10n {
 
   @override
   String get cleanExifDescription =>
-      'Удалять метаданные EXIF (модель камеры, геолокация, время) из изображений еред отправкой.';
+      'Удалять метаданные EXIF (модель камеры, геолокация, время) из изображений перед отправкой.';
 
   @override
   String get repeatPassword => 'Повторите пароль';

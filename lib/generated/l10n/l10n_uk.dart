@@ -25,6 +25,22 @@ class L10nUk extends L10n {
   String get resume => 'Resume';
 
   @override
+  String get newSubSpace => 'New sub space';
+
+  @override
+  String get moveToDifferentSpace => 'Move to different space';
+
+  @override
+  String get moveUp => 'Move up';
+
+  @override
+  String get moveDown => 'Move down';
+
+  @override
+  String get removeFromSpaceDescription =>
+      'The chat will be removed from the space but still appear in your chat list.';
+
+  @override
   String get endPoll => 'End poll';
 
   @override
