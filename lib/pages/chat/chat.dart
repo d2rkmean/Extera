@@ -455,9 +455,6 @@ class ChatController extends State<ChatPageWithRoom>
         eventContextId: eventContextId,
         onInsert: onInsert,
       );
-      if (timeline is ThreadTimeline) {
-        (timeline as ThreadTimeline).getThreadEvents();
-      }
       Logs().v("Thread timeline loaded");
     } catch (e, s) {
       Logs().w(
@@ -474,6 +471,9 @@ class ChatController extends State<ChatPageWithRoom>
       if (e is TimeoutException || e is IOException) {
         _showScrollUpMaterialBanner(eventContextId!);
       }
+    }
+    if (timeline is ThreadTimeline) {
+      (timeline as ThreadTimeline).getThreadEvents();
     }
   }
 
@@ -749,7 +749,8 @@ class ChatController extends State<ChatPageWithRoom>
       name: fileName ?? audioFile.path,
     );
 
-    await room.sendFileEvent(
+    await room
+        .sendFileEvent(
       file,
       inReplyTo: replyEvent,
       extraContent: {
@@ -763,7 +764,10 @@ class ChatController extends State<ChatPageWithRoom>
           'waveform': waveform,
         },
       },
-    ).catchError((e) {
+      threadLastEventId: thread?.lastEvent?.eventId,
+      threadRootEventId: thread?.rootEvent.eventId,
+    )
+        .catchError((e) {
       scaffoldMessenger.showSnackBar(
         SnackBar(
           content: Text(
@@ -802,7 +806,10 @@ class ChatController extends State<ChatPageWithRoom>
   void sendLocationAction() async {
     await showAdaptiveDialog(
       context: context,
-      builder: (c) => SendLocationDialog(room: room),
+      builder: (c) => SendLocationDialog(
+        room: room,
+        thread: thread,
+      ),
     );
   }
 
@@ -900,10 +907,10 @@ class ChatController extends State<ChatPageWithRoom>
     }
     content['xyz.extera.translated'] = true;
     Navigator.of(context).push(
-      new MaterialPageRoute(
+      MaterialPageRoute(
         builder: (BuildContext ctx) {
           return TranslatedEventDialog(
-            event: new Event(
+            event: Event(
               content: content,
               type: 'm.room.message',
               eventId: event.eventId,

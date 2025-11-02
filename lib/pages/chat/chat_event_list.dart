@@ -39,13 +39,15 @@ class ChatEventList extends StatelessWidget {
 
     final horizontalPadding = FluffyThemes.isColumnMode(context) ? 8.0 : 0.0;
 	
-    var events = timeline.events.filterByVisibleInGui();
+    var events = timeline.events;
 
     if (showThreadRoots) {
       events = events.filterThreadRoots();
     } else {
       events = events.filterByThreaded(controller.thread != null);
     }
+
+    events = events.filterByVisibleInGui();
 
     final animateInEventIndex = controller.animateInEventIndex;
     final threads = controller.room.threads;

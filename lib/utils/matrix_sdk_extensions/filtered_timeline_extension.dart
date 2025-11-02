@@ -5,7 +5,7 @@ import '../../config/app_config.dart';
 
 extension VisibleInGuiExtension on List<Event> {
   List<Event> filterByThreaded(bool threaded) {
-    return where((e) => e.isThreaded == threaded).toList();
+    return where((e) => e.isThreaded == threaded || e.relationshipType == RelationshipTypes.edit || e.relationshipType == RelationshipTypes.reaction).toList();
   }
 
   List<Event> filterThreadRoots() {
