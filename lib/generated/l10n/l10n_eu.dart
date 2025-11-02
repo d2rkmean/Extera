@@ -2457,6 +2457,16 @@ class L10nEu extends L10n {
   String get restricted => 'Mugatuta';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => 'Eskatu baimena sarrera mugatua duen txatean';
 
   @override

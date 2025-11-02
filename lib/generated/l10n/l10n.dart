@@ -4401,6 +4401,18 @@ abstract class L10n {
   /// **'Restricted'**
   String get restricted;
 
+  /// No description provided for @spaceMemberOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Space member of {spaces}'**
+  String spaceMemberOf(String spaces);
+
+  /// No description provided for @spaceMemberOfCanKnock.
+  ///
+  /// In en, this message translates to:
+  /// **'Space member of {spaces} can knock'**
+  String spaceMemberOfCanKnock(String spaces);
+
   /// No description provided for @knockRestricted.
   ///
   /// In en, this message translates to:

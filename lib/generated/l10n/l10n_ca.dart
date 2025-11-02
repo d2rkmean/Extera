@@ -2471,6 +2471,16 @@ class L10nCa extends L10n {
   String get restricted => 'Restringit';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => 'No es pot picar a la porta';
 
   @override

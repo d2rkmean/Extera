@@ -2460,6 +2460,16 @@ class L10nUk extends L10n {
   String get restricted => 'Обмежено';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => 'Стук обмежено';
 
   @override

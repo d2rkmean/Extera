@@ -2459,6 +2459,16 @@ class L10nGl extends L10n {
   String get restricted => 'Non accesible';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => 'Peta á porta';
 
   @override

@@ -2476,6 +2476,16 @@ class L10nGa extends L10n {
   String get restricted => 'Srianta';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => 'Cnoc Mhuire srianta';
 
   @override

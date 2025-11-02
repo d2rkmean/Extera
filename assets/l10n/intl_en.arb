@@ -3170,7 +3170,8 @@
       "spaces": {
         "type": "String"
       }
-    },
+    }
+  },
   "knockRestricted": "Knock restricted",
   "@knockRestricted": {},
   "goToSpace": "Go to space: {space}",

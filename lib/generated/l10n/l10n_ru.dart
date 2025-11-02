@@ -25,20 +25,20 @@ class L10nRu extends L10n {
   String get resume => 'Продолжить';
 
   @override
-  String get newSubSpace => 'New sub space';
+  String get newSubSpace => 'Новое подпространство';
 
   @override
-  String get moveToDifferentSpace => 'Move to different space';
+  String get moveToDifferentSpace => 'Перенести в другое пространство';
 
   @override
-  String get moveUp => 'Move up';
+  String get moveUp => 'Вверх';
 
   @override
-  String get moveDown => 'Move down';
+  String get moveDown => 'Вниз';
 
   @override
   String get removeFromSpaceDescription =>
-      'The chat will be removed from the space but still appear in your chat list.';
+      'Эта комната будет удалена из пространства, но останется в Вашем списке чатов.';
 
   @override
   String get endPoll => 'Завершить опрос';
@@ -2450,6 +2450,16 @@ class L10nRu extends L10n {
 
   @override
   String get restricted => 'Ограничено';
+
+  @override
+  String spaceMemberOf(String spaces) {
+    return 'Участники пространства $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Участники пространства $spaces (по запросу)';
+  }
 
   @override
   String get knockRestricted => 'Ограничено + по запросу';

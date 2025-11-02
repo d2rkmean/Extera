@@ -2456,6 +2456,16 @@ class L10nHr extends L10n {
   String get restricted => 'Ograničeni';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => 'Pokucaj na ograničene sobe';
 
   @override

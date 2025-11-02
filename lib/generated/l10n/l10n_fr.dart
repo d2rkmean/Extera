@@ -2491,6 +2491,16 @@ class L10nFr extends L10n {
   String get restricted => 'Limité';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => 'Frapper à la porte limité';
 
   @override

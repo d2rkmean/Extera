@@ -2457,6 +2457,16 @@ class L10nTr extends L10n {
   String get restricted => 'Kısıtlı';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => 'Tıklatma kısıtlı';
 
   @override

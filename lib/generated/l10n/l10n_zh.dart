@@ -2372,6 +2372,16 @@ class L10nZh extends L10n {
   String get restricted => '受限';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => '“请求加入”请求受限';
 
   @override

@@ -2464,6 +2464,16 @@ class L10nId extends L10n {
   String get restricted => 'Dibatasi';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => 'Ketukan dibatasi';
 
   @override

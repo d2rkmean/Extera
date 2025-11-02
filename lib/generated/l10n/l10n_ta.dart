@@ -2478,6 +2478,16 @@ class L10nTa extends L10n {
   String get restricted => 'தடைசெய்யப்பட்டது';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => 'நாக் தடை';
 
   @override

@@ -2398,6 +2398,16 @@ class L10nKo extends L10n {
   String get restricted => '스페이스 멤버로 제한';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => '스페이스 멤버만 참가 요청 가능';
 
   @override

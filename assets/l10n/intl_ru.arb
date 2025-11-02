@@ -3171,7 +3171,8 @@
       "spaces": {
         "type": "String"
       }
-    },
+    }
+  },
 	"userLevel": "{level} - Пользователь",
 	"@userLevel": {
 		"type": "String",

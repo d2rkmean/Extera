@@ -2432,6 +2432,16 @@ class L10nAr extends L10n {
   String get restricted => 'مقيد';
 
   @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
+
+  @override
   String get knockRestricted => 'قيود النقر';
 
   @override
