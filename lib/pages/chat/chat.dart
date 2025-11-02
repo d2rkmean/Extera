@@ -51,12 +51,14 @@ class ChatPage extends StatelessWidget {
   final String roomId;
   final List<ShareItem>? shareItems;
   final String? eventId;
+  final bool? showThreadRoots;
 
   const ChatPage({
     super.key,
     required this.roomId,
     this.eventId,
     this.shareItems,
+    this.showThreadRoots,
   });
 
   @override
@@ -79,6 +81,7 @@ class ChatPage extends StatelessWidget {
       room: room,
       shareItems: shareItems,
       eventId: eventId,
+      showThreadRoots: showThreadRoots,
     );
   }
 }
@@ -88,6 +91,7 @@ class ChatPageWithRoom extends StatefulWidget {
   final Thread? thread;
   final List<ShareItem>? shareItems;
   final String? eventId;
+  final bool? showThreadRoots;
 
   const ChatPageWithRoom({
     super.key,
@@ -95,6 +99,7 @@ class ChatPageWithRoom extends StatefulWidget {
     this.thread,
     this.shareItems,
     this.eventId,
+    this.showThreadRoots,
   });
 
   @override
@@ -104,6 +109,7 @@ class ChatPageWithRoom extends StatefulWidget {
 class ChatController extends State<ChatPageWithRoom>
     with WidgetsBindingObserver {
   Room get room => sendingClient.getRoomById(roomId) ?? widget.room;
+  bool get showThreadRoots => (widget.showThreadRoots ?? false);
   Thread? get thread =>
       sendingClient.getRoomById(roomId)?.threads[threadRootEventId] ??
       widget.room.threads[threadRootEventId];

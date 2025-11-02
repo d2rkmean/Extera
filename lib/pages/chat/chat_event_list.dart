@@ -15,10 +15,12 @@ import 'package:extera_next/utils/platform_infos.dart';
 
 class ChatEventList extends StatelessWidget {
   final ChatController controller;
+  final bool showThreadRoots;
   
   const ChatEventList({
     super.key,
     required this.controller,
+    this.showThreadRoots = false,
   });
 
   @override
@@ -37,7 +39,14 @@ class ChatEventList extends StatelessWidget {
 
     final horizontalPadding = FluffyThemes.isColumnMode(context) ? 8.0 : 0.0;
 	
-    final events = timeline.events.filterByVisibleInGui().filterByThreaded(controller.thread != null);
+    var events = timeline.events.filterByVisibleInGui();
+
+    if (showThreadRoots) {
+      events = events.filterThreadRoots();
+    } else {
+      events = events.filterByThreaded(controller.thread != null);
+    }
+
     final animateInEventIndex = controller.animateInEventIndex;
     final threads = controller.room.threads;
 

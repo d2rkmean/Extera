@@ -330,6 +330,7 @@ class ChatView extends StatelessWidget {
                               onTap: controller.clearSingleSelectedEvent,
                               child: ChatEventList(
                                 controller: controller,
+                                showThreadRoots: controller.showThreadRoots,
                               ),
                             ),
                           ),
@@ -349,7 +350,8 @@ class ChatView extends StatelessWidget {
                               ),
                             )
                           else if (controller.room.canSendDefaultMessages &&
-                              controller.room.membership == Membership.join)
+                              controller.room.membership == Membership.join &&
+                              !controller.showThreadRoots)
                             Container(
                               margin: EdgeInsets.all(bottomSheetPadding),
                               constraints: const BoxConstraints(
