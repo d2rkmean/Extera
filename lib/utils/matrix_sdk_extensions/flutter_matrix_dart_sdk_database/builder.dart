@@ -10,7 +10,6 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:universal_html/html.dart' as html;
 
 import 'package:extera_next/config/app_config.dart';
-import 'package:extera_next/generated/l10n/l10n.dart';
 import 'package:extera_next/utils/client_manager.dart';
 import 'package:extera_next/utils/platform_infos.dart';
 import 'cipher.dart';
@@ -69,7 +68,12 @@ Future<MatrixSdkDatabase> _constructDatabase(String clientName) async {
 
   Directory? fileStorageLocation;
   try {
-    fileStorageLocation = await getTemporaryDirectory();
+    final tmpDir = await getTemporaryDirectory();
+    final appTmpDir = Directory(join(tmpDir.path, clientName));
+    if (!await appTmpDir.exists()) {
+      await appTmpDir.create(recursive: true);
+    }
+    fileStorageLocation = appTmpDir;
   } on MissingPlatformDirectoryException catch (_) {
     Logs().w(
       'No temporary directory for file cache available on this platform.',
@@ -106,11 +110,10 @@ Future<MatrixSdkDatabase> _constructDatabase(String clientName) async {
   final database = await factory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 1,
-      // most important : apply encryption when opening the DB
-      onConfigure: helper?.applyPragmaKey,
-      singleInstance: false
-    ),
+        version: 1,
+        // most important : apply encryption when opening the DB
+        onConfigure: helper?.applyPragmaKey,
+        singleInstance: false),
   );
 
   return await MatrixSdkDatabase.init(

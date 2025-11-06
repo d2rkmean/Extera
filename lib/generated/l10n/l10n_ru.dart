@@ -25,6 +25,22 @@ class L10nRu extends L10n {
   String get resume => 'Продолжить';
 
   @override
+  String get newSubSpace => 'Новое подпространство';
+
+  @override
+  String get moveToDifferentSpace => 'Перенести в другое пространство';
+
+  @override
+  String get moveUp => 'Вверх';
+
+  @override
+  String get moveDown => 'Вниз';
+
+  @override
+  String get removeFromSpaceDescription =>
+      'Эта комната будет удалена из пространства, но останется в Вашем списке чатов.';
+
+  @override
   String get endPoll => 'Завершить опрос';
 
   @override
@@ -55,6 +71,9 @@ class L10nRu extends L10n {
   String choicesSelected(int selected, int max) {
     return 'Выбрано $selected из $max';
   }
+
+  @override
+  String get discuss => 'Обсудить';
 
   @override
   String get pollType => 'Тип опроса';
@@ -88,7 +107,7 @@ class L10nRu extends L10n {
 
   @override
   String get cleanExifDescription =>
-      'Удалять метаданные EXIF (модель камеры, геолокация, время) из изображений еред отправкой.';
+      'Удалять метаданные EXIF (модель камеры, геолокация, время) из изображений перед отправкой.';
 
   @override
   String get repeatPassword => 'Повторите пароль';
@@ -663,6 +682,12 @@ class L10nRu extends L10n {
   String get chatPermissions => 'Права в чате';
 
   @override
+  String get chatThreads => 'Обсуждения';
+
+  @override
+  String get chatThreadsDescription => 'Список всех обсуждений в этой комнате';
+
+  @override
   String get editDisplayname => 'Отображаемое имя';
 
   @override
@@ -695,7 +720,7 @@ class L10nRu extends L10n {
 
   @override
   String get accessAndVisibilityDescription =>
-      'Кто может зайти и как найти этот чат.';
+      'Кто может зайти и как найти этот чат';
 
   @override
   String get calls => 'Звонки';
@@ -2425,6 +2450,16 @@ class L10nRu extends L10n {
 
   @override
   String get restricted => 'Ограничено';
+
+  @override
+  String spaceMemberOf(String spaces) {
+    return 'Участники пространства $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Участники пространства $spaces (по запросу)';
+  }
 
   @override
   String get knockRestricted => 'Ограничено + по запросу';

@@ -6,6 +6,11 @@
   "longPressToRecordVoiceMessage": "Long press to record voice message.",
   "pause": "Pause",
   "resume": "Resume",
+  "newSubSpace": "New sub space",
+  "moveToDifferentSpace": "Move to different space",
+  "moveUp": "Move up",
+  "moveDown": "Move down",
+  "removeFromSpaceDescription": "The chat will be removed from the space but still appear in your chat list.",
   "endPoll": "End poll",
   "anonymousPoll": "Anonymous",
   "publicPoll": "Public",
@@ -16,6 +21,7 @@
   "vote": "Vote",
   "changeVote": "Re-vote",
   "choicesSelected": "{selected} of {max} selected",
+  "discuss": "Discuss",
   "@choicesSelected": {
     "type": "String",
     "placeholders": {
@@ -893,6 +899,9 @@
   },
   "chatPermissions": "Chat permissions",
   "@chatPermissions": {},
+  "chatThreads": "Threads",
+  "@chatThreads": {},
+  "chatThreadsDescription": "See all threads in this room",
   "editDisplayname": "Edit displayname",
   "@editDisplayname": {
     "type": "String",
@@ -3145,6 +3154,24 @@
   },
   "restricted": "Restricted",
   "@restricted": {},
+  "spaceMemberOf": "Space member of {spaces}",
+  "@spaceMemberOf": {
+    "type": "String",
+    "placeholders": {
+      "spaces": {
+        "type": "String"
+      }
+    }
+  },
+  "spaceMemberOfCanKnock": "Space member of {spaces} can knock",
+  "@spaceMemberOfCanKnock": {
+    "type": "String",
+    "placeholders": {
+      "spaces": {
+        "type": "String"
+      }
+    }
+  },
   "knockRestricted": "Knock restricted",
   "@knockRestricted": {},
   "goToSpace": "Go to space: {space}",

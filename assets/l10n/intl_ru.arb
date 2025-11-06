@@ -6,6 +6,11 @@
   "noMessagesYet": "Нет сообщений",
   "longPressToRecordVoiceMessage": "Зажмите, чтобы записать голосовое сообщение.",
   "pause": "Пауза",
+  "newSubSpace": "Новое подпространство",
+  "moveToDifferentSpace": "Перенести в другое пространство",
+  "moveUp": "Вверх",
+  "moveDown": "Вниз",
+  "removeFromSpaceDescription": "Эта комната будет удалена из пространства, но останется в Вашем списке чатов.",
   "resume": "Продолжить",
   "anonymousPoll": "Анонимный",
   "publicPoll": "Открытый",
@@ -16,6 +21,7 @@
   "vote": "Голосовать",
   "changeVote": "Изменить ответ",
   "choicesSelected": "Выбрано {selected} из {max}",
+  "discuss": "Обсудить",
   "@choicesSelected": {
     "type": "String",
     "placeholders": {
@@ -41,7 +47,7 @@
     "type": "String",
     "placeholders": {}
   },
-  "cleanExifDescription": "Удалять метаданные EXIF (модель камеры, геолокация, время) из изображений еред отправкой.",
+  "cleanExifDescription": "Удалять метаданные EXIF (модель камеры, геолокация, время) из изображений перед отправкой.",
   "@cleanExifDescription": {
     "type": "String",
     "placeholders": {}
@@ -892,6 +898,9 @@
 	},
 	"chatPermissions": "Права в чате",
 	"@chatPermissions": {},
+  "chatThreads": "Обсуждения",
+  "@chatThreads": {},
+  "chatThreadsDescription": "Список всех обсуждений в этой комнате",
 	"editDisplayname": "Отображаемое имя",
 	"@editDisplayname": {
 		"type": "String",
@@ -936,7 +945,7 @@
 	"@globalChatId": {},
 	"accessAndVisibility": "Доступность и видимость",
 	"@accessAndVisibility": {},
-	"accessAndVisibilityDescription": "Кто может зайти и как найти этот чат.",
+	"accessAndVisibilityDescription": "Кто может зайти и как найти этот чат",
 	"@accessAndVisibilityDescription": {},
 	"calls": "Звонки",
 	"@calls": {},
@@ -3145,6 +3154,25 @@
 		"space": {}
 	},
 	"markAsUnread": "Отметить как непрочитанное",
+
+  "spaceMemberOf": "Участники пространства {spaces}",
+  "@spaceMemberOf": {
+    "type": "String",
+    "placeholders": {
+      "spaces": {
+        "type": "String"
+      }
+    }
+  },
+  "spaceMemberOfCanKnock": "Участники пространства {spaces} (по запросу)",
+  "@spaceMemberOfCanKnock": {
+    "type": "String",
+    "placeholders": {
+      "spaces": {
+        "type": "String"
+      }
+    }
+  },
 	"userLevel": "{level} - Пользователь",
 	"@userLevel": {
 		"type": "String",

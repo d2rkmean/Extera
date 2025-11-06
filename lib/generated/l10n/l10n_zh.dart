@@ -25,6 +25,22 @@ class L10nZh extends L10n {
   String get resume => 'Resume';
 
   @override
+  String get newSubSpace => 'New sub space';
+
+  @override
+  String get moveToDifferentSpace => 'Move to different space';
+
+  @override
+  String get moveUp => 'Move up';
+
+  @override
+  String get moveDown => 'Move down';
+
+  @override
+  String get removeFromSpaceDescription =>
+      'The chat will be removed from the space but still appear in your chat list.';
+
+  @override
   String get endPoll => 'End poll';
 
   @override
@@ -55,6 +71,9 @@ class L10nZh extends L10n {
   String choicesSelected(int selected, int max) {
     return '$selected of $max selected';
   }
+
+  @override
+  String get discuss => 'Discuss';
 
   @override
   String get pollType => 'Poll type';
@@ -643,6 +662,12 @@ class L10nZh extends L10n {
 
   @override
   String get chatPermissions => '聊天权限';
+
+  @override
+  String get chatThreads => 'Threads';
+
+  @override
+  String get chatThreadsDescription => 'See all threads in this room';
 
   @override
   String get editDisplayname => '编辑昵称';
@@ -2345,6 +2370,16 @@ class L10nZh extends L10n {
 
   @override
   String get restricted => '受限';
+
+  @override
+  String spaceMemberOf(String spaces) {
+    return 'Space member of $spaces';
+  }
+
+  @override
+  String spaceMemberOfCanKnock(String spaces) {
+    return 'Space member of $spaces can knock';
+  }
 
   @override
   String get knockRestricted => '“请求加入”请求受限';

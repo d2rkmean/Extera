@@ -223,6 +223,36 @@ abstract class L10n {
   /// **'Resume'**
   String get resume;
 
+  /// No description provided for @newSubSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'New sub space'**
+  String get newSubSpace;
+
+  /// No description provided for @moveToDifferentSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to different space'**
+  String get moveToDifferentSpace;
+
+  /// No description provided for @moveUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Move up'**
+  String get moveUp;
+
+  /// No description provided for @moveDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Move down'**
+  String get moveDown;
+
+  /// No description provided for @removeFromSpaceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The chat will be removed from the space but still appear in your chat list.'**
+  String get removeFromSpaceDescription;
+
   /// No description provided for @endPoll.
   ///
   /// In en, this message translates to:
@@ -282,6 +312,12 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'{selected} of {max} selected'**
   String choicesSelected(int selected, int max);
+
+  /// No description provided for @discuss.
+  ///
+  /// In en, this message translates to:
+  /// **'Discuss'**
+  String get discuss;
 
   /// No description provided for @pollType.
   ///
@@ -1310,6 +1346,18 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Chat permissions'**
   String get chatPermissions;
+
+  /// No description provided for @chatThreads.
+  ///
+  /// In en, this message translates to:
+  /// **'Threads'**
+  String get chatThreads;
+
+  /// No description provided for @chatThreadsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'See all threads in this room'**
+  String get chatThreadsDescription;
 
   /// No description provided for @editDisplayname.
   ///
@@ -4352,6 +4400,18 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Restricted'**
   String get restricted;
+
+  /// No description provided for @spaceMemberOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Space member of {spaces}'**
+  String spaceMemberOf(String spaces);
+
+  /// No description provided for @spaceMemberOfCanKnock.
+  ///
+  /// In en, this message translates to:
+  /// **'Space member of {spaces} can knock'**
+  String spaceMemberOfCanKnock(String spaces);
 
   /// No description provided for @knockRestricted.
   ///
