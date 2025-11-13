@@ -23,6 +23,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:extera_next/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -75,6 +76,20 @@ class BackgroundPush {
 
   void _init() async {
     try {
+      mainIsolateReceivePort?.listen(
+        (message) async {
+          try {
+            await notificationTap(
+              NotificationResponseJson.fromJsonString(message),
+              client: client,
+              router: FluffyChatApp.router,
+              l10n: l10n,
+            );
+          } catch (e, s) {
+            Logs().wtf('Main Notification Tap crashed', e, s);
+          }
+        },
+      );
       if (PlatformInfos.isAndroid) {
         final port = ReceivePort();
         IsolateNameServer.removePortNameMapping('background_tab_port');
@@ -103,11 +118,10 @@ class BackgroundPush {
           iOS: DarwinInitializationSettings(),
         ),
         onDidReceiveNotificationResponse: (response) => notificationTap(
-          response,
-          client: client,
-          router: FluffyChatApp.router,
-          l10n: l10n
-        ),
+            response,
+            client: client,
+            router: FluffyChatApp.router,
+            l10n: l10n),
         onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
       );
       Logs().v('Flutter Local Notifications initialized');
@@ -312,12 +326,8 @@ class BackgroundPush {
       final response = details.notificationResponse;
 
       if (response != null) {
-        notificationTap(
-          response,
-          client: client,
-          router: FluffyChatApp.router,
-          l10n: l10n
-        );
+        notificationTap(response,
+            client: client, router: FluffyChatApp.router, l10n: l10n);
       }
     });
   }

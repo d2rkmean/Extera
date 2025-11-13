@@ -110,10 +110,10 @@ Future<MatrixSdkDatabase> _constructDatabase(String clientName) async {
   final database = await factory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-        version: 1,
-        // most important : apply encryption when opening the DB
-        onConfigure: helper?.applyPragmaKey,
-        singleInstance: false),
+      version: 1,
+      // most important : apply encryption when opening the DB
+      onConfigure: helper?.applyPragmaKey,
+    ),
   );
 
   return await MatrixSdkDatabase.init(
