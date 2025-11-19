@@ -23,6 +23,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:extera_next/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -75,6 +76,20 @@ class BackgroundPush {
 
   void _init() async {
     try {
+      mainIsolateReceivePort?.listen(
+        (message) async {
+          try {
+            await notificationTap(
+              NotificationResponseJson.fromJsonString(message),
+              client: client,
+              router: FluffyChatApp.router,
+              l10n: l10n,
+            );
+          } catch (e, s) {
+            Logs().wtf('Main Notification Tap crashed', e, s);
+          }
+        },
+      );
       if (PlatformInfos.isAndroid) {
         final port = ReceivePort();
         IsolateNameServer.removePortNameMapping('background_tab_port');
@@ -103,11 +118,10 @@ class BackgroundPush {
           iOS: DarwinInitializationSettings(),
         ),
         onDidReceiveNotificationResponse: (response) => notificationTap(
-          response,
-          client: client,
-          router: FluffyChatApp.router,
-          l10n: l10n
-        ),
+            response,
+            client: client,
+            router: FluffyChatApp.router,
+            l10n: l10n),
         onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
       );
       Logs().v('Flutter Local Notifications initialized');
@@ -125,7 +139,7 @@ class BackgroundPush {
       if (Platform.isAndroid) {
         await UnifiedPush.initialize(
           onNewEndpoint: _newUpEndpoint,
-          onRegistrationFailed: _upUnregistered,
+          onRegistrationFailed: (_, i) => _upUnregistered(i),
           onUnregistered: _upUnregistered,
           onMessage: _onUpMessage,
         );
@@ -312,12 +326,8 @@ class BackgroundPush {
       final response = details.notificationResponse;
 
       if (response != null) {
-        notificationTap(
-          response,
-          client: client,
-          router: FluffyChatApp.router,
-          l10n: l10n
-        );
+        notificationTap(response,
+            client: client, router: FluffyChatApp.router, l10n: l10n);
       }
     });
   }
@@ -363,55 +373,18 @@ class BackgroundPush {
     );
   }
 
-  Future<void> goToRoom(NotificationResponse? response) async {
-    try {
-      if (response?.payload == null) return;
-      final arr = response?.payload?.split(' ');
-      final roomId = arr?[0];
-      final eventId = arr?[1];
-      Logs().v('[Push] Attempting to go to room $roomId...');
-      if (roomId == null || eventId == null) {
-        return;
-      }
-      await client.roomsLoading;
-      await client.accountDataLoading;
-      if (client.getRoomById(roomId) == null) {
-        await client
-            .waitForRoomInSync(roomId)
-            .timeout(const Duration(seconds: 30));
-      }
-      if (response?.actionId == "read") {
-        if (AppConfig.sendPublicReadReceipts) {
-          await client.setReadMarker(roomId, mRead: eventId);
-        } else {
-          await client.setReadMarker(roomId, mReadPrivate: eventId);
-        }
-        return;
-      } else if (response?.actionId == "reply") {
-        final replyText = response?.input;
-        final room = client.getRoomById(roomId);
-        if (replyText != null && room != null) {
-          await room.sendTextEvent(replyText,
-              inReplyTo: await room.getEventById(eventId));
-        }
-        return;
-      }
-      FluffyChatApp.router.go(
-        client.getRoomById(roomId)?.membership == Membership.invite
-            ? '/rooms'
-            : '/rooms/$roomId',
-      );
-    } catch (e, s) {
-      Logs().e('[Push] Failed to open room', e, s);
-    }
-  }
-
   Future<void> setupUp() async {
-    await UnifiedPushUi(matrix!.context, ["default"], UPFunctions())
-        .registerAppWithDialog();
+    await UnifiedPushUi(
+      context: matrix!.context,
+      instances: ["default"],
+      unifiedPushFunctions: UPFunctions(),
+      showNoDistribDialog: false,
+      onNoDistribDialogDismissed: () {}, // TODO: Implement me
+    ).registerAppWithDialog();
   }
 
-  Future<void> _newUpEndpoint(String newEndpoint, String i) async {
+  Future<void> _newUpEndpoint(PushEndpoint newPushEndpoint, String i) async {
+    final newEndpoint = newPushEndpoint.url;
     upAction = true;
     if (newEndpoint.isEmpty) {
       await _upUnregistered(i);
@@ -471,8 +444,9 @@ class BackgroundPush {
     }
   }
 
-  Future<void> _onUpMessage(Uint8List message, String i) async {
+  Future<void> _onUpMessage(PushMessage pushMessage, String i) async {
     upAction = true;
+    final message = pushMessage.content;
     final data = Map<String, dynamic>.from(
       json.decode(utf8.decode(message))['notification'],
     );

@@ -46,11 +46,10 @@ extension NotificationResponseJson on NotificationResponse {
 void notificationTapBackground(
   NotificationResponse notificationResponse,
 ) async {
-  Logs().i('Notification tap in background');
-
-  final sendPort = IsolateNameServer.lookupPortByName('background_tab_port');
+  final sendPort = IsolateNameServer.lookupPortByName(AppConfig.mainIsolatePortName);
   if (sendPort != null) {
     sendPort.send(notificationResponse.toJsonString());
+    Logs().i('Notification tap sent to main isolate');
     return;
   }
 
