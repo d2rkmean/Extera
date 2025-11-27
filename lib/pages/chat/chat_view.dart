@@ -66,8 +66,8 @@ class ChatView extends StatelessWidget {
           // Use builder context to correctly position the share dialog on iPad
           Builder(
             builder: (context) => IconButton(
-              icon: Icon(Icons.adaptive.share),
-              tooltip: L10n.of(context).share,
+              icon: const Icon(Icons.download),
+              tooltip: L10n.of(context).downloadFile,
               onPressed: () => controller.saveSelectedEvent(context),
             ),
           ),
