@@ -113,7 +113,6 @@ class ChatListController extends State<ChatList>
 
   void onChatTap(Room room) async {
     if (room.membership == Membership.invite) {
-      
       return;
     }
 
@@ -590,23 +589,24 @@ class ChatListController extends State<ChatList>
               ],
             ),
           ),
-        PopupMenuItem(
-          value: ChatContextAction.block,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.block_outlined,
-                color: Theme.of(context).colorScheme.error,
-              ),
-              const SizedBox(width: 12),
-              Text(
-                L10n.of(context).block,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
-            ],
+        if (room.isDirectChat)
+          PopupMenuItem(
+            value: ChatContextAction.block,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.block_outlined,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  L10n.of(context).block,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              ],
+            ),
           ),
-        ),
         PopupMenuItem(
           value: ChatContextAction.leave,
           child: Row(
