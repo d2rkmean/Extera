@@ -126,8 +126,11 @@ class MessageContent extends StatelessWidget {
           case MessageTypes.Image:
           case MessageTypes.Sticker:
             if (event.redacted) continue textmessage;
-            final maxSize =
-                event.messageType == MessageTypes.Image ? 512.0 : 256.0;
+            final maxSize = event.messageType == MessageTypes.Sticker
+                ? 128
+                : event.messageType == MessageTypes.Image
+                    ? 512.0
+                    : 256.0;
             final w = event.content
                 .tryGetMap<String, Object?>('info')
                 ?.tryGet<int>('w');
@@ -199,8 +202,8 @@ class MessageContent extends StatelessWidget {
                 !event.redacted &&
                 event.isRichMessage) {
               var html = AppConfig.renderHtml && event.isRichMessage
-                ? event.formattedText
-                : event.text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+                  ? event.formattedText
+                  : event.text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
               if (event.messageType == MessageTypes.Emote) {
                 html = '* $html';
               }
