@@ -3378,5 +3378,14 @@
   "enterNewChat": "Enter new chat",
   "approve": "Approve",
   "youHaveKnocked": "You have knocked",
-  "pleaseWaitUntilInvited": "Please wait now, until someone from the room invites you."
+  "pleaseWaitUntilInvited": "Please wait until someone invites you.",
+  "backToMainChat": "Back to main chat",
+  "saveChanges": "Save changes",
+  "createSticker": "Create sticker or emoji",
+  "newStickerPack": "New sticker pack",
+  "stickerPackNameAlreadyExists": "A sticker pack with that name already exists",
+  "stickerPackName": "Sticker pack name",
+  "attribution": "Attribution",
+  "useAsSticker": "Sticker",
+  "useAsEmoji": "Emoji"
 }

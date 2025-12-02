@@ -5172,8 +5172,62 @@ abstract class L10n {
   /// No description provided for @pleaseWaitUntilInvited.
   ///
   /// In en, this message translates to:
-  /// **'Please wait now, until someone from the room invites you.'**
+  /// **'Please wait until someone invites you.'**
   String get pleaseWaitUntilInvited;
+
+  /// No description provided for @backToMainChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to main chat'**
+  String get backToMainChat;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get saveChanges;
+
+  /// No description provided for @createSticker.
+  ///
+  /// In en, this message translates to:
+  /// **'Create sticker or emoji'**
+  String get createSticker;
+
+  /// No description provided for @newStickerPack.
+  ///
+  /// In en, this message translates to:
+  /// **'New sticker pack'**
+  String get newStickerPack;
+
+  /// No description provided for @stickerPackNameAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'A sticker pack with that name already exists'**
+  String get stickerPackNameAlreadyExists;
+
+  /// No description provided for @stickerPackName.
+  ///
+  /// In en, this message translates to:
+  /// **'Sticker pack name'**
+  String get stickerPackName;
+
+  /// No description provided for @attribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Attribution'**
+  String get attribution;
+
+  /// No description provided for @useAsSticker.
+  ///
+  /// In en, this message translates to:
+  /// **'Sticker'**
+  String get useAsSticker;
+
+  /// No description provided for @useAsEmoji.
+  ///
+  /// In en, this message translates to:
+  /// **'Emoji'**
+  String get useAsEmoji;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

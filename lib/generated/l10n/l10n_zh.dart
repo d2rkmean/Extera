@@ -2792,8 +2792,35 @@ class L10nZh extends L10n {
   String get youHaveKnocked => 'You have knocked';
 
   @override
-  String get pleaseWaitUntilInvited =>
-      'Please wait now, until someone from the room invites you.';
+  String get pleaseWaitUntilInvited => 'Please wait until someone invites you.';
+
+  @override
+  String get backToMainChat => 'Back to main chat';
+
+  @override
+  String get saveChanges => 'Save changes';
+
+  @override
+  String get createSticker => 'Create sticker or emoji';
+
+  @override
+  String get newStickerPack => 'New sticker pack';
+
+  @override
+  String get stickerPackNameAlreadyExists =>
+      'A sticker pack with that name already exists';
+
+  @override
+  String get stickerPackName => 'Sticker pack name';
+
+  @override
+  String get attribution => 'Attribution';
+
+  @override
+  String get useAsSticker => 'Sticker';
+
+  @override
+  String get useAsEmoji => 'Emoji';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).

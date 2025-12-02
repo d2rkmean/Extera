@@ -263,7 +263,9 @@ abstract class AppRoutes {
                           pageBuilder: (context, state) => defaultPageBuilder(
                             context,
                             state,
-                            const EmotesSettings(),
+                            EmotesSettings(
+                              roomId: state.pathParameters['roomid'],
+                            ),
                           ),
                         ),
                       ],
@@ -369,7 +371,8 @@ abstract class AppRoutes {
                     roomId: state.pathParameters['roomid']!,
                     shareItems: shareItems,
                     eventId: state.uri.queryParameters['event'],
-                    showThreadRoots: state.uri.queryParameters['threads'] == 'true',
+                    showThreadRoots:
+                        state.uri.queryParameters['threads'] == 'true',
                   ),
                 );
               },
@@ -491,7 +494,9 @@ abstract class AppRoutes {
                       pageBuilder: (context, state) => defaultPageBuilder(
                         context,
                         state,
-                        const EmotesSettings(),
+                        EmotesSettings(
+                          roomId: state.pathParameters['roomid'],
+                        ),
                       ),
                       redirect: loggedOutRedirect,
                     ),
@@ -500,7 +505,9 @@ abstract class AppRoutes {
                       pageBuilder: (context, state) => defaultPageBuilder(
                         context,
                         state,
-                        const EmotesSettings(),
+                        EmotesSettings(
+                          roomId: state.pathParameters['roomid'],
+                        ),
                       ),
                       redirect: loggedOutRedirect,
                     ),

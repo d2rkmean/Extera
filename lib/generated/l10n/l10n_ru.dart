@@ -2902,4 +2902,32 @@ class L10nRu extends L10n {
   @override
   String get pleaseWaitUntilInvited =>
       'Пожалуйста, подождите когда администраторы примут Ваш запрос.';
+
+  @override
+  String get backToMainChat => 'Back to main chat';
+
+  @override
+  String get saveChanges => 'Save changes';
+
+  @override
+  String get createSticker => 'Create sticker or emoji';
+
+  @override
+  String get newStickerPack => 'New sticker pack';
+
+  @override
+  String get stickerPackNameAlreadyExists =>
+      'A sticker pack with that name already exists';
+
+  @override
+  String get stickerPackName => 'Sticker pack name';
+
+  @override
+  String get attribution => 'Attribution';
+
+  @override
+  String get useAsSticker => 'Sticker';
+
+  @override
+  String get useAsEmoji => 'Emoji';
 }
