@@ -168,9 +168,8 @@ class BootstrapDialogState extends State<BootstrapDialog> {
                   subtitle: Text(L10n.of(context).saveKeyManuallyDescription),
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.check_outlined),
-                  label: Text(L10n.of(context).next),
+                ElevatedButton(
+                  // icon: const Icon(Icons.check_outlined),
                   onPressed:
                       (_recoveryKeyCopied || _storeInSecureStorage == true)
                           ? () {
@@ -183,6 +182,8 @@ class BootstrapDialogState extends State<BootstrapDialog> {
                               setState(() => _recoveryKeyStored = true);
                             }
                           : null,
+                  // icon: const Icon(Icons.check_outlined),
+                  child: Text(L10n.of(context).next),
                 ),
               ],
             ),
@@ -272,16 +273,12 @@ class BootstrapDialogState extends State<BootstrapDialog> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton.icon(
+                    ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor: theme.colorScheme.onPrimary,
                         iconColor: theme.colorScheme.onPrimary,
                         backgroundColor: theme.colorScheme.primary,
                       ),
-                      icon: _recoveryKeyInputLoading
-                          ? const CircularProgressIndicator.adaptive()
-                          : const Icon(Icons.lock_open_outlined),
-                      label: Text(L10n.of(context).unlockOldMessages),
                       onPressed: _recoveryKeyInputLoading
                           ? null
                           : () async {
@@ -341,6 +338,9 @@ class BootstrapDialogState extends State<BootstrapDialog> {
                                 );
                               }
                             },
+                      child: _recoveryKeyInputLoading
+                        ? const LinearProgressIndicator()
+                        : Text(L10n.of(context).unlockOldMessages),
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -354,9 +354,8 @@ class BootstrapDialogState extends State<BootstrapDialog> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.cast_connected_outlined),
-                      label: Text(L10n.of(context).transferFromAnotherDevice),
+                    ElevatedButton(
+                      // icon: const Icon(Icons.cast_connected_outlined),
                       onPressed: _recoveryKeyInputLoading
                           ? null
                           : () async {
@@ -384,16 +383,16 @@ class BootstrapDialogState extends State<BootstrapDialog> {
                                   .show(context);
                               Navigator.of(context, rootNavigator: false).pop();
                             },
+                      // icon: const Icon(Icons.cast_connected_outlined),
+                      child: Text(L10n.of(context).transferFromAnotherDevice),
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton.icon(
+                    ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: theme.colorScheme.errorContainer,
                         foregroundColor: theme.colorScheme.onErrorContainer,
                         iconColor: theme.colorScheme.onErrorContainer,
                       ),
-                      icon: const Icon(Icons.delete_outlined),
-                      label: Text(L10n.of(context).recoveryKeyLost),
                       onPressed: _recoveryKeyInputLoading
                           ? null
                           : () async {
@@ -410,6 +409,8 @@ class BootstrapDialogState extends State<BootstrapDialog> {
                                 setState(() => _createBootstrap(true));
                               }
                             },
+                      // icon: const Icon(Icons.delete_outlined),
+                      child: Text(L10n.of(context).recoveryKeyLost),
                     ),
                   ],
                 ),

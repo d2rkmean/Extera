@@ -4308,25 +4308,25 @@ abstract class L10n {
   /// No description provided for @verifyOtherUser.
   ///
   /// In en, this message translates to:
-  /// **'🔐 Verify other user'**
+  /// **'Verify other user'**
   String get verifyOtherUser;
 
   /// No description provided for @verifyOtherUserDescription.
   ///
   /// In en, this message translates to:
-  /// **'If you verify another user, you can be sure that you know who you are really writing to. 💪\n\nWhen you start a verification, you and the other user will see a popup in the app. There you will then see a series of emojis or numbers that you have to compare with each other.\n\nThe best way to do this is to meet up or start a video call. 👭'**
+  /// **'If you verify another user, you can be sure that you know who you are really writing to. When you start a verification, you and the other user will see a popup in the app. There you will then see a series of emojis or numbers that you have to compare with each other.\n\nThe best way to do this is to meet up or start a video call. If you live in the distant future when deepfake technologies are widely available and indistinguishable, do not trust videocalls.'**
   String get verifyOtherUserDescription;
 
   /// No description provided for @verifyOtherDevice.
   ///
   /// In en, this message translates to:
-  /// **'🔐 Verify other device'**
+  /// **'Verify other device'**
   String get verifyOtherDevice;
 
   /// No description provided for @verifyOtherDeviceDescription.
   ///
   /// In en, this message translates to:
-  /// **'When you verify another device, those devices can exchange keys, increasing your overall security. 💪 When you start a verification, a popup will appear in the app on both devices. There you will then see a series of emojis or numbers that you have to compare with each other. It\'s best to have both devices handy before you start the verification. 🤳'**
+  /// **'When you verify another device, those devices can exchange keys, increasing your overall security. When you start a verification, a popup will appear in the app on both devices. There you will then see a series of emojis or numbers that you have to compare with each other. It\'s best to have both devices handy before you start the verification.'**
   String get verifyOtherDeviceDescription;
 
   /// No description provided for @acceptedKeyVerification.
