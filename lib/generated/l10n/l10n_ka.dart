@@ -458,6 +458,9 @@ class L10nKa extends L10n {
   String get chat => 'ჩატი';
 
   @override
+  String get newChat => 'New chat';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'თქვენი ჩატის სარეზერვო საშუალება კონფიგურირებული იქნა.';
 
@@ -1058,9 +1061,6 @@ class L10nKa extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Please be aware that you need Pantalaimon to use end-to-end encryption for now.';
-
-  @override
-  String get newChat => 'New chat';
 
   @override
   String get newMessageInFluffyChat => '💬 New message in Extera';

@@ -456,6 +456,9 @@ class L10nCs extends L10n {
   String get chat => 'Chat';
 
   @override
+  String get newChat => 'Nový chat';
+
+  @override
   String get yourChatBackupHasBeenSetUp => 'Vaše záloha chatu byla nastavena.';
 
   @override
@@ -1061,9 +1064,6 @@ class L10nCs extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Prosím vezměte na vědomí, že pro použití koncového šifrování je prozatím potřeba použít Pantalaimon.';
-
-  @override
-  String get newChat => 'Nový chat';
 
   @override
   String get newMessageInFluffyChat => 'Nová zpráva ve FluffyChatu';

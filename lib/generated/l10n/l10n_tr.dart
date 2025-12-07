@@ -458,6 +458,9 @@ class L10nTr extends L10n {
   String get chat => 'Sohbet';
 
   @override
+  String get newChat => 'Yeni sohbet';
+
+  @override
   String get yourChatBackupHasBeenSetUp => 'Sohbet yedeklemeniz ayarlandı.';
 
   @override
@@ -1060,9 +1063,6 @@ class L10nTr extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Uçtan uca şifreleme kullanmak için şimdilik Pantalaimon\'a ihtiyacınız olduğunu lütfen unutmayın.';
-
-  @override
-  String get newChat => 'Yeni sohbet';
 
   @override
   String get newMessageInFluffyChat => '💬 FluffyChat\'te yeni mesaj';

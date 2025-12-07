@@ -456,6 +456,9 @@ class L10nGl extends L10n {
   String get chat => 'Conversa';
 
   @override
+  String get newChat => 'Nova conversa';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Configurouse a copia de apoio da charla.';
 
@@ -1061,9 +1064,6 @@ class L10nGl extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Ten en conta que polo de agora precisas Pantalaimon para a cifraxe extremo-a-extremo.';
-
-  @override
-  String get newChat => 'Nova conversa';
 
   @override
   String get newMessageInFluffyChat => '💬 Nova mensaxe en FluffyChat';

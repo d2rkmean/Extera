@@ -457,6 +457,9 @@ class L10nSv extends L10n {
   String get chat => 'Chatt';
 
   @override
+  String get newChat => 'Ny chatt';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Din chatt-backup har konfigurerats.';
 
@@ -1058,9 +1061,6 @@ class L10nSv extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Var medveten om att du behöver Pantalaimon för att använda ändpunktskryptering tillsvidare.';
-
-  @override
-  String get newChat => 'Ny chatt';
 
   @override
   String get newMessageInFluffyChat => '💬 Nya meddelanden i FluffyChat';

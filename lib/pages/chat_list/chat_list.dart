@@ -67,6 +67,20 @@ extension LocalizedActiveFilter on ActiveFilter {
         return L10n.of(context).spaces;
     }
   }
+
+  IconData toIconData(bool outline) {
+    switch (this) {
+      case ActiveFilter.allChats:
+      case ActiveFilter.messages:
+        return outline ? Icons.chat_bubble_outline : Icons.chat_bubble;
+      case ActiveFilter.unread:
+        return outline ? Icons.mark_unread_chat_alt_outlined : Icons.mark_unread_chat_alt;
+      case ActiveFilter.groups:
+        return outline ? Icons.people_outline : Icons.people;
+      case ActiveFilter.spaces:
+        return outline ? Icons.grid_view_outlined : Icons.grid_view_rounded;
+    }
+  }
 }
 
 class ChatList extends StatefulWidget {

@@ -459,6 +459,9 @@ class L10nGa extends L10n {
   String get chat => 'Comhrá';
 
   @override
+  String get newChat => 'Comhrá nua';
+
+  @override
   String get yourChatBackupHasBeenSetUp => 'Bunaíodh do chúltaca comhrá.';
 
   @override
@@ -1069,9 +1072,6 @@ class L10nGa extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Bí ar an eolas go dteastaíonn Pantalaimon uait chun criptiú ó cheann go ceann a úsáid anois.';
-
-  @override
-  String get newChat => 'Comhrá nua';
 
   @override
   String get newMessageInFluffyChat => '💬 Teachtaireacht nua in FluffyChat';

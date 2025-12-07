@@ -458,6 +458,9 @@ class L10nEu extends L10n {
   String get chat => 'Txata';
 
   @override
+  String get newChat => 'Txat berria';
+
+  @override
   String get yourChatBackupHasBeenSetUp => 'Txaten babeskopiak ezarri dira.';
 
   @override
@@ -1062,9 +1065,6 @@ class L10nEu extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Kontuan izan oraingoz Pantalaimon behar duzula ertzetik ertzerako zifratzerako.';
-
-  @override
-  String get newChat => 'Txat berria';
 
   @override
   String get newMessageInFluffyChat => '💬 Mezu berria FluffyChaten';

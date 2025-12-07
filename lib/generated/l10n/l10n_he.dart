@@ -455,6 +455,9 @@ class L10nHe extends L10n {
   String get chat => 'צ׳אט';
 
   @override
+  String get newChat => 'צ\'אט חדש';
+
+  @override
   String get yourChatBackupHasBeenSetUp => 'גיבוי הצ\'אט שלך הוגדר.';
 
   @override
@@ -1054,9 +1057,6 @@ class L10nHe extends L10n {
   @override
   String get needPantalaimonWarning =>
       'שים לב שאתה צריך Pantalaimon כדי להשתמש בהצפנה מקצה לקצה לעת עתה.';
-
-  @override
-  String get newChat => 'צ\'אט חדש';
 
   @override
   String get newMessageInFluffyChat => 'הודעה חדשה ב-FluffyChat';

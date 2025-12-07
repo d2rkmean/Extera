@@ -459,6 +459,9 @@ class L10nTa extends L10n {
   String get chat => 'அரட்டை';
 
   @override
+  String get newChat => 'புதிய அரட்டை';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'உங்கள் அரட்டை காப்புப்பிரதி அமைக்கப்பட்டுள்ளது.';
 
@@ -1068,9 +1071,6 @@ class L10nTa extends L10n {
   @override
   String get needPantalaimonWarning =>
       'இப்போதைக்கு இறுதி முதல் இறுதி குறியாக்கத்தைப் பயன்படுத்த உங்களுக்கு பாண்டலாயமன் தேவை என்பதை நினைவில் கொள்க.';
-
-  @override
-  String get newChat => 'புதிய அரட்டை';
 
   @override
   String get newMessageInFluffyChat => 'Fuf பஞ்சுபோன்ற புதிய செய்தி';

@@ -456,6 +456,9 @@ class L10nLt extends L10n {
   String get chat => 'Pokalbis';
 
   @override
+  String get newChat => 'Naujas pokalbis';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Jūsų pokalbio atsarginė kopija buvo nustatyta.';
 
@@ -1059,9 +1062,6 @@ class L10nLt extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Atminkite, kad norint naudoti end-to-end šifravimą, reikalingas Pantalaimon.';
-
-  @override
-  String get newChat => 'Naujas pokalbis';
 
   @override
   String get newMessageInFluffyChat => '💬 Nauja žinutė FluffyChat\'e';

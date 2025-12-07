@@ -130,61 +130,6 @@ class ChatListViewBody extends StatelessWidget {
                           onStatusEdit: controller.setStatus,
                         ),
                       ),
-                    AnimatedContainer(
-                      height: controller.isTorBrowser ? 64 : 0,
-                      duration: FluffyThemes.animationDuration,
-                      curve: FluffyThemes.animationCurve,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: const BoxDecoration(),
-                      child: Material(
-                        color: theme.colorScheme.surface,
-                        child: ListTile(
-                          leading: const Icon(Icons.vpn_key),
-                          title: Text(L10n.of(context).dehydrateTor),
-                          subtitle: Text(L10n.of(context).dehydrateTorLong),
-                          trailing: const Icon(Icons.chevron_right_outlined),
-                          onTap: controller.dehydrate,
-                        ),
-                      ),
-                    ),
-                    if (client.rooms.isNotEmpty && !controller.isSearchMode)
-                      SizedBox(
-                        height: 64,
-                        child: ListView(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12.0,
-                            vertical: 12.0,
-                          ),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            if (AppConfig.separateChatTypes)
-                              ActiveFilter.messages
-                            else
-                              ActiveFilter.allChats,
-                            ActiveFilter.groups,
-                            ActiveFilter.unread,
-                            if (spaceDelegateCandidates.isNotEmpty &&
-                                !controller.widget.displayNavigationRail)
-                              ActiveFilter.spaces,
-                          ]
-                              .map(
-                                (filter) => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 4.0,
-                                  ),
-                                  child: FilterChip(
-                                    selected: filter == controller.activeFilter,
-                                    onSelected: (_) =>
-                                        controller.setActiveFilter(filter),
-                                    label:
-                                        Text(filter.toLocalizedString(context)),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ),
                     if (controller.isSearchMode)
                       SearchTitle(
                         title: L10n.of(context).chats,

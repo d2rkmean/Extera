@@ -452,6 +452,9 @@ class L10nKo extends L10n {
   String get chat => '채팅';
 
   @override
+  String get newChat => '새 채팅';
+
+  @override
   String get yourChatBackupHasBeenSetUp => '당신의 채팅 백업이 설정되었습니다.';
 
   @override
@@ -1035,9 +1038,6 @@ class L10nKo extends L10n {
   @override
   String get needPantalaimonWarning =>
       '지금 종단간 암호화를 사용하기 위해서는 Pantalaimon이 필요하다는 것을 알아주세요.';
-
-  @override
-  String get newChat => '새 채팅';
 
   @override
   String get newMessageInFluffyChat => '💬 FluffyChat에서 새로운 메시지';

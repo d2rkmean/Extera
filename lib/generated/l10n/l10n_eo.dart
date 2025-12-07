@@ -456,6 +456,9 @@ class L10nEo extends L10n {
   String get chat => 'Babilo';
 
   @override
+  String get newChat => 'Nova babilo';
+
+  @override
   String get yourChatBackupHasBeenSetUp => 'Your chat backup has been set up.';
 
   @override
@@ -1059,9 +1062,6 @@ class L10nEo extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Bonvolu scii, ke vi ankoraŭ bezonas la programon Pantalaimon por uzi tutvojan ĉifradon.';
-
-  @override
-  String get newChat => 'Nova babilo';
 
   @override
   String get newMessageInFluffyChat => 'Nova mesaĝo en FluffyChat';

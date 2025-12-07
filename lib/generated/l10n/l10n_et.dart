@@ -457,6 +457,9 @@ class L10nEt extends L10n {
   String get chat => 'Vestlus';
 
   @override
+  String get newChat => 'Uus vestlus';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Sinu vestluste varundus on seadistatud.';
 
@@ -1061,9 +1064,6 @@ class L10nEt extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Palun arvesta, et sa saad hetkel kasutada läbivat krüptimist vaid siis, kui koduserver kasutab Pantalaimon\'it.';
-
-  @override
-  String get newChat => 'Uus vestlus';
 
   @override
   String get newMessageInFluffyChat => '💬 Uus sõnum FluffyChat\'i vahendusel';

@@ -458,6 +458,9 @@ class L10nFil extends L10n {
   String get chat => 'Chat';
 
   @override
+  String get newChat => 'New chat';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Na-set up na ang iyong chat backup.';
 
@@ -1062,9 +1065,6 @@ class L10nFil extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Please be aware that you need Pantalaimon to use end-to-end encryption for now.';
-
-  @override
-  String get newChat => 'New chat';
 
   @override
   String get newMessageInFluffyChat => '💬 New message in Extera';

@@ -1,0 +1,61 @@
+import 'package:extera_next/config/app_config.dart';
+import 'package:flutter/material.dart';
+
+import 'package:matrix/matrix.dart';
+
+import 'package:extera_next/pages/chat_list/chat_list.dart';
+import '../../widgets/matrix.dart';
+
+class ChatListBottomNavbar extends StatelessWidget {
+  final ChatListController controller;
+
+  const ChatListBottomNavbar(this.controller, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final client = Matrix.of(context).client;
+    final theme = Theme.of(context);
+
+    final spaces = client.rooms.where((r) => r.isSpace);
+    final spaceDelegateCandidates = <String, Room>{};
+    for (final space in spaces) {
+      for (final spaceChild in space.spaceChildren) {
+        final roomId = spaceChild.roomId;
+        if (roomId == null) continue;
+        spaceDelegateCandidates[roomId] = space;
+      }
+    }
+
+    final filters = [
+      if (AppConfig.separateChatTypes)
+        ActiveFilter.messages
+      else
+        ActiveFilter.allChats,
+      ActiveFilter.groups,
+      ActiveFilter.unread,
+      if (spaceDelegateCandidates.isNotEmpty &&
+          !controller.widget.displayNavigationRail)
+        ActiveFilter.spaces,
+    ];
+
+    return BottomNavigationBar(
+      currentIndex: filters.indexOf(controller.activeFilter),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      selectedItemColor: theme.colorScheme.primary,
+      unselectedItemColor: theme.colorScheme.secondary,
+      enableFeedback: true,
+      onTap: (index) {
+        controller.setActiveFilter(filters[index]);
+      },
+      items: filters
+          .map(
+            (filter) => BottomNavigationBarItem(
+              icon: Icon(filter.toIconData(true)),
+              activeIcon: Icon(filter.toIconData(false)),
+              label: filter.toLocalizedString(context),
+            ),
+          )
+          .toList(),
+    );
+  }
+}

@@ -1,4 +1,6 @@
 import 'package:extera_next/config/app_config.dart';
+import 'package:extera_next/pages/chat_list/chat_list_bottom_navbar.dart';
+import 'package:extera_next/widgets/matrix.dart';
 import 'package:flutter/material.dart';
 
 import 'package:extera_next/generated/l10n/l10n.dart';
@@ -16,6 +18,8 @@ class ChatListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final client = Matrix.of(context).client;
+    
     return PopScope(
       canPop: !controller.isSearchMode && controller.activeSpaceId == null,
       onPopInvokedWithResult: (pop, _) {
@@ -31,7 +35,8 @@ class ChatListView extends StatelessWidget {
       },
       child: Row(
         children: [
-          if (FluffyThemes.isColumnMode(context) || AppConfig.displayNavigationRail) ...[
+          if (FluffyThemes.isColumnMode(context) ||
+              AppConfig.displayNavigationRail) ...[
             SpacesNavigationRail(
               activeSpaceId: controller.activeSpaceId,
               onGoToChats: controller.clearActiveSpace,
@@ -53,13 +58,16 @@ class ChatListView extends StatelessWidget {
                         controller.activeSpaceId == null
                     ? FloatingActionButton.extended(
                         onPressed: () => context.go('/rooms/newprivatechat'),
-                        icon: const Icon(Icons.add_outlined),
-                        label: Text(
-                          L10n.of(context).chat,
-                          overflow: TextOverflow.fade,
-                        ),
+                        icon: const Icon(Icons.chat_outlined),
+                        label: Text(L10n.of(context).newChat),
                       )
                     : const SizedBox.shrink(),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.endFloat,
+                bottomNavigationBar: client.rooms.isNotEmpty &&
+                        !controller.isSearchMode
+                    ? ChatListBottomNavbar(controller)
+                    : null,
               ),
             ),
           ),

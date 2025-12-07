@@ -455,6 +455,9 @@ class L10nHu extends L10n {
   String get chat => 'Csevegés';
 
   @override
+  String get newChat => 'Új csevegés';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'A beszélgetések mentése be lett állítva.';
 
@@ -1059,9 +1062,6 @@ class L10nHu extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Jelenleg a Pantalaimon szükséges a végpontok közötti titkosítás használatához.';
-
-  @override
-  String get newChat => 'Új csevegés';
 
   @override
   String get newMessageInFluffyChat => '💬 Új FluffyChat üzenet';

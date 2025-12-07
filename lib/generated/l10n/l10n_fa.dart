@@ -455,6 +455,9 @@ class L10nFa extends L10n {
   String get chat => 'گپ';
 
   @override
+  String get newChat => 'گپ جدید';
+
+  @override
   String get yourChatBackupHasBeenSetUp => 'پشتیبان گپ‌تان تنظیم شده است.';
 
   @override
@@ -1055,9 +1058,6 @@ class L10nFa extends L10n {
   @override
   String get needPantalaimonWarning =>
       'لطفا توجه داشته باشید که در حال حاضر برای استفاده از رمزگذاری انتها به انتها به Pantalaimon نیاز دارید.';
-
-  @override
-  String get newChat => 'گپ جدید';
 
   @override
   String get newMessageInFluffyChat => '💬 پیام جدید در فلافی‌چت';

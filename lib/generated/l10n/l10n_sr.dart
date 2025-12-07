@@ -456,6 +456,9 @@ class L10nSr extends L10n {
   String get chat => 'Ћаскање';
 
   @override
+  String get newChat => 'Ново ћаскање';
+
+  @override
   String get yourChatBackupHasBeenSetUp => 'Your chat backup has been set up.';
 
   @override
@@ -1056,9 +1059,6 @@ class L10nSr extends L10n {
   @override
   String get needPantalaimonWarning =>
       'За сада, потребан је Пантелејмон (Pantalaimon) да бисте користили шифровање с краја на крај.';
-
-  @override
-  String get newChat => 'Ново ћаскање';
 
   @override
   String get newMessageInFluffyChat => 'Нова порука — FluffyChat';

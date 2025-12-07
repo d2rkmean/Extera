@@ -457,6 +457,9 @@ class L10nUk extends L10n {
   String get chat => 'Бесіда';
 
   @override
+  String get newChat => 'Нова бесіда';
+
+  @override
   String get yourChatBackupHasBeenSetUp => 'Рез. копію чату налаштовано.';
 
   @override
@@ -1061,9 +1064,6 @@ class L10nUk extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Майте на увазі, що на цей час вам потрібен Pantalaimon, щоб використовувати наскрізне шифрування.';
-
-  @override
-  String get newChat => 'Нова бесіда';
 
   @override
   String get newMessageInFluffyChat => '💬 Нове повідомлення у FluffyChat';

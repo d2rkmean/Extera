@@ -450,6 +450,9 @@ class L10nZh extends L10n {
   String get chat => '聊天';
 
   @override
+  String get newChat => '新的聊天';
+
+  @override
   String get yourChatBackupHasBeenSetUp => '你的聊天记录备份已设置。';
 
   @override
@@ -1024,9 +1027,6 @@ class L10nZh extends L10n {
 
   @override
   String get needPantalaimonWarning => '请注意当前你需要 Pantalaimon 以使用端到端加密功能。';
-
-  @override
-  String get newChat => '新的聊天';
 
   @override
   String get newMessageInFluffyChat => '💬 FluffyChat 新消息';
@@ -3148,6 +3148,9 @@ class L10nZhHant extends L10nZh {
   String get chat => '聊天室';
 
   @override
+  String get newChat => '新聊天';
+
+  @override
   String get yourChatBackupHasBeenSetUp => '您的聊天室記錄備份已設定。';
 
   @override
@@ -3716,9 +3719,6 @@ class L10nZhHant extends L10nZh {
 
   @override
   String get needPantalaimonWarning => '請注意您需要 Pantalaimon 才能使用點對點加密功能。';
-
-  @override
-  String get newChat => '新聊天';
 
   @override
   String get newMessageInFluffyChat => '💬 來自 FluffyChat 的新訊息';

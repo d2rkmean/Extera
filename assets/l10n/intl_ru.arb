@@ -541,6 +541,7 @@
 		"type": "String",
 		"placeholders": {}
 	},
+    "newChat": "Новый чат",
 	"chat": "Чат",
 	"@chat": {
 		"type": "String",

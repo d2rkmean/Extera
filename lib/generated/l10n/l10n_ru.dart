@@ -456,6 +456,9 @@ class L10nRu extends L10n {
   String get chat => 'Чат';
 
   @override
+  String get newChat => 'Новый чат';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Настроено резервное копирование чатов.';
 
@@ -1059,9 +1062,6 @@ class L10nRu extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Помните, что вам нужен Pantalaimon для использования сквозного шифрования.';
-
-  @override
-  String get newChat => 'Новый чат';
 
   @override
   String get newMessageInFluffyChat => '💬 Новое сообщение в Extera';

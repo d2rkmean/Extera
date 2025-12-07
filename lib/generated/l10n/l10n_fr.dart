@@ -458,6 +458,9 @@ class L10nFr extends L10n {
   String get chat => 'Discussion';
 
   @override
+  String get newChat => 'Nouvelle discussion';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Votre sauvegarde de la discussion a été mise en place.';
 
@@ -1072,9 +1075,6 @@ class L10nFr extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Pour l\'instant, vous avez besoin de Pantalaimon pour utiliser le chiffrement de bout en bout.';
-
-  @override
-  String get newChat => 'Nouvelle discussion';
 
   @override
   String get newMessageInFluffyChat => '💬 Nouveau message dans Extera';

@@ -453,6 +453,9 @@ class L10nJa extends L10n {
   String get chat => 'チャット';
 
   @override
+  String get newChat => '新規チャット';
+
+  @override
   String get yourChatBackupHasBeenSetUp => 'チャットバックアップを設定ました。';
 
   @override
@@ -1044,9 +1047,6 @@ class L10nJa extends L10n {
   @override
   String get needPantalaimonWarning =>
       '現時点では、エンドツーエンドの暗号化を使用するにはPantalaimonが必要であることに注意してください。';
-
-  @override
-  String get newChat => '新規チャット';
 
   @override
   String get newMessageInFluffyChat => '💬 FluffyChatに新しいメッセージがあります';

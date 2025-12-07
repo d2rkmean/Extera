@@ -458,6 +458,9 @@ class L10nLv extends L10n {
   String get chat => 'Tērzēšana';
 
   @override
+  String get newChat => 'Jauna tērzēšana';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Tērzēšanu rezerves kopēšana tika iestatīta.';
 
@@ -1063,9 +1066,6 @@ class L10nLv extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Lūgums ņemt vērā, ka pagaidām ir nepieciešams Pantalaimon, lai izmantotu pilnīgu šifrēšanu.';
-
-  @override
-  String get newChat => 'Jauna tērzēšana';
 
   @override
   String get newMessageInFluffyChat => '💬 Jauna ziņa FluffyChat';

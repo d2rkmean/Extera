@@ -458,6 +458,9 @@ class L10nSl extends L10n {
   String get chat => 'Klepet';
 
   @override
+  String get newChat => 'New chat';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Varnostna kopija klepeta je nastavljena.';
 
@@ -1060,9 +1063,6 @@ class L10nSl extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Please be aware that you need Pantalaimon to use end-to-end encryption for now.';
-
-  @override
-  String get newChat => 'New chat';
 
   @override
   String get newMessageInFluffyChat => '💬 New message in Extera';

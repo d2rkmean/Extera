@@ -456,6 +456,9 @@ class L10nRo extends L10n {
   String get chat => 'Chat';
 
   @override
+  String get newChat => 'Chat nou';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Backup-ul vostru de chat a fost configurat.';
 
@@ -1062,9 +1065,6 @@ class L10nRo extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Vă rugăm să fiți conștienți că e nevoie de Pantalaimon să folosiți criptare end-to-end deocamdată.';
-
-  @override
-  String get newChat => 'Chat nou';
 
   @override
   String get newMessageInFluffyChat => '💬 Mesaj nou în FluffyChat';

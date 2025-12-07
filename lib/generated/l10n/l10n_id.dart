@@ -458,6 +458,9 @@ class L10nId extends L10n {
   String get chat => 'Obrolan';
 
   @override
+  String get newChat => 'Chat baru';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Cadangan obrolanmu telah disiapkan.';
 
@@ -1064,9 +1067,6 @@ class L10nId extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Perlu diketahui bahwa kamu memerlukan Pantalaimon untuk menggunakan enkripsi ujung-ke-ujung untuk saat ini.';
-
-  @override
-  String get newChat => 'Chat baru';
 
   @override
   String get newMessageInFluffyChat => '💬 Pesan baru di FluffyChat';

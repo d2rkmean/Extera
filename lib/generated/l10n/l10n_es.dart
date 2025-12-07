@@ -457,6 +457,9 @@ class L10nEs extends L10n {
   String get chat => 'Chat';
 
   @override
+  String get newChat => 'Nuevo chat';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Se ha configurado la copia de respaldo del chat.';
 
@@ -1065,9 +1068,6 @@ class L10nEs extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Tenga en cuenta que necesita Pantalaimon para utilizar el cifrado de extremo a extremo por ahora.';
-
-  @override
-  String get newChat => 'Nuevo chat';
 
   @override
   String get newMessageInFluffyChat => 'Nuevo mensaje en Extera';

@@ -512,7 +512,7 @@
     "type": "String",
     "placeholders": {}
   },
-  "changeTheme": "Change your style",
+  "changeTheme": "Appearance",
   "@changeTheme": {
     "type": "String",
     "placeholders": {}
@@ -533,6 +533,7 @@
     "placeholders": {}
   },
   "chat": "Chat",
+  "newChat": "New chat",
   "@chat": {
     "type": "String",
     "placeholders": {}

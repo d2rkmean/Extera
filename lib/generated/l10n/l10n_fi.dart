@@ -457,6 +457,9 @@ class L10nFi extends L10n {
   String get chat => 'Keskustelu';
 
   @override
+  String get newChat => 'Uusi keskustelu';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Keskustelujesi varmuuskopiointi on asetettu.';
 
@@ -1061,9 +1064,6 @@ class L10nFi extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Tiedäthän tarvitsevasi toistaiseksi Pantalaimonin käyttääksesi päästä-päähän-salausta.';
-
-  @override
-  String get newChat => 'Uusi keskustelu';
 
   @override
   String get newMessageInFluffyChat => '💬 Uusi viesti FluffyChätissä';

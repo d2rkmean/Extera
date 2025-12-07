@@ -458,6 +458,9 @@ class L10nCa extends L10n {
   String get chat => 'Xat';
 
   @override
+  String get newChat => 'Xat nou';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'S’ha configurat la còpia de seguretat del xat.';
 
@@ -1063,9 +1066,6 @@ class L10nCa extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Tingueu en compte que, ara per ara, us cal el Pantalaimon per a poder utilitzar el xifratge d’extrem a extrem.';
-
-  @override
-  String get newChat => 'Xat nou';
 
   @override
   String get newMessageInFluffyChat => '💬 Missatge nou al FluffyChat';

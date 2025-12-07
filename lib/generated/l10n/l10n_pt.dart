@@ -441,7 +441,7 @@ class L10nPt extends L10n {
   String get changeTheHomeserver => 'Change the homeserver';
 
   @override
-  String get changeTheme => 'Change your style';
+  String get changeTheme => 'Appearance';
 
   @override
   String get changeTheNameOfTheGroup => 'Change the name of the group';
@@ -455,6 +455,9 @@ class L10nPt extends L10n {
 
   @override
   String get chat => 'Chat';
+
+  @override
+  String get newChat => 'New chat';
 
   @override
   String get yourChatBackupHasBeenSetUp => 'Your chat backup has been set up.';
@@ -1056,9 +1059,6 @@ class L10nPt extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Please be aware that you need Pantalaimon to use end-to-end encryption for now.';
-
-  @override
-  String get newChat => 'New chat';
 
   @override
   String get newMessageInFluffyChat => '💬 New message in Extera';
@@ -3219,6 +3219,9 @@ class L10nPtBr extends L10nPt {
   String get chat => 'Conversas';
 
   @override
+  String get newChat => 'Nova conversa';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Seu backup de conversas foi configurado.';
 
@@ -3817,9 +3820,6 @@ class L10nPtBr extends L10nPt {
   @override
   String get needPantalaimonWarning =>
       'Por favor, observe que, por enquanto, você precisa do Pantalaimon para usar criptografia ponta-a-ponta.';
-
-  @override
-  String get newChat => 'Nova conversa';
 
   @override
   String get newMessageInFluffyChat => '💬 Nova mensagem no FluffyChat';
@@ -5387,6 +5387,9 @@ class L10nPtPt extends L10nPt {
   String get chat => 'Conversa';
 
   @override
+  String get newChat => 'Nova conversa';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'A cópia de segurança foi configurada.';
 
@@ -5883,9 +5886,6 @@ class L10nPtPt extends L10nPt {
 
   @override
   String get needPantalaimonWarning => 'Por favor,';
-
-  @override
-  String get newChat => 'Nova conversa';
 
   @override
   String get newMessageInFluffyChat => 'Nova mensagem no FluffyChat';

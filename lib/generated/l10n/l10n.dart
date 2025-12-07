@@ -918,7 +918,7 @@ abstract class L10n {
   /// No description provided for @changeTheme.
   ///
   /// In en, this message translates to:
-  /// **'Change your style'**
+  /// **'Appearance'**
   String get changeTheme;
 
   /// No description provided for @changeTheNameOfTheGroup.
@@ -944,6 +944,12 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Chat'**
   String get chat;
+
+  /// No description provided for @newChat.
+  ///
+  /// In en, this message translates to:
+  /// **'New chat'**
+  String get newChat;
 
   /// No description provided for @yourChatBackupHasBeenSetUp.
   ///
@@ -2012,12 +2018,6 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Please be aware that you need Pantalaimon to use end-to-end encryption for now.'**
   String get needPantalaimonWarning;
-
-  /// No description provided for @newChat.
-  ///
-  /// In en, this message translates to:
-  /// **'New chat'**
-  String get newChat;
 
   /// No description provided for @newMessageInFluffyChat.
   ///

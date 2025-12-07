@@ -442,7 +442,7 @@ class L10nEl extends L10n {
   String get changeTheHomeserver => 'Change the homeserver';
 
   @override
-  String get changeTheme => 'Change your style';
+  String get changeTheme => 'Appearance';
 
   @override
   String get changeTheNameOfTheGroup => 'Change the name of the group';
@@ -456,6 +456,9 @@ class L10nEl extends L10n {
 
   @override
   String get chat => 'Chat';
+
+  @override
+  String get newChat => 'New chat';
 
   @override
   String get yourChatBackupHasBeenSetUp => 'Your chat backup has been set up.';
@@ -1057,9 +1060,6 @@ class L10nEl extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Please be aware that you need Pantalaimon to use end-to-end encryption for now.';
-
-  @override
-  String get newChat => 'New chat';
 
   @override
   String get newMessageInFluffyChat => '💬 New message in Extera';

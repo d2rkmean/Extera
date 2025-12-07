@@ -457,6 +457,9 @@ class L10nHr extends L10n {
   String get chat => 'Razgovor';
 
   @override
+  String get newChat => 'Novi razgovor';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Sigurnosna kopija tvog razgovora je postavljena.';
 
@@ -1058,9 +1061,6 @@ class L10nHr extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Za trenutačno korištenje obostranog šifriranja trebaš Pantalaimon.';
-
-  @override
-  String get newChat => 'Novi razgovor';
 
   @override
   String get newMessageInFluffyChat => '💬 Nova poruka u FluffyChatu';

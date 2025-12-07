@@ -458,6 +458,9 @@ class L10nDe extends L10n {
   String get chat => 'Chat';
 
   @override
+  String get newChat => 'Neuer Chat';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'Dein Chat-Backup wurde eingerichtet.';
 
@@ -1062,9 +1065,6 @@ class L10nDe extends L10n {
   @override
   String get needPantalaimonWarning =>
       'Bitte beachte, dass du Pantalaimon brauchst, um Ende-zu-Ende-Verschlüsselung benutzen zu können.';
-
-  @override
-  String get newChat => 'Neuer Chat';
 
   @override
   String get newMessageInFluffyChat => '💬 Neue Nachricht in Extera';

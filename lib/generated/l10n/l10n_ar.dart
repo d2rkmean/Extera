@@ -454,6 +454,9 @@ class L10nAr extends L10n {
   String get chat => 'محادثة';
 
   @override
+  String get newChat => 'محادثة جديدة';
+
+  @override
   String get yourChatBackupHasBeenSetUp =>
       'تم إعداد النسخ الاحتياطي لمحادثاتك.';
 
@@ -1049,9 +1052,6 @@ class L10nAr extends L10n {
   @override
   String get needPantalaimonWarning =>
       'اعلم أننا نستخدم بانتاليمون للتشفير طرفا لطرف.';
-
-  @override
-  String get newChat => 'محادثة جديدة';
 
   @override
   String get newMessageInFluffyChat => '💬 رسالة جديدة في Extera';
