@@ -2934,6 +2934,12 @@ class L10nPt extends L10n {
 
   @override
   String get useAsEmoji => 'Emoji';
+
+  @override
+  String get mutualRooms => 'Mutual rooms';
+
+  @override
+  String get matrixId => 'Matrix ID';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).

@@ -71,6 +71,7 @@ class UserDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final client = Matrix.of(context).client;
     final dmRoomId = client.getDirectChatFromUserId(profile.userId);
+    
     final displayname = profile.displayName ??
         profile.userId.localpart ??
         L10n.of(context).user;

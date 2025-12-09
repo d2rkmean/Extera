@@ -1,3 +1,4 @@
+import 'package:extera_next/utils/show_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,6 @@ import 'package:extera_next/utils/stream_extension.dart';
 import 'package:extera_next/widgets/adaptive_dialogs/public_room_dialog.dart';
 import 'package:extera_next/widgets/avatar.dart';
 import '../../config/themes.dart';
-import '../../widgets/adaptive_dialogs/user_dialog.dart';
 import '../../widgets/matrix.dart';
 import 'chat_list_header.dart';
 
@@ -115,7 +115,7 @@ class ChatListViewBody extends StatelessWidget {
                                               .results[i].userId.localpart ??
                                           L10n.of(context).unknownDevice,
                                   avatar: userSearchResult.results[i].avatarUrl,
-                                  onPressed: () => UserDialog.show(
+                                  onPressed: () => showProfile(
                                     context: context,
                                     profile: userSearchResult.results[i],
                                   ),

@@ -1,0 +1,61 @@
+import 'package:extera_next/pages/profile/profile_view.dart';
+import 'package:extera_next/utils/matrix_sdk_extensions/msc2666_extension.dart';
+import 'package:extera_next/widgets/matrix.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:matrix/matrix.dart';
+
+class ProfilePage extends StatefulWidget {
+  final Profile profile;
+  final bool noProfileWarning;
+
+  const ProfilePage(this.profile, {this.noProfileWarning = false, super.key});
+
+  @override
+  State<StatefulWidget> createState() => ProfileController();
+}
+
+class ProfileController extends State<ProfilePage> {
+  List<Room> mutualRooms = [];
+  bool canQueryMutualRooms = true;
+  bool isQueryingMutualRooms = false;
+  final ScrollController scrollController = ScrollController();
+
+  Future<void> queryMutualRooms() async {
+    final client = Matrix.of(context).client;
+    if (!canQueryMutualRooms || isQueryingMutualRooms) return;
+    canQueryMutualRooms = await client.isMsc2666Supported();
+    setState(() {
+      isQueryingMutualRooms = true;
+    });
+    final rooms = (await client.queryMutualRoomsIds(widget.profile.userId))
+        .map(
+          (roomId) => client.getRoomById(roomId),
+        )
+        .where(
+          (room) => room != null && !room.isSpace && !room.isDirectChat,
+        );
+    setState(() {
+      mutualRooms = rooms.map((room) => room!).toList();
+      isQueryingMutualRooms = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    queryMutualRooms();
+  }
+
+  void onChatTap(Room room) {
+    if (room.membership == Membership.leave) {
+      context.go('/rooms/archive/${room.id}');
+      return;
+    }
+
+    context.go('/rooms/${room.id}');
+  }
+
+  @override
+  Widget build(BuildContext context) => ProfileView(this);
+}

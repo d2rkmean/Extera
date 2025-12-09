@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:extera_next/pages/chat_thread/thread.dart';
+import 'package:extera_next/pages/profile/profile.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -117,6 +118,37 @@ abstract class AppRoutes {
             : child,
       ),
       routes: [
+        GoRoute(
+          path: '/user',
+          redirect: loggedOutRedirect,
+          pageBuilder: (context, state) => defaultPageBuilder(
+            context,
+            state,
+            const EmptyPage(),
+          ),
+          routes: [
+            GoRoute(
+              path: ':user_id',
+              pageBuilder: (context, state) => defaultPageBuilder(
+                context,
+                state,
+                ProfilePage(
+                  Profile(
+                    userId: state.pathParameters['user_id']!,
+                    displayName: state.uri.queryParameters['display_name'],
+                    avatarUrl: state.uri.queryParameters
+                            .containsKey('avatar_uri')
+                        ? Uri.parse(state.uri.queryParameters['avatar_uri']!)
+                        : null,
+                  ),
+                  noProfileWarning:
+                      state.uri.queryParameters['no_profile_warning'] == 'true',
+                ),
+              ),
+              redirect: loggedOutRedirect,
+            ),
+          ],
+        ),
         GoRoute(
           path: '/rooms',
           redirect: loggedOutRedirect,

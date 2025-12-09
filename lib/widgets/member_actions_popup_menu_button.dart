@@ -1,3 +1,4 @@
+import 'package:extera_next/utils/show_profile.dart';
 import 'package:extera_next/widgets/matrix.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +8,6 @@ import 'package:matrix/matrix.dart';
 import 'package:extera_next/widgets/permission_slider_dialog.dart';
 import 'adaptive_dialogs/show_ok_cancel_alert_dialog.dart';
 import 'adaptive_dialogs/show_text_input_dialog.dart';
-import 'adaptive_dialogs/user_dialog.dart';
 import 'avatar.dart';
 import 'future_loading_dialog.dart';
 
@@ -278,7 +278,7 @@ void showMemberActionsPopupMenu({
       );
       return;
     case _MemberActions.info:
-      await UserDialog.show(
+      showProfile(
         context: context,
         profile: Profile(
           userId: user.id,

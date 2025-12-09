@@ -2940,4 +2940,10 @@ class L10nRu extends L10n {
 
   @override
   String get useAsEmoji => 'Эмодзи';
+
+  @override
+  String get mutualRooms => 'Общие чаты';
+
+  @override
+  String get matrixId => 'Matrix ID';
 }

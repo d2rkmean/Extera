@@ -1,3 +1,4 @@
+import 'package:extera_next/utils/show_profile.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart' show IterableExtension;
@@ -230,7 +231,7 @@ class UrlLauncher {
           },
         ),
       );
-      await UserDialog.show(
+      showProfile(
         context: context,
         profile: profileResult.result!,
         noProfileWarning: noProfileWarning,

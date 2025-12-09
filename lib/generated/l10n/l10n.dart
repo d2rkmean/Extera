@@ -5246,6 +5246,18 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Emoji'**
   String get useAsEmoji;
+
+  /// No description provided for @mutualRooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Mutual rooms'**
+  String get mutualRooms;
+
+  /// No description provided for @matrixId.
+  ///
+  /// In en, this message translates to:
+  /// **'Matrix ID'**
+  String get matrixId;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

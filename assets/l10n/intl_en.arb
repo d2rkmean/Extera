@@ -3391,5 +3391,7 @@
   "stickerPackName": "Sticker pack name",
   "attribution": "Attribution",
   "useAsSticker": "Sticker",
-  "useAsEmoji": "Emoji"
+  "useAsEmoji": "Emoji",
+  "mutualRooms": "Mutual rooms",
+  "matrixId": "Matrix ID"
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:extera_next/utils/show_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,7 +15,6 @@ import 'package:extera_next/utils/fluffy_share.dart';
 import 'package:extera_next/utils/platform_infos.dart';
 import 'package:extera_next/utils/url_launcher.dart';
 import 'package:extera_next/widgets/matrix.dart';
-import '../../widgets/adaptive_dialogs/user_dialog.dart';
 
 class NewPrivateChat extends StatefulWidget {
   const NewPrivateChat({super.key});
@@ -98,7 +98,7 @@ class NewPrivateChatController extends State<NewPrivateChat> {
     );
   }
 
-  void openUserModal(Profile profile) => UserDialog.show(
+  void openUserModal(Profile profile) => showProfile(
         context: context,
         profile: profile,
       );

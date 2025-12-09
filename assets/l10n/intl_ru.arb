@@ -3495,5 +3495,7 @@
   "attribution": "Авторство",
   "useAsSticker": "Стикер",
   "useAsEmoji": "Эмодзи",
-  "signInWithLabel": "Войти в:"
+  "signInWithLabel": "Войти в:",
+  "mutualRooms": "Общие чаты",
+  "matrixId": "Matrix ID"
 }

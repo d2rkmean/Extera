@@ -2831,6 +2831,12 @@ class L10nZh extends L10n {
 
   @override
   String get useAsEmoji => 'Emoji';
+
+  @override
+  String get mutualRooms => 'Mutual rooms';
+
+  @override
+  String get matrixId => 'Matrix ID';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).

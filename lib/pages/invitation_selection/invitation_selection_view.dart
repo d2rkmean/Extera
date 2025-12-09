@@ -1,3 +1,4 @@
+import 'package:extera_next/utils/show_profile.dart';
 import 'package:flutter/material.dart';
 
 import 'package:extera_next/generated/l10n/l10n.dart';
@@ -7,7 +8,6 @@ import 'package:extera_next/pages/invitation_selection/invitation_selection.dart
 import 'package:extera_next/widgets/avatar.dart';
 import 'package:extera_next/widgets/layouts/max_width_body.dart';
 import 'package:extera_next/widgets/matrix.dart';
-import '../../widgets/adaptive_dialogs/user_dialog.dart';
 
 class InvitationSelectionView extends StatelessWidget {
   final InvitationSelectionController controller;
@@ -169,7 +169,7 @@ class _InviteContactListTile extends StatelessWidget {
         mxContent: profile.avatarUrl,
         name: profile.displayName,
         presenceUserId: profile.userId,
-        onTap: () => UserDialog.show(
+        onTap: () => showProfile(
           context: context,
           profile: profile,
         ),

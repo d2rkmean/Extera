@@ -1,3 +1,4 @@
+import 'package:extera_next/utils/show_profile.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -8,7 +9,6 @@ import 'package:extera_next/utils/stream_extension.dart';
 import 'package:extera_next/widgets/avatar.dart';
 import 'package:extera_next/widgets/hover_builder.dart';
 import 'package:extera_next/widgets/matrix.dart';
-import '../../widgets/adaptive_dialogs/user_dialog.dart';
 
 class StatusMessageList extends StatelessWidget {
   final void Function() onStatusEdit;
@@ -24,7 +24,7 @@ class StatusMessageList extends StatelessWidget {
     final client = Matrix.of(context).client;
     if (profile.userId == client.userID) return onStatusEdit();
 
-    UserDialog.show(
+    showProfile(
       context: context,
       profile: profile,
     );

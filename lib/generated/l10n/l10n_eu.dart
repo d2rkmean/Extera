@@ -2946,4 +2946,10 @@ class L10nEu extends L10n {
 
   @override
   String get useAsEmoji => 'Emoji';
+
+  @override
+  String get mutualRooms => 'Mutual rooms';
+
+  @override
+  String get matrixId => 'Matrix ID';
 }
