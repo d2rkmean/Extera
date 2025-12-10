@@ -48,12 +48,13 @@ class Download {
           Logs().w("Download progress: $progress%");
         },
         options: Options(
-            responseType: ResponseType.bytes,
-            headers: {'authorization': "Bearer ${mx.accessToken}"}),
+          responseType: ResponseType.bytes,
+          headers: {'authorization': "Bearer ${mx.accessToken}"},
+        ),
         cancelToken: ct,
       );
       Logs().w("Download completed and saved to $downloadPath/$name");
-        } catch (e) {
+    } catch (e) {
       Logs().w("Error during download: $e");
     }
   }
