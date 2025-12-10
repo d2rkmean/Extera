@@ -2837,6 +2837,9 @@ class L10nZh extends L10n {
 
   @override
   String get matrixId => 'Matrix ID';
+
+  @override
+  String get copyLink => 'Copy link';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).

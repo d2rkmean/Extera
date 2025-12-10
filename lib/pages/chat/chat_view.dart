@@ -27,7 +27,7 @@ import '../../utils/stream_extension.dart';
 import 'chat_emoji_picker.dart';
 import 'chat_input_row.dart';
 
-enum _EventContextAction { info, recover, translate, report, endPoll }
+enum _EventContextAction { info, recover, report, endPoll, copyLink }
 
 class ChatView extends StatelessWidget {
   final ChatController controller;
@@ -47,6 +47,12 @@ class ChatView extends StatelessWidget {
           icon: const Icon(Icons.copy_outlined),
           tooltip: L10n.of(context).copy,
           onPressed: controller.copyEventsAction,
+        ),
+        if (controller.selectedEvents.length > 1)
+        IconButton(
+          icon: const Icon(Icons.link),
+          tooltip: L10n.of(context).copyLink,
+          onPressed: controller.copyLinkAction,
         ),
         if (controller.selectedEvents.length == 1)
           IconButton(
@@ -97,8 +103,8 @@ class ChatView extends StatelessWidget {
                 case _EventContextAction.recover:
                   controller.recoverEventAction();
                   break;
-                case _EventContextAction.translate:
-                  controller.translateEventAction();
+                case _EventContextAction.copyLink:
+                  controller.copyLinkAction();
                   break;
                 case _EventContextAction.endPoll:
                   controller.endPollAction();
@@ -114,6 +120,17 @@ class ChatView extends StatelessWidget {
                     const Icon(Icons.info_outlined),
                     const SizedBox(width: 12),
                     Text(L10n.of(context).messageInfo),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: _EventContextAction.info,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.link),
+                    const SizedBox(width: 12),
+                    Text(L10n.of(context).copyLink),
                   ],
                 ),
               ),

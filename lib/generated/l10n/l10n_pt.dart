@@ -2940,6 +2940,9 @@ class L10nPt extends L10n {
 
   @override
   String get matrixId => 'Matrix ID';
+
+  @override
+  String get copyLink => 'Copy link';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).

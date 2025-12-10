@@ -2941,4 +2941,7 @@ class L10nSk extends L10n {
 
   @override
   String get matrixId => 'Matrix ID';
+
+  @override
+  String get copyLink => 'Copy link';
 }

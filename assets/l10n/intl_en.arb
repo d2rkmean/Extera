@@ -3393,5 +3393,6 @@
   "useAsSticker": "Sticker",
   "useAsEmoji": "Emoji",
   "mutualRooms": "Mutual rooms",
-  "matrixId": "Matrix ID"
+  "matrixId": "Matrix ID",
+  "copyLink": "Copy link"
 }

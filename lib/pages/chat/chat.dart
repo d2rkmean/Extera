@@ -836,6 +836,26 @@ class ChatController extends State<ChatPageWithRoom>
     });
   }
 
+  void copyLinkAction() {
+    Clipboard.setData(
+      ClipboardData(
+        text: selectedEvents
+            .map(
+              (event) => "https://matrix.to/#/${room.canonicalAlias != ''
+                ? room.canonicalAlias : roomId}/${event.eventId}",
+            )
+            .join('\n'),
+      ),
+    );
+    setState(() {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(L10n.of(context).copiedToClipboard)),
+      );
+      showEmojiPicker = false;
+      selectedEvents.clear();
+    });
+  }
+
   void recoverEventAction() async {
     final mx = Matrix.of(context);
     if (!await mx.client.isSynapseAdministrator()) {

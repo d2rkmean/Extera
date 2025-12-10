@@ -5258,6 +5258,12 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Matrix ID'**
   String get matrixId;
+
+  /// No description provided for @copyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy link'**
+  String get copyLink;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

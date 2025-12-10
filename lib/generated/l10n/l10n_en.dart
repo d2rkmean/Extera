@@ -2940,4 +2940,7 @@ class L10nEn extends L10n {
 
   @override
   String get matrixId => 'Matrix ID';
+
+  @override
+  String get copyLink => 'Copy link';
 }
