@@ -91,6 +91,8 @@ class PollWidgetState extends State<PollWidget> {
   void _calculateResults() async {
     final room = widget.event.room;
     final pollEventId = widget.event.eventId;
+    final pollContent = widget.event.content['org.matrix.msc3381.poll.start']! as Map;
+    final int maxAnswers = pollContent['max_selections'] ?? 1;
     final results = <String, int>{};
 
     final rel = await Matrix.of(context)
@@ -102,15 +104,31 @@ class PollWidgetState extends State<PollWidget> {
           "org.matrix.msc3381.poll.response",
         );
 
-    // Get all poll response events for this poll
     final responses = rel.chunk;
+    final userLatestResponse = <String, MatrixEvent>{};
 
-    // Count votes for each answer
     for (final response in responses) {
+      final senderId = response.senderId;
+      final ts = response.originServerTs;
+
+      if (!userLatestResponse.containsKey(senderId) ||
+          ts.isAfter(userLatestResponse[senderId]!.originServerTs)) {
+        userLatestResponse[senderId] = response;
+      }
+    }
+
+    for (final response in userLatestResponse.values) {
       final responseContent = response
           .content['org.matrix.msc3381.poll.response'] as Map<String, dynamic>;
-      final List<dynamic> answers = responseContent['answers'];
-      for (final answer in answers.cast<String>()) {
+
+      // Безопасно приводим список ответов
+      final List<dynamic> answersRaw = responseContent['answers'] ?? [];
+      final answers = answersRaw.cast<String>();
+      if (answers.length > maxAnswers) {
+        continue;
+      }
+
+      for (final answer in answers) {
         results[answer] = (results[answer] ?? 0) + 1;
       }
     }
@@ -282,14 +300,16 @@ class PollWidgetState extends State<PollWidget> {
           // answers
           StreamBuilder(
             key: ValueKey(
-              client.userID.toString(),
+              event.eventId,
             ),
             stream: client.onTimelineEvent.stream
-                .where((s) =>
-                    s.type == "org.matrix.msc3381.poll.response" &&
-                    s.relationshipEventId == event.eventId)
-                .rateLimit(const Duration(seconds: 1)),
+                .where(
+                  (s) =>
+                      s.type == "org.matrix.msc3381.poll.response" &&
+                      s.relationshipEventId == event.eventId,
+                ).rateLimit(const Duration(seconds: 1)),
             builder: (context, _) {
+              _calculateResults();
               return Column(
                 children: [
                   ...answers.asMap().entries.map((entry) {
