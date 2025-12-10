@@ -28,7 +28,7 @@ class SendPollDialogState extends State<SendPollDialog> {
     TextEditingController(),
   ];
   int _maxSelections = 1;
-  String _kind = 'org.matrix.msc3381.disclosed';
+  String _kind = 'org.matrix.msc3381.poll.disclosed';
 
   void _addAnswer() {
     setState(() {
@@ -236,12 +236,12 @@ class SendPollDialogState extends State<SendPollDialog> {
                 showSelectedIcon: false, // Cleaner look for text-only segments
                 segments: [
                   ButtonSegment<String>(
-                    value: 'org.matrix.msc3381.disclosed',
+                    value: 'org.matrix.msc3381.poll.disclosed',
                     label: Text(l10n.publicPoll),
                     icon: const Icon(Icons.visibility_outlined),
                   ),
                   ButtonSegment<String>(
-                    value: 'org.matrix.msc3381.undisclosed',
+                    value: 'org.matrix.msc3381.poll.undisclosed',
                     label: Text(l10n.anonymousPoll),
                     icon: const Icon(Icons.visibility_off_outlined),
                   ),

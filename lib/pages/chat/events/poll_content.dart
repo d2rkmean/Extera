@@ -47,7 +47,7 @@ class PollWidgetState extends State<PollWidget> {
 
     // For disclosed polls, load initial results
     final kind = content['kind'] as String?;
-    if (kind == 'org.matrix.msc3381.disclosed') {
+    if (kind == 'org.matrix.msc3381.poll.disclosed') {
       _calculateResults();
     }
   }
@@ -154,7 +154,7 @@ class PollWidgetState extends State<PollWidget> {
       final content =
           widget.event.content[PollEvents.PollStart] as Map<String, dynamic>;
       final kind = content['kind'] as String?;
-      if (kind == 'org.matrix.msc3381.disclosed') {
+      if (kind == 'org.matrix.msc3381.poll.disclosed') {
         _calculateResults();
       }
     } catch (e) {
@@ -177,7 +177,6 @@ class PollWidgetState extends State<PollWidget> {
     final content =
         widget.event.content[PollEvents.PollStart] as Map<String, dynamic>;
     final maxSelections = content['max_selections'] as int? ?? 1;
-    final List<dynamic> answers = content['answers'];
 
     setState(() {
       if (maxSelections == 1) {
@@ -197,7 +196,6 @@ class PollWidgetState extends State<PollWidget> {
   }
 
   bool _isPollEnded() {
-    final room = widget.event.room;
     // Check if there's an end event for this poll
     final endEvents = widget.timeline.events.where((e) {
       return e.type == 'org.matrix.msc3381.poll.end' &&
@@ -211,7 +209,7 @@ class PollWidgetState extends State<PollWidget> {
     final content =
         widget.event.content[PollEvents.PollStart] as Map<String, dynamic>;
     final kind = content['kind'] as String?;
-    final isDisclosed = kind == 'org.matrix.msc3381.disclosed';
+    final isDisclosed = kind == 'org.matrix.msc3381.poll.disclosed';
     final isEnded = _isPollEnded();
 
     return isDisclosed || isEnded;
@@ -389,11 +387,11 @@ class PollWidgetState extends State<PollWidget> {
               // Poll info
               Text(
                 '${maxSelections == 1 ? L10n.of(context).singleChoice : L10n.of(context).multipleChoice} • '
-                '${kind == 'org.matrix.msc3381.undisclosed' ? L10n.of(context).anonymousPoll : L10n.of(context).publicPoll} • '
+                '${kind == 'org.matrix.msc3381.poll.undisclosed' ? L10n.of(context).anonymousPoll : L10n.of(context).publicPoll} • '
                 '${isEnded ? L10n.of(context).endedPoll : L10n.of(context).activePoll}',
                 style: TextStyle(
                   fontSize: widget.fontSize - 2,
-                  color: widget.color.withOpacity(0.6),
+                  color: widget.color.withValues(alpha: 0.6),
                 ),
               ),
             ],
