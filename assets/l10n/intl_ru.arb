@@ -3498,5 +3498,10 @@
   "signInWithLabel": "Войти в:",
   "mutualRooms": "Общие чаты",
   "matrixId": "Matrix ID",
-  "copyLink": "Копировать ссылку"
+  "copyLink": "Копировать ссылку",
+  "aboutUser": "О себе",
+  "editAbout": "Изменить \"О себе\"",
+  "editAboutDescription": "Вы можете добавить пару строк о себе. Максимум 256 символов.",
+  "aboutExample": "Всем привет!",
+  "notSet": "Не указано"
 }
