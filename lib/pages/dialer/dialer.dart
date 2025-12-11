@@ -19,6 +19,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:extera_next/widgets/matrix.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -116,12 +117,14 @@ class Calling extends StatefulWidget {
   final String callId;
   final CallSession call;
   final Client client;
+  final DateTime startedAt;
 
   const Calling({
     required this.context,
     required this.call,
     required this.client,
     required this.callId,
+    required this.startedAt,
     this.onClear,
     super.key,
   });
@@ -173,15 +176,25 @@ class MyCallingPage extends State<Calling> {
   double? _localVideoWidth;
   EdgeInsetsGeometry? _localVideoMargin;
   CallState? _state;
+  AudioPlayer? callSoundPlayer;
 
   void _playCallSound() async {
-    const path = 'assets/sounds/call.ogg';
-    if (kIsWeb || PlatformInfos.isMobile || PlatformInfos.isMacOS) {
-      final player = AudioPlayer();
-      await player.setAsset(path);
-      player.play();
+    if (!{CallState.kRinging, CallState.kInviteSent, CallState.kConnecting}
+        .contains(_state)) {
+      return;
+    }
+    if (call.isOutgoing) {
+      const path = 'assets/sounds/call.ogg';
+      if (kIsWeb || PlatformInfos.isMobile || PlatformInfos.isMacOS) {
+        final player = callSoundPlayer = AudioPlayer();
+        await player.setAsset(path);
+        player.setLoopMode(LoopMode.one);
+        player.play();
+      } else {
+        Logs().w('Playing sound not implemented for this platform!');
+      }
     } else {
-      Logs().w('Playing sound not implemented for this platform!');
+      Matrix.of(context).voipPlugin?.playRingtone();
     }
   }
 
@@ -189,7 +202,6 @@ class MyCallingPage extends State<Calling> {
   void initState() {
     super.initState();
     initialize();
-    _playCallSound();
   }
 
   void initialize() async {
@@ -210,12 +222,10 @@ class MyCallingPage extends State<Calling> {
     });
     _state = call.state;
 
-    if (call.type == CallType.kVideo) {
-      try {
-        // Enable wakelock (keep screen on)
-        unawaited(WakelockPlus.enable());
-      } catch (_) {}
-    }
+    try {
+      // Enable wakelock (keep screen on)
+      unawaited(WakelockPlus.enable());
+    } catch (_) {}
   }
 
   void cleanUp() {
@@ -223,11 +233,9 @@ class MyCallingPage extends State<Calling> {
       const Duration(seconds: 2),
       () => widget.onClear?.call(),
     );
-    if (call.type == CallType.kVideo) {
-      try {
-        unawaited(WakelockPlus.disable());
-      } catch (_) {}
-    }
+    try {
+      unawaited(WakelockPlus.disable());
+    } catch (_) {}
   }
 
   @override
@@ -255,7 +263,17 @@ class MyCallingPage extends State<Calling> {
   void _handleCallState(CallState state) {
     Logs().v('CallingPage::handleCallState: ${state.toString()}');
     if ({CallState.kConnected, CallState.kEnded}.contains(state)) {
+      if (callSoundPlayer != null) {
+        callSoundPlayer!.stop();
+        callSoundPlayer = null;
+      }
+      Matrix.of(context).voipPlugin?.stopRingtone();
       HapticFeedback.heavyImpact();
+    }
+
+    if ({CallState.kRinging, CallState.kCreateAnswer, CallState.kInviteSent}
+        .contains(state)) {
+      _playCallSound();
     }
 
     if (mounted) {
@@ -305,7 +323,11 @@ class MyCallingPage extends State<Calling> {
         );
         FlutterForegroundTask.startService(
           notificationTitle: L10n.of(widget.context).screenSharingTitle,
-          notificationText: L10n.of(widget.context).screenSharingDetail,
+          notificationText: L10n.of(widget.context)
+              .screenSharingDetail(room!.getLocalizedDisplayname()),
+          serviceTypes: [
+            ForegroundServiceTypes.mediaProjection,
+          ],
         );
       } else {
         FlutterForegroundTask.stopService();
@@ -314,6 +336,7 @@ class MyCallingPage extends State<Calling> {
 
     setState(() {
       call.setScreensharingEnabled(!call.screensharingEnabled);
+      call.tryRemoveStopedStreams();
     });
   }
 
@@ -338,13 +361,17 @@ class MyCallingPage extends State<Calling> {
     setState(() {});
   }
 
-  /*
+  bool _speakerOn = false;
+
   void _switchSpeaker() {
+    final audioTracks = call.remoteUserMediaStream?.stream?.getAudioTracks();
     setState(() {
-      session.setSpeakerOn();
+      _speakerOn = !_speakerOn;
+      if (audioTracks != null && audioTracks.isNotEmpty) {
+        audioTracks[0].enableSpeakerphone(_speakerOn);
+      }
     });
   }
-  */
 
   List<Widget> _buildActionButtons(bool isFloating) {
     if (isFloating) {
@@ -357,15 +384,15 @@ class MyCallingPage extends State<Calling> {
       backgroundColor: Colors.black45,
       child: const Icon(Icons.switch_camera),
     );
-    /*
-    var switchSpeakerButton = FloatingActionButton(
+    
+    final switchSpeakerButton = FloatingActionButton(
       heroTag: 'switchSpeaker',
-      child: Icon(_speakerOn ? Icons.volume_up : Icons.volume_off),
       onPressed: _switchSpeaker,
       foregroundColor: Colors.black54,
-      backgroundColor: Theme.of(widget.context).backgroundColor,
+      backgroundColor: Colors.black45,
+      child: Icon(_speakerOn ? Icons.volume_up : Icons.volume_off),
     );
-    */
+    
     final hangupButton = FloatingActionButton(
       heroTag: 'hangup',
       onPressed: _hangUp,
@@ -425,7 +452,7 @@ class MyCallingPage extends State<Calling> {
       case CallState.kConnected:
         return <Widget>[
           muteMicButton,
-          //switchSpeakerButton,
+          switchSpeakerButton,
           if (!voiceonly && !kIsWeb) switchCameraButton,
           if (!voiceonly) muteCameraButton,
           if (PlatformInfos.isMobile || PlatformInfos.isWeb)
@@ -451,6 +478,41 @@ class MyCallingPage extends State<Calling> {
     final stackWidgets = <Widget>[];
 
     final call = this.call;
+
+    stackWidgets.add(
+      Padding(
+        padding: const EdgeInsetsGeometry.symmetric(vertical: 128),
+        child: Center(
+          child: Column(
+            spacing: 4,
+            children: [
+              Text(
+                call.remoteUser?.calcDisplayname() ??
+                    call.remoteUserId ??
+                    room!.name,
+                textScaler: const TextScaler.linear(1.67),
+              ),
+              Text(
+                call.state == CallState.kConnected
+                    ? L10n.of(context).callConnected
+                    : call.state == CallState.kConnecting
+                        ? L10n.of(context).callConnecting
+                        : call.state == CallState.kEnded
+                            ? L10n.of(context).callEnded
+                            : call.state == CallState.kEnding
+                                ? L10n.of(context).callEnding
+                                : call.state == CallState.kRinging
+                                    ? L10n.of(context).callRinging
+                                    : call.state == CallState.kInviteSent
+                                        ? L10n.of(context).callInviteSent
+                                        : "",
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
     if (call.callHasEnded) {
       return stackWidgets;
     }
@@ -458,11 +520,11 @@ class MyCallingPage extends State<Calling> {
     if (call.localHold || call.remoteOnHold) {
       var title = '';
       if (call.localHold) {
-        title = '${call.room.getLocalizedDisplayname(
+        title = L10n.of(context).heldTheCall(call.room.getLocalizedDisplayname(
           MatrixLocals(L10n.of(widget.context)),
-        )} held the call.';
+        ));
       } else if (call.remoteOnHold) {
-        title = 'You held the call.';
+        title = L10n.of(context).youHeldTheCall;
       }
       stackWidgets.add(
         Center(
@@ -497,13 +559,23 @@ class MyCallingPage extends State<Calling> {
       primaryStream = call.localUserMediaStream;
     }
 
-    if (primaryStream != null) {
+    if (primaryStream != null && connected) {
       stackWidgets.add(
         Center(
           child: _StreamView(
             primaryStream,
             mainView: true,
             matrixClient: widget.client,
+          ),
+        ),
+      );
+    } else {
+      stackWidgets.add(
+        Center(
+          child: Avatar(
+            mxContent: call.remoteUser?.avatarUrl,
+            name: displayName,
+            size: 96,
           ),
         ),
       );

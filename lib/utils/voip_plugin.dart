@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart' as webrtc_impl;
 import 'package:matrix/matrix.dart';
 import 'package:webrtc_interface/webrtc_interface.dart' hide Navigator;
@@ -11,7 +12,6 @@ import 'package:webrtc_interface/webrtc_interface.dart' hide Navigator;
 import 'package:extera_next/pages/chat_list/chat_list.dart';
 import 'package:extera_next/pages/dialer/dialer.dart';
 import 'package:extera_next/utils/platform_infos.dart';
-import '../../utils/voip/user_media_manager.dart';
 import '../widgets/matrix.dart';
 
 class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
@@ -38,8 +38,7 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
   }
 
   void addCallingOverlay(String callId, CallSession call) {
-    final context =
-        kIsWeb ? ChatList.contextForVoip! : this.context; // web is weird
+    final context = ChatList.contextForVoip!; // web is weird
 
     if (overlayEntry != null) {
       Logs().e('[VOIP] addCallingOverlay: The call session already exists?');
@@ -47,32 +46,34 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
     }
     // Overlay.of(context) is broken on web
     // falling back on a dialog
-    if (kIsWeb) {
-      showDialog(
+    // if (kIsWeb) {
+    // showDialog(
+    //   context: context,
+    //   builder: (context) => Calling(
+    //     context: context,
+    //     client: client,
+    //     callId: callId,
+    //     call: call,
+    //     onClear: () => Navigator.of(context).pop(),
+    //   ),
+    // );
+    // } else {
+    overlayEntry = OverlayEntry(
+      builder: (_) => Calling(
         context: context,
-        builder: (context) => Calling(
-          context: context,
-          client: client,
-          callId: callId,
-          call: call,
-          onClear: () => Navigator.of(context).pop(),
-        ),
-      );
-    } else {
-      overlayEntry = OverlayEntry(
-        builder: (_) => Calling(
-          context: context,
-          client: client,
-          callId: callId,
-          call: call,
-          onClear: () {
-            overlayEntry?.remove();
-            overlayEntry = null;
-          },
-        ),
-      );
-      Overlay.of(context).insert(overlayEntry!);
-    }
+        client: client,
+        callId: callId,
+        call: call,
+        startedAt: DateTime.now(),
+        onClear: () {
+          overlayEntry?.remove();
+          overlayEntry = null;
+        },
+      ),
+      canSizeOverlay: true,
+    );
+    Overlay.of(context).insert(overlayEntry!);
+    // }
   }
 
   @override
@@ -92,20 +93,18 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
 
   @override
   Future<void> playRingtone() async {
-    if (!background && !await hasCallingAccount) {
-      try {
-        await UserMediaManager().startRingingTone();
-      } catch (_) {}
+    try {
+      FlutterRingtonePlayer().playRingtone(looping: true);
+    } catch (ex) {
+      Logs().e("Failed to play ringtone", ex);
     }
   }
 
   @override
   Future<void> stopRingtone() async {
-    if (!background && !await hasCallingAccount) {
-      try {
-        await UserMediaManager().stopRingingTone();
-      } catch (_) {}
-    }
+    try {
+      FlutterRingtonePlayer().stop();
+    } catch (_) {}
   }
 
   @override
@@ -125,6 +124,7 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
         Logs().e('VOIP foreground failed $e');
       }
       // use fallback flutter call pages for outgoing and video calls.
+      playRingtone();
       addCallingOverlay(call.callId, call);
     } else {
       addCallingOverlay(call.callId, call);
@@ -170,8 +170,9 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
   EncryptionKeyProvider? get keyProvider => throw UnimplementedError();
 
   @override
-  Future<void> registerListeners(CallSession session) {
+  Future<void> registerListeners(CallSession session) async {
     // TODO: implement registerListeners
-    throw UnimplementedError();
+
+    // throw UnimplementedError();
   }
 }

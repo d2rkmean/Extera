@@ -2738,10 +2738,16 @@
   "@custom": {},
   "foregroundServiceRunning": "This notification appears when the foreground service is running.",
   "@foregroundServiceRunning": {},
-  "screenSharingTitle": "screen sharing",
+  "screenSharingTitle": "Screen sharing",
   "@screenSharingTitle": {},
-  "screenSharingDetail": "You are sharing your screen in Extera",
-  "@screenSharingDetail": {},
+  "screenSharingDetail": "You are sharing your screen with {name}",
+  "@screenSharingDetail": {
+    "placeholders": {
+        "name": {
+            "type": "String"
+        }
+    }
+  },
   "callingPermissions": "Calling permissions",
   "@callingPermissions": {},
   "callingAccount": "Calling account",
@@ -3399,5 +3405,26 @@
   "editAbout": "Edit about",
   "editAboutDescription": "You can tell something about yourself. This will be visible to everyone.",
   "aboutExample": "Hello! I am From Tokyo",
-  "notSet": "Not set"
+  "notSet": "Not set",
+  "settingsStyleMessage1": "So, what did you change in Extera 25.1.0, besides skipping 23 major versions?",
+  "settingsStyleMessage2": "The biggest changes are \"About yourself\" field and redesigned profile view. If you wanna know more - check our Git repo.",
+  "settingsStyleMessage3": "Wow, it has got background downloads on Linux, pretty cool.",
+  "incomingCall": "Incoming call",
+  "outgoingCall": "Outgoing call",
+  "heldTheCall": "{user} held the call.",
+  "@heldTheCall": {
+    "type": "String",
+    "placeholders": {
+      "user": {
+        "type": "String"
+      }
+    }
+  },
+  "youHeldTheCall": "You held the call.",
+  "callConnected": "Connected",
+  "callConnecting": "Connecting",
+  "callEnded": "Call ended",
+  "callEnding": "Ending",
+  "callRinging": "Ringing",
+  "callInviteSent": "Invite sent"
 }
