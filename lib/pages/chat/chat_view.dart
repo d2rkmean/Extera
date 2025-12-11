@@ -379,7 +379,7 @@ class ChatView extends StatelessWidget {
                               alignment: Alignment.center,
                               child: Material(
                                 clipBehavior: Clip.hardEdge,
-                                color: theme.colorScheme.surfaceContainerHigh,
+                                color: theme.colorScheme.surfaceContainer,
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(24),
                                 ),
