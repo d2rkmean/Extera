@@ -1,5 +1,9 @@
-## Extera 25.1.0 (not released yet)
-- Redesign user profile view. It is now a whole page and gives more information like mutual rooms.
+## Extera 25.1.0
+- Brought back calls. Just enable "Experimental video calls" and press that phone button in a chat - calls will probably work.
+- Fixed screen sharing in calls. Screen sharing now works, the problem was the foreground service missing MEDIA_PROJECTION flag.
+- Incoming calls will now use system ringtone.
+- Added the "Seen by" dialog. Now you can see the whole exact list of users, who got the message.
+- Redesigned user profile view. It is now a whole page and gives more information like mutual rooms.
 - Added "About yourself" field. Tell the world about yourself, but remember to fit that only in 256 characters!
 - (Probably) Fix video being stuck playing in background.
 - An option to not send an image, if EXIF metadata has failed to clean. It was always on, but now an option.
@@ -12,6 +16,7 @@
 - Bottom navigation bar instead of chat filter pills.
 - Copy link action. Now, you can copy links to messages.
 - Introducing background downloads on Linux! The `/sdcard/Download/Extera` directory, which is exclusive to Android, was hard-coded the whole time. Now it's picking various directories, depending on the platform. (Android and Linux supported only)
+- Now you need to hit enter to start a global search - no more query leaking.
 - Fixed rendering poll events, which were redacted. No more large yellow tiles.
 - Fixed encryption key backup GUI: now the button has linear progress bar in it instead of circular, like in most parts of the app.
 - Fixed poll events not being parsed properly on another clients. The problem was incorrect `kind` parameter.
