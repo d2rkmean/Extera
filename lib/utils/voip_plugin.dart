@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart' as webrtc_impl;
+import 'package:just_audio/just_audio.dart';
 import 'package:matrix/matrix.dart';
 import 'package:webrtc_interface/webrtc_interface.dart' hide Navigator;
 
@@ -107,6 +108,39 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
     } catch (_) {}
   }
 
+  AudioPlayer? callSoundPlayer;
+
+  Future<void> playCallingSound(CallSession call) async {
+    await stopCallingSound();
+    if (call.direction == CallDirection.kOutgoing) {
+      if (!{CallState.kInviteSent, CallState.kConnecting, CallState.kRinging}
+          .contains(call.state)) {
+        return;
+      }
+      Logs().w("Playing kOutgoing call sound");
+      final path = 'assets/sounds/${call.state.name}.ogg';
+      if (kIsWeb || PlatformInfos.isMobile || PlatformInfos.isMacOS || PlatformInfos.isLinux) {
+        final player = callSoundPlayer = AudioPlayer();
+        await player.setAsset(path);
+        player.setLoopMode(LoopMode.one);
+        player.play();
+      } else {
+        Logs().w('Playing sound not implemented for this platform!');
+      }
+    } else {
+      Logs().w("Playing ringtone, ${call.direction.name}");
+      playRingtone();
+    }
+  }
+
+  Future<void> stopCallingSound() async {
+    if (callSoundPlayer != null) {
+      await callSoundPlayer?.stop();
+      callSoundPlayer = null;
+    }
+    stopRingtone();
+  }
+
   @override
   Future<void> handleNewCall(CallSession call) async {
     if (PlatformInfos.isAndroid) {
@@ -124,7 +158,7 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
         Logs().e('VOIP foreground failed $e');
       }
       // use fallback flutter call pages for outgoing and video calls.
-      playRingtone();
+      playCallingSound(call);
       addCallingOverlay(call.callId, call);
     } else {
       addCallingOverlay(call.callId, call);
@@ -172,7 +206,7 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
   @override
   Future<void> registerListeners(CallSession session) async {
     // TODO: implement registerListeners
-
+    Logs().w("call register listeners ${session.direction.name}");
     // throw UnimplementedError();
   }
 }

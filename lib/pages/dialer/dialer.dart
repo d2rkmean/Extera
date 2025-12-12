@@ -179,12 +179,13 @@ class MyCallingPage extends State<Calling> {
   AudioPlayer? callSoundPlayer;
 
   void _playCallSound() async {
-    if (!{CallState.kRinging, CallState.kInviteSent, CallState.kConnecting}
+    if (!{CallState.kInviteSent, CallState.kConnecting, CallState.kRinging}
         .contains(_state)) {
       return;
     }
-    if (call.isOutgoing) {
-      const path = 'assets/sounds/call.ogg';
+    if (call.direction == CallDirection.kOutgoing) {
+      Logs().w("Playing kOutgoing call sound");
+      final path = 'assets/sounds/${_state!.name}.ogg';
       if (kIsWeb || PlatformInfos.isMobile || PlatformInfos.isMacOS) {
         final player = callSoundPlayer = AudioPlayer();
         await player.setAsset(path);
@@ -194,7 +195,15 @@ class MyCallingPage extends State<Calling> {
         Logs().w('Playing sound not implemented for this platform!');
       }
     } else {
+      Logs().w("Playing ringtone, ${call.direction.name}");
       Matrix.of(context).voipPlugin?.playRingtone();
+    }
+  }
+
+  void _stopCallSound() {
+    if (callSoundPlayer != null) {
+      callSoundPlayer!.stop();
+      callSoundPlayer = null;
     }
   }
 
@@ -263,17 +272,14 @@ class MyCallingPage extends State<Calling> {
   void _handleCallState(CallState state) {
     Logs().v('CallingPage::handleCallState: ${state.toString()}');
     if ({CallState.kConnected, CallState.kEnded}.contains(state)) {
-      if (callSoundPlayer != null) {
-        callSoundPlayer!.stop();
-        callSoundPlayer = null;
-      }
-      Matrix.of(context).voipPlugin?.stopRingtone();
+      Matrix.of(context).voipPlugin?.stopCallingSound();
       HapticFeedback.heavyImpact();
     }
 
-    if ({CallState.kRinging, CallState.kCreateAnswer, CallState.kInviteSent}
-        .contains(state)) {
-      _playCallSound();
+    if ({CallState.kInviteSent, CallState.kConnecting}.contains(state)) {
+      Matrix.of(context).voipPlugin?.playCallingSound(call);
+    } else {
+      Matrix.of(context).voipPlugin?.stopCallingSound();
     }
 
     if (mounted) {
@@ -384,7 +390,7 @@ class MyCallingPage extends State<Calling> {
       backgroundColor: Colors.black45,
       child: const Icon(Icons.switch_camera),
     );
-    
+
     final switchSpeakerButton = FloatingActionButton(
       heroTag: 'switchSpeaker',
       onPressed: _switchSpeaker,
@@ -392,7 +398,7 @@ class MyCallingPage extends State<Calling> {
       backgroundColor: _speakerOn ? Colors.white : Colors.black45,
       child: Icon(_speakerOn ? Icons.volume_up : Icons.volume_off),
     );
-    
+
     final hangupButton = FloatingActionButton(
       heroTag: 'hangup',
       onPressed: _hangUp,
