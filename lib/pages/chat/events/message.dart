@@ -209,22 +209,6 @@ class Message extends StatelessWidget {
     final messageStatusRow = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (event.hasAggregatedEvents(
-          timeline,
-          RelationshipTypes.edit,
-        ))
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 4.0,
-            ),
-            child: Icon(
-              Icons.edit_outlined,
-              color: textColor.withAlpha(
-                164,
-              ),
-              size: 14,
-            ),
-          ),
         Text(
           event.originServerTs.localizedTimeOfDay(
             context,
@@ -236,13 +220,35 @@ class Message extends StatelessWidget {
             fontSize: 11,
           ),
         ),
+        if (event.hasAggregatedEvents(
+          timeline,
+          RelationshipTypes.edit,
+        ))
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 4.0,
+            ),
+            child: Icon(
+              Icons.edit_outlined,
+              color: textColor.withAlpha(
+                164,
+              ),
+              size: 14,
+            ),
+          ),
         if (ownMessage)
           Padding(
             padding: const EdgeInsets.only(
               left: 4.0,
             ),
             child: Icon(
-              hasBeenRead ? Icons.done_all : Icons.check,
+              event.status == EventStatus.sending
+                  ? Icons.watch_later_outlined
+                  : event.status == EventStatus.error
+                      ? Icons.error_outline
+                      : hasBeenRead
+                          ? Icons.done_all
+                          : Icons.check,
               color: textColor.withAlpha(
                 164,
               ),

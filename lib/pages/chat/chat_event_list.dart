@@ -7,7 +7,6 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:extera_next/config/themes.dart';
 import 'package:extera_next/pages/chat/chat.dart';
 import 'package:extera_next/pages/chat/events/message.dart';
-import 'package:extera_next/pages/chat/seen_by_row.dart';
 import 'package:extera_next/pages/chat/typing_indicators.dart';
 import 'package:extera_next/utils/account_config.dart';
 import 'package:extera_next/utils/matrix_sdk_extensions/filtered_timeline_extension.dart';
