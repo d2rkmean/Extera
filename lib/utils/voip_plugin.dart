@@ -16,7 +16,7 @@ import 'package:extera_next/pages/dialer/dialer.dart';
 import 'package:extera_next/utils/platform_infos.dart';
 import '../widgets/matrix.dart';
 // ignore: depend_on_referenced_packages
-import 'package:audio_session/audio_session.dart' show AndroidAudioAttributes, AndroidAudioUsage, AndroidAudioContentType, AndroidAudioFlags;
+import 'package:audio_session/audio_session.dart';
 
 class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
   final MatrixState matrix;
@@ -51,6 +51,8 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
       overlayEntry!.remove();
     }
 
+    overlayMinimised = false;
+
     overlayEntry = OverlayEntry(
       builder: (_) => Calling(
         context: context,
@@ -83,19 +85,35 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
 
   Future<bool> get hasCallingAccount async => false;
 
+  Future<void> setAudioAttributes() async {
+    try {
+      Logs().w("configuring audio attributes");
+      final session = await AudioSession.instance;
+      await session.configure(
+        const AudioSessionConfiguration(
+          androidAudioAttributes: AndroidAudioAttributes(
+            usage: AndroidAudioUsage.notificationRingtone,
+          ),
+        ),
+      );
+      Logs().w("configured audio attributes");
+    } catch (ex) {
+      Logs().e("Failed to set attributes", ex);
+    }
+  }
+
   @override
   Future<void> playRingtone() async {
     try {
       if (AppConfig.ringtone == 'system') {
         FlutterRingtonePlayer().playRingtone(looping: true);
-      } else if (kIsWeb || PlatformInfos.isMobile || PlatformInfos.isMacOS) {
-        final player = callSoundPlayer = AudioPlayer();
-        await player.setAndroidAudioAttributes(
-          const AndroidAudioAttributes(
-            usage: AndroidAudioUsage.notificationRingtone,
-            flags: AndroidAudioFlags(0x00000006),
-            contentType: AndroidAudioContentType.unknown,
-          ),
+      } else if (kIsWeb ||
+          PlatformInfos.isMobile ||
+          PlatformInfos.isMacOS ||
+          PlatformInfos.isLinux) {
+        await setAudioAttributes();
+        final player = callSoundPlayer = AudioPlayer(
+          androidApplyAudioAttributes: false,
         );
         await player.setAsset(AppConfig.ringtoneFiles[AppConfig.ringtone]!);
         await player.setLoopMode(LoopMode.one);
@@ -133,7 +151,10 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
       }
       Logs().w("Playing kOutgoing call sound");
       final path = 'assets/sounds/${call.state.name}.ogg';
-      if (kIsWeb || PlatformInfos.isMobile || PlatformInfos.isMacOS) {
+      if (kIsWeb ||
+          PlatformInfos.isMobile ||
+          PlatformInfos.isMacOS ||
+          PlatformInfos.isLinux) {
         final player = callSoundPlayer = AudioPlayer();
         await player.setAsset(path);
         player.setLoopMode(LoopMode.one);
@@ -173,7 +194,10 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
         Logs().e('VOIP foreground failed $e');
       }
       // use fallback flutter call pages for outgoing and video calls.
-      currentCallSession = call;
+      if (!call.callHasEnded) {
+        currentCallSession = call;
+        overlayMinimised = false;
+      }
       Logs().w("current call session ${call.callId}");
       playCallingSound(call);
       addCallingOverlay(call.callId, call);
@@ -184,7 +208,9 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
 
   @override
   Future<void> handleCallEnded(CallSession session) async {
-    currentCallSession = null;
+    if (session.callHasEnded && session.callId == currentCallSession?.callId) {
+      currentCallSession = null;
+    }
     stopCallingSound();
     Logs().w("ended call session ${session.callId}");
     if (overlayEntry != null) {
@@ -226,6 +252,10 @@ class VoipPlugin with WidgetsBindingObserver implements WebRTCDelegate {
   @override
   Future<void> registerListeners(CallSession session) async {
     // TODO: implement registerListeners
+    if (!session.callHasEnded) {
+      currentCallSession = session;
+      overlayMinimised = false;
+    }
     Logs().w("call register listeners ${session.direction.name}");
     // throw UnimplementedError();
   }

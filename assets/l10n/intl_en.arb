@@ -3452,5 +3452,15 @@
   "ringtone": "Ringtone",
   "ringtoneDescription": "Choose which ringtone should be played when you receive a call.",
   "systemRingtone": "System ringtone",
-  "chooseRingtone": "Choose a ringtone"
+  "chooseRingtone": "Choose a ringtone",
+  "ongoingCall": "Ongoing call",
+  "@ongoingCall": {},
+  "ongoingCallDetail": "You are talking with {name}",
+  "@ongoingCallDetail": {
+    "placeholders": {
+        "name": {
+            "type": "String"
+        }
+    }
+  }
 }

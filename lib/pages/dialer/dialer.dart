@@ -23,11 +23,11 @@ import 'package:extera_next/widgets/matrix.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:action_slider/action_slider.dart';
 
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:extera_next/generated/l10n/l10n.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart' hide VideoRenderer;
-import 'package:just_audio/just_audio.dart';
 import 'package:matrix/matrix.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -176,36 +176,6 @@ class CallingView extends State<Calling> {
   double? _localVideoWidth;
   EdgeInsetsGeometry? _localVideoMargin;
   CallState? _state;
-  AudioPlayer? callSoundPlayer;
-
-  void _playCallSound() async {
-    if (!{CallState.kInviteSent, CallState.kConnecting, CallState.kRinging}
-        .contains(_state)) {
-      return;
-    }
-    if (call.direction == CallDirection.kOutgoing) {
-      Logs().w("Playing kOutgoing call sound");
-      final path = 'assets/sounds/${_state!.name}.ogg';
-      if (kIsWeb || PlatformInfos.isMobile || PlatformInfos.isMacOS) {
-        final player = callSoundPlayer = AudioPlayer();
-        await player.setAsset(path);
-        player.setLoopMode(LoopMode.one);
-        player.play();
-      } else {
-        Logs().w('Playing sound not implemented for this platform!');
-      }
-    } else {
-      Logs().w("Playing ringtone, ${call.direction.name}");
-      Matrix.of(context).voipPlugin?.playRingtone();
-    }
-  }
-
-  void _stopCallSound() {
-    if (callSoundPlayer != null) {
-      callSoundPlayer!.stop();
-      callSoundPlayer = null;
-    }
-  }
 
   @override
   void initState() {
@@ -222,8 +192,25 @@ class CallingView extends State<Calling> {
     if (call.direction == CallDirection.kOutgoing) {
       registerListeners();
     }
-    
     _state = call.state;
+
+    FlutterForegroundTask.init(
+      androidNotificationOptions: AndroidNotificationOptions(
+        channelId: 'notification_channel_id',
+        channelName: 'Foreground Notification',
+        channelDescription: L10n.of(widget.context).foregroundServiceRunning,
+      ),
+      iosNotificationOptions: const IOSNotificationOptions(),
+      foregroundTaskOptions: ForegroundTaskOptions(
+        eventAction: ForegroundTaskEventAction.nothing(),
+      ),
+    );
+
+    FlutterForegroundTask.startService(
+      notificationTitle: L10n.of(widget.context).ongoingCall,
+      notificationText: L10n.of(widget.context)
+          .ongoingCallDetail(room!.getLocalizedDisplayname()),
+    );
 
     try {
       // Enable wakelock (keep screen on)
@@ -338,19 +325,10 @@ class CallingView extends State<Calling> {
   void _screenSharing() async {
     if (PlatformInfos.isAndroid) {
       if (!call.screensharingEnabled) {
-        FlutterForegroundTask.init(
-          androidNotificationOptions: AndroidNotificationOptions(
-            channelId: 'notification_channel_id',
-            channelName: 'Foreground Notification',
-            channelDescription:
-                L10n.of(widget.context).foregroundServiceRunning,
-          ),
-          iosNotificationOptions: const IOSNotificationOptions(),
-          foregroundTaskOptions: ForegroundTaskOptions(
-            eventAction: ForegroundTaskEventAction.nothing(),
-          ),
-        );
-        FlutterForegroundTask.startService(
+        if (await FlutterForegroundTask.isRunningService) {
+          await FlutterForegroundTask.stopService();
+        }
+        await FlutterForegroundTask.startService(
           notificationTitle: L10n.of(widget.context).screenSharingTitle,
           notificationText: L10n.of(widget.context)
               .screenSharingDetail(room!.getLocalizedDisplayname()),
@@ -359,10 +337,14 @@ class CallingView extends State<Calling> {
           ],
         );
       } else {
-        FlutterForegroundTask.stopService();
+        await FlutterForegroundTask.stopService();
+        await FlutterForegroundTask.startService(
+          notificationTitle: L10n.of(widget.context).ongoingCall,
+          notificationText: L10n.of(widget.context)
+              .ongoingCallDetail(room!.getLocalizedDisplayname()),
+        );
       }
     }
-
     setState(() {
       call.setScreensharingEnabled(!call.screensharingEnabled);
       call.tryRemoveStopedStreams();
@@ -476,14 +458,68 @@ class CallingView extends State<Calling> {
       child: Icon(isLocalVideoMuted ? Icons.videocam_off : Icons.videocam),
     );
 
+    final actionSlider = ConstrainedBox(
+      constraints: const BoxConstraints.tightFor(
+        width: 312,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: ActionSlider.dual(
+          startChild: Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.call_end,
+                  color: Colors.red,
+                ),
+                const SizedBox(width: 18),
+                Text(L10n.of(context).hangUp),
+              ],
+            ),
+          ),
+          endChild: Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(L10n.of(context).answerCall),
+                const SizedBox(width: 18),
+                const Icon(
+                  Icons.call,
+                  color: Colors.green,
+                ),
+              ],
+            ),
+          ),
+          icon: const Icon(Icons.phone),
+          sliderBehavior: SliderBehavior.move,
+          startAction: (controller) {
+            controller.loading();
+            _hangUp();
+            controller.success();
+          },
+          endAction: (controller) {
+            controller.loading();
+            _answerCall();
+            controller.success();
+          },
+        ),
+      ),
+    );
+
     switch (_state) {
       case CallState.kRinging:
       case CallState.kInviteSent:
       case CallState.kCreateAnswer:
-      case CallState.kConnecting:
         return call.isOutgoing
             ? <Widget>[hangupButton]
-            : <Widget>[answerButton, hangupButton];
+            : PlatformInfos.isMobile
+                ? <Widget>[actionSlider]
+                : <Widget>[answerButton, hangupButton];
+      case CallState.kConnecting:
+        return <Widget>[hangupButton];
       case CallState.kConnected:
         return <Widget>[
           muteMicButton,

@@ -3548,5 +3548,23 @@
   "ringtone": "Рингтон",
   "ringtoneDescription": "Выберите рингтон, который будет звучать при входящем звонке.",
   "systemRingtone": "Системный рингтон",
-  "chooseRingtone": "Выберите рингтон"
+  "chooseRingtone": "Выберите рингтон",
+  "switchCamera": "Переключить камеру",
+  "switchSpeaker": "Переключить динамик",
+  "hangUp": "Сбросить",
+  "answerCall": "Ответить",
+  "muteMic": "Откл. микрофон",
+  "screenSharing": "Демонстрация экрана",
+  "holdCall": "Удержание",
+  "muteCam": "Откл. камеру",
+  "ongoingCall": "Звонок",
+  "@ongoingCall": {},
+  "ongoingCallDetail": "Вы находитесь в звонке с {name}",
+  "@ongoingCallDetail": {
+    "placeholders": {
+        "name": {
+            "type": "String"
+        }
+    }
+  }
 }

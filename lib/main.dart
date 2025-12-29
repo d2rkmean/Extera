@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:just_audio_media_kit/just_audio_media_kit.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:matrix/matrix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,7 +24,7 @@ import 'widgets/fluffy_chat_app.dart';
 ReceivePort? mainIsolateReceivePort;
 
 void main() async {
-  Logs().i('Welcome to ${AppConfig.applicationName} <3');
+  Logs().i('Welcome to ${AppConfig.applicationName}! Wonderhoy!!');
 
   if (PlatformInfos.isAndroid) {
     final port = mainIsolateReceivePort = ReceivePort();
@@ -33,6 +35,13 @@ void main() async {
     );
     await waitForPushIsolateDone();
   }
+
+  JustAudioMediaKit.ensureInitialized(
+    linux: true,
+    android: true,
+  );
+
+  MediaKit.ensureInitialized();
 
   // Our background push shared isolate accesses flutter-internal things very early in the startup proccess
   // To make sure that the parts of flutter needed are started up already, we need to ensure that the
