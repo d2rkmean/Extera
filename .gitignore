@@ -16,6 +16,8 @@ prime
 /assets/js/package
 /lib/generated
 
+/appimage/Extera.AppDir
+
 # IntelliJ related
 *.iml
 *.ipr
