@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
 import 'package:extera_next/generated/l10n/l10n.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart';
 
@@ -244,7 +245,7 @@ class SettingsController extends State<Settings> {
   bool? crossSigningCached;
   bool? showChatBackupBanner;
 
-  void firstRunBootstrapAction([_]) async {
+  void firstRunBootstrapAction([dynamic _]) async {
     if (showChatBackupBanner != true) {
       showOkAlertDialog(
         context: context,
@@ -254,9 +255,7 @@ class SettingsController extends State<Settings> {
       );
       return;
     }
-    await BootstrapDialog(
-      client: Matrix.of(context).client,
-    ).show(context);
+    await context.push('/backup');
     checkBootstrap();
   }
 

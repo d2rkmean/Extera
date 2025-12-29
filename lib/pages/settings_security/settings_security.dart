@@ -102,12 +102,6 @@ class SettingsSecurityController extends State<SettingsSecurity> {
     );
   }
 
-  void showBootstrapDialog(BuildContext context) async {
-    await BootstrapDialog(
-      client: Matrix.of(context).client,
-    ).show(context);
-  }
-
   Future<void> dehydrateAction() => Matrix.of(context).dehydrateAction(context);
 
   void changeShareKeysWith(ShareKeysWith? shareKeysWith) async {

@@ -8,7 +8,6 @@ import 'package:matrix/matrix.dart';
 
 import 'package:extera_next/config/themes.dart';
 import 'package:extera_next/utils/date_time_extension.dart';
-import 'package:extera_next/widgets/adaptive_dialogs/adaptive_dialog_action.dart';
 import 'package:extera_next/widgets/avatar.dart';
 import 'package:extera_next/widgets/presence_builder.dart';
 import '../../utils/url_launcher.dart';
@@ -70,7 +69,6 @@ class UserDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final client = Matrix.of(context).client;
-    final dmRoomId = client.getDirectChatFromUserId(profile.userId);
     
     final displayname = profile.displayName ??
         profile.userId.localpart ??

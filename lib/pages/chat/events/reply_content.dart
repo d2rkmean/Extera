@@ -78,6 +78,7 @@ class ReplyContent extends StatelessWidget {
                     MatrixLocals(L10n.of(context)),
                     withSenderNamePrefix: false,
                     hideReply: true,
+                    plaintextBody: true,
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,

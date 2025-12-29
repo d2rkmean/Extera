@@ -3465,5 +3465,9 @@
   },
   "chatPrivacy": "Privacy settings",
   "chatPrivacyDescription": "Individual privacy settings for this chat",
-  "chatPrivacyTitle": "Chat privacy"
+  "chatPrivacyTitle": "Chat privacy",
+  "skipChatBackup": "Skip chat backup",
+  "skipChatBackupWarning": "Do you want to continue without chat backup? You may lose access to your encrypted messages if you change your device.",
+  "loadingMessages": "Loading messages",
+  "setupChatBackup": "Set up chat backup"
 }
