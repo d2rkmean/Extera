@@ -3566,5 +3566,8 @@
             "type": "String"
         }
     }
-  }
+  },
+  "chatPrivacy": "Конфиденциальность",
+  "chatPrivacyDescription": "Задайте индивидуальные настройки для этого чата",
+  "chatPrivacyTitle": "Конфиденциальность в чате"
 }
