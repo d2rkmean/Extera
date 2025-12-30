@@ -3469,5 +3469,7 @@
   "skipChatBackup": "Skip chat backup",
   "skipChatBackupWarning": "Do you want to continue without chat backup? You may lose access to your encrypted messages if you change your device.",
   "loadingMessages": "Loading messages",
-  "setupChatBackup": "Set up chat backup"
+  "setupChatBackup": "Set up chat backup",
+  "individualChatPrivacySettings": "Chat settings",
+  "individualChatPrivacySettingsDescription": "Set different privacy settings for every chat."
 }

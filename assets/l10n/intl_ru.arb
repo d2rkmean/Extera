@@ -3573,5 +3573,7 @@
   "skipChatBackup": "Резервное копирование",
   "skipChatBackupWarning": "Продолжить без настройки резервного копиирования? Вы можете потерять доступ к зашифрованным сообщениям, если смените устройство.",
   "loadingMessages": "Загрузка сообщений",
-  "setupChatBackup": "Настроить резервное копирование"
+  "setupChatBackup": "Настроить резервное копирование",
+  "individualChatPrivacySettings": "Настройки чатов",
+  "individualChatPrivacySettingsDescription": "Задайте собственные настройки конфиденциальности для разных чатов."
 }

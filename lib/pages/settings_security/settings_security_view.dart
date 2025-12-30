@@ -1,3 +1,5 @@
+import 'package:extera_next/pages/settings_security/chat_privacy_list.dart';
+import 'package:extera_next/utils/adaptive_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 import 'package:extera_next/generated/l10n/l10n.dart';
@@ -33,10 +35,9 @@ class SettingsSecurityView extends StatelessWidget {
         iconColor: theme.colorScheme.onSurface,
         child: MaxWidthBody(
           child: FutureBuilder(
-            future: Matrix.of(context)
-                .client
-                .getCapabilities()
-                .timeout(const Duration(seconds: 10)),
+            future: Matrix.of(
+              context,
+            ).client.getCapabilities().timeout(const Duration(seconds: 10)),
             builder: (context, snapshot) {
               final capabilities = snapshot.data;
               final error = snapshot.error;
@@ -61,8 +62,7 @@ class SettingsSecurityView extends StatelessWidget {
                   ),
                   SettingsSwitchListTile.adaptive(
                     title: L10n.of(context).hideAvatarsInInvites,
-                    subtitle:
-                        L10n.of(context).hideAvatarsInInvitesDescription,
+                    subtitle: L10n.of(context).hideAvatarsInInvitesDescription,
                     onChanged: (b) => AppConfig.hideAvatarsInInvites = b,
                     storeKey: SettingKeys.hideAvatarsInInvites,
                     defaultValue: AppConfig.hideAvatarsInInvites,
@@ -78,24 +78,23 @@ class SettingsSecurityView extends StatelessWidget {
                   ),
                   SettingsSwitchListTile.adaptive(
                     title: L10n.of(context).cleanExif,
-                    subtitle:
-                        L10n.of(context).cleanExifDescription,
+                    subtitle: L10n.of(context).cleanExifDescription,
                     onChanged: (b) => AppConfig.cleanExif = b,
                     storeKey: SettingKeys.cleanExif,
                     defaultValue: AppConfig.cleanExif,
                   ),
                   SettingsSwitchListTile.adaptive(
                     title: L10n.of(context).doNotSendIfCantClean,
-                    subtitle:
-                        L10n.of(context).doNotSendIfCantCleanDescription,
+                    subtitle: L10n.of(context).doNotSendIfCantCleanDescription,
                     onChanged: (b) => AppConfig.doNotSendIfCantClean = b,
                     storeKey: SettingKeys.doNotSendIfCantClean,
                     defaultValue: AppConfig.doNotSendIfCantClean,
                   ),
                   SettingsSwitchListTile.adaptive(
                     title: L10n.of(context).sendTypingNotifications,
-                    subtitle:
-                        L10n.of(context).sendTypingNotificationsDescription,
+                    subtitle: L10n.of(
+                      context,
+                    ).sendTypingNotificationsDescription,
                     onChanged: (b) => AppConfig.sendTypingNotifications = b,
                     storeKey: SettingKeys.sendTypingNotifications,
                     defaultValue: AppConfig.sendTypingNotifications,
@@ -109,6 +108,23 @@ class SettingsSecurityView extends StatelessWidget {
                   ),
                   ListTile(
                     trailing: const Icon(Icons.chevron_right_outlined),
+                    title: Text(L10n.of(context).individualChatPrivacySettings),
+                    subtitle: Text(
+                      L10n.of(context).individualChatPrivacySettingsDescription,
+                    ),
+                    onTap: () {
+                      showAdaptiveBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return ChatPrivacyList(
+                            client: Matrix.of(context).client,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  ListTile(
+                    trailing: const Icon(Icons.chevron_right_outlined),
                     title: Text(L10n.of(context).blockedUsers),
                     subtitle: Text(
                       L10n.of(context).thereAreCountUsersBlocked(
@@ -116,7 +132,7 @@ class SettingsSecurityView extends StatelessWidget {
                       ),
                     ),
                     onTap: () =>
-                        context.go('/rooms/settings/security/ignorelist'),
+                        context.push('/rooms/settings/security/ignorelist'),
                   ),
                   if (Matrix.of(context).client.encryption != null) ...{
                     if (PlatformInfos.isMobile)
@@ -140,14 +156,16 @@ class SettingsSecurityView extends StatelessWidget {
                   ),
                   ListTile(
                     title: Material(
-                      borderRadius:
-                          BorderRadius.circular(AppConfig.borderRadius / 2),
+                      borderRadius: BorderRadius.circular(
+                        AppConfig.borderRadius / 2,
+                      ),
                       color: theme.colorScheme.onInverseSurface,
                       child: DropdownButton<ShareKeysWith>(
                         isExpanded: true,
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        borderRadius:
-                            BorderRadius.circular(AppConfig.borderRadius / 2),
+                        borderRadius: BorderRadius.circular(
+                          AppConfig.borderRadius / 2,
+                        ),
                         underline: const SizedBox.shrink(),
                         value: Matrix.of(context).client.shareKeysWith,
                         items: ShareKeysWith.values
@@ -187,7 +205,7 @@ class SettingsSecurityView extends StatelessWidget {
                       trailing: const Icon(Icons.chevron_right_outlined),
                       title: Text(L10n.of(context).changePassword),
                       onTap: () =>
-                          context.go('/rooms/settings/security/password'),
+                          context.push('/rooms/settings/security/password'),
                     ),
                   ListTile(
                     iconColor: Colors.orange,
