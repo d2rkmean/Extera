@@ -159,7 +159,7 @@ class AudioPlayerState extends State<AudioPlayerWidget> {
     onPlayerStateChanged ??= audioPlayer.onPlayerStateChanged.listen(
       (_) => setState(() {}),
     );
-    
+
     if (audioPlayer.state == PlayerState.playing) {
       await audioPlayer.pause();
       return;
@@ -406,6 +406,20 @@ class AudioPlayerState extends State<AudioPlayerWidget> {
               ],
             ),
           ),
+          if (fileDescription != widget.event.plaintextBody) ...[
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(
+                widget.event.plaintextBody,
+                textScaleFactor: MediaQuery.textScalerOf(context).scale(1),
+                style: TextStyle(
+                  color: widget.color,
+                  fontSize: widget.fontSize,
+                ),
+              ),
+            ),
+          ],
           if (fileDescription != null &&
               !widget.event.isRichFileDescription) ...[
             const SizedBox(height: 8),
