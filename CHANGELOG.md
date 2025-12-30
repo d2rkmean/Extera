@@ -5,6 +5,7 @@
 - Added a list of privacy settings set for different chats.
 - Added update checking.
 - Added call button in profile view.
+- Twemoji font option.
 
 ## Extera 25.1.1
 - Added context menu for messages. Now, when selecting a single message, a context menu will appear. Multi-selection is still available.
