@@ -154,6 +154,11 @@ class SendFileDialogState extends State<SendFileDialog> {
           };
         }
 
+        setState(() {
+          isSending = false;
+        });
+        Navigator.of(context, rootNavigator: false).pop();
+
         try {
           await widget.room.sendFileEvent(
             file,
@@ -165,10 +170,6 @@ class SendFileDialogState extends State<SendFileDialog> {
                 widget.thread?.rootEvent.eventId,
             threadRootEventId: widget.thread?.rootEvent.eventId,
           );
-          setState(() {
-            isSending = false;
-          });
-          Navigator.of(context, rootNavigator: false).pop();
         } on MatrixException catch (e) {
           final retryAfterMs = e.retryAfterMs;
           if (e.error != MatrixError.M_LIMIT_EXCEEDED || retryAfterMs == null) {

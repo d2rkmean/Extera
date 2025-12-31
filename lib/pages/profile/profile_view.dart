@@ -210,7 +210,7 @@ class ProfileView extends StatelessWidget {
                             _buildActionButton(
                               context: context,
                               icon: Icons.call,
-                              label: L10n.of(context).placeCall,
+                              label: L10n.of(context).callAction,
                               onPressed: () {
                                 controller.onCallTap();
                               },

@@ -263,9 +263,7 @@ class ChatController extends State<ChatPageWithRoom>
           closeIconColor: theme.colorScheme.onErrorContainer,
           content: Text(
             L10n.of(context).otherPartyNotLoggedIn,
-            style: TextStyle(
-              color: theme.colorScheme.onErrorContainer,
-            ),
+            style: TextStyle(color: theme.colorScheme.onErrorContainer),
           ),
           showCloseIcon: true,
         ),
@@ -343,8 +341,8 @@ class ChatController extends State<ChatPageWithRoom>
       var readMarkerEventIndex = readMarkerEventId.isEmpty
           ? -1
           : timeline!.events
-              .filterByVisibleInGui(exceptionEventId: readMarkerEventId)
-              .indexWhere((e) => e.eventId == readMarkerEventId);
+                .filterByVisibleInGui(exceptionEventId: readMarkerEventId)
+                .indexWhere((e) => e.eventId == readMarkerEventId);
 
       // Read marker is existing but not found in first events. Try a single
       // requestHistory call before opening timeline on event context:
@@ -376,12 +374,12 @@ class ChatController extends State<ChatPageWithRoom>
   String? scrollUpBannerEventId;
 
   void discardScrollUpBannerEventId() => setState(() {
-        scrollUpBannerEventId = null;
-      });
+    scrollUpBannerEventId = null;
+  });
 
   void _showScrollUpMaterialBanner(String eventId) => setState(() {
-        scrollUpBannerEventId = eventId;
-      });
+    scrollUpBannerEventId = eventId;
+  });
 
   Future<void> updateView() async {
     if (!mounted) return;
@@ -397,8 +395,11 @@ class ChatController extends State<ChatPageWithRoom>
     if (lastEvent == null) return;
     if (lastEvent.relationshipType == RelationshipTypes.thread &&
         lastEvent.relationshipEventId != null) {
-      final thread = await room.client.database
-          .getThread(room.id, lastEvent.relationshipEventId!, room.client);
+      final thread = await room.client.database.getThread(
+        room.id,
+        lastEvent.relationshipEventId!,
+        room.client,
+      );
       if (thread != null) {
         setState(() {
           threads?[lastEvent.eventId] = thread;
@@ -474,9 +475,7 @@ class ChatController extends State<ChatPageWithRoom>
     }
   }
 
-  Future<void> _getTimeline({
-    String? eventContextId,
-  }) async {
+  Future<void> _getTimeline({String? eventContextId}) async {
     await Matrix.of(context).client.roomsLoading;
     await Matrix.of(context).client.accountDataLoading;
     if (eventContextId != null &&
@@ -538,12 +537,12 @@ class ChatController extends State<ChatPageWithRoom>
     // ignore: unawaited_futures
     _setReadMarkerFuture = timeline
         .setReadMarker(
-      eventId: eventId,
-      public: shouldSendPublicReadReceipts(room.client, roomId),
-    )
+          eventId: eventId,
+          public: shouldSendPublicReadReceipts(room.client, roomId),
+        )
         .then((_) {
-      _setReadMarkerFuture = null;
-    });
+          _setReadMarkerFuture = null;
+        });
 
     if (timeline is RoomTimeline) {
       if (eventId == null || eventId == timeline.room.lastEvent?.eventId) {
@@ -586,8 +585,8 @@ class ChatController extends State<ChatPageWithRoom>
   }
 
   void setActiveClient(Client c) => setState(() {
-        Matrix.of(context).setActiveClient(c);
-      });
+    Matrix.of(context).setActiveClient(c);
+  });
 
   Future<void> send() async {
     if (sendController.text.trim().isEmpty) return;
@@ -642,21 +641,14 @@ class ChatController extends State<ChatPageWithRoom>
   void sendPollAction() async {
     await showAdaptiveDialog(
       context: context,
-      builder: (c) => SendPollDialog(
-        room: room,
-        thread: thread,
-        outerContext: context,
-      ),
+      builder: (c) =>
+          SendPollDialog(room: room, thread: thread, outerContext: context),
     );
     replyEvent = null;
   }
 
   void sendFileAction({FileSelectorType type = FileSelectorType.any}) async {
-    final files = await selectFiles(
-      context,
-      allowMultiple: true,
-      type: type,
-    );
+    final files = await selectFiles(context, allowMultiple: true, type: type);
     if (files.isEmpty) {
       Logs().v("Returning in sendFileAction, bc files.isEmpty==true");
       return;
@@ -747,32 +739,25 @@ class ChatController extends State<ChatPageWithRoom>
 
     await room
         .sendFileEvent(
-      file,
-      inReplyTo: replyEvent,
-      extraContent: {
-        'info': {
-          ...file.info,
-          'duration': duration,
-        },
-        'org.matrix.msc3245.voice': {},
-        'org.matrix.msc1767.audio': {
-          'duration': duration,
-          'waveform': waveform,
-        },
-      },
-      threadLastEventId: thread?.lastEvent?.eventId,
-      threadRootEventId: thread?.rootEvent.eventId,
-    )
+          file,
+          inReplyTo: replyEvent,
+          extraContent: {
+            'info': {...file.info, 'duration': duration},
+            'org.matrix.msc3245.voice': {},
+            'org.matrix.msc1767.audio': {
+              'duration': duration,
+              'waveform': waveform,
+            },
+          },
+          threadLastEventId: thread?.lastEvent?.eventId,
+          threadRootEventId: thread?.rootEvent.eventId,
+        )
         .catchError((e) {
-      scaffoldMessenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            (e as Object).toLocalizedString(context),
-          ),
-        ),
-      );
-      return null;
-    });
+          scaffoldMessenger.showSnackBar(
+            SnackBar(content: Text((e as Object).toLocalizedString(context))),
+          );
+          return null;
+        });
     setState(() {
       replyEvent = null;
     });
@@ -802,10 +787,7 @@ class ChatController extends State<ChatPageWithRoom>
   void sendLocationAction() async {
     await showAdaptiveDialog(
       context: context,
-      builder: (c) => SendLocationDialog(
-        room: room,
-        thread: thread,
-      ),
+      builder: (c) => SendLocationDialog(room: room, thread: thread),
     );
   }
 
@@ -818,7 +800,9 @@ class ChatController extends State<ChatPageWithRoom>
     }
     for (final event in selectedEvents) {
       if (copyString.isNotEmpty) copyString += '\n\n';
-      copyString += event.getDisplayEvent(timeline!).calcLocalizedBodyFallback(
+      copyString += event
+          .getDisplayEvent(timeline!)
+          .calcLocalizedBodyFallback(
             MatrixLocals(L10n.of(context)),
             withSenderNamePrefix: true,
           );
@@ -839,11 +823,7 @@ class ChatController extends State<ChatPageWithRoom>
       ClipboardData(
         text: event != null
             ? event.getLink()
-            : selectedEvents
-                .map(
-                  (event) => event.getLink(),
-                )
-                .join('\n'),
+            : selectedEvents.map((event) => event.getLink()).join('\n'),
       ),
     );
     setState(() {
@@ -949,14 +929,8 @@ class ChatController extends State<ChatPageWithRoom>
           value: -100,
           label: L10n.of(context).extremeOffensive,
         ),
-        AdaptiveModalAction(
-          value: -50,
-          label: L10n.of(context).offensive,
-        ),
-        AdaptiveModalAction(
-          value: 0,
-          label: L10n.of(context).inoffensive,
-        ),
+        AdaptiveModalAction(value: -50, label: L10n.of(context).offensive),
+        AdaptiveModalAction(value: 0, label: L10n.of(context).inoffensive),
       ],
     );
     if (score == null) return;
@@ -971,11 +945,11 @@ class ChatController extends State<ChatPageWithRoom>
     final result = await showFutureLoadingDialog(
       context: context,
       future: () => Matrix.of(context).client.reportEvent(
-            event!.roomId!,
-            event.eventId,
-            reason: reason,
-            score: score,
-          ),
+        event!.roomId!,
+        event.eventId,
+        reason: reason,
+        score: score,
+      ),
     );
     if (result.error != null) return;
     setState(() {
@@ -1029,17 +1003,11 @@ class ChatController extends State<ChatPageWithRoom>
     );
     if (client == null) return;
     if (event.senderId != client.userID) return;
-    await room.sendEvent(
-      {
-        'org.matrix.msc1767.text': 'Ended poll',
-        'm.relates_to': {
-          'rel_type': 'm.reference',
-          'event_id': event.eventId,
-        },
-        'body': 'Ended poll',
-      },
-      type: 'org.matrix.msc3381.poll.end',
-    );
+    await room.sendEvent({
+      'org.matrix.msc1767.text': 'Ended poll',
+      'm.relates_to': {'rel_type': 'm.reference', 'event_id': event.eventId},
+      'body': 'Ended poll',
+    }, type: 'org.matrix.msc3381.poll.end');
   }
 
   void redactEventsAction({Event? event}) async {
@@ -1073,9 +1041,10 @@ class ChatController extends State<ChatPageWithRoom>
                 return;
               }
               final room = client.getRoomById(roomId)!;
-              await Event.fromJson(event.toJson(), room).redactEvent(
-                reason: reason,
-              );
+              await Event.fromJson(
+                event.toJson(),
+                room,
+              ).redactEvent(reason: reason);
             }
           } else {
             await event.cancelSend();
@@ -1124,8 +1093,9 @@ class ChatController extends State<ChatPageWithRoom>
         !selectedEvents.first.status.isSent) {
       return false;
     }
-    return currentRoomBundle
-        .any((cl) => selectedEvents.first.senderId == cl!.userID);
+    return currentRoomBundle.any(
+      (cl) => selectedEvents.first.senderId == cl!.userID,
+    );
   }
 
   void forwardEventsAction({Event? event}) async {
@@ -1135,16 +1105,16 @@ class ChatController extends State<ChatPageWithRoom>
         items: selectedEvents.isEmpty
             ? [ContentShareItem(event!.content)]
             : selectedEvents
-                .map((event) => ContentShareItem(event.content))
-                .toList(),
+                  .map((event) => ContentShareItem(event.content))
+                  .toList(),
       ),
     );
     if (!mounted) return;
     setState(() => selectedEvents.clear());
   }
 
-  void sendAgainAction() {
-    final event = selectedEvents.first;
+  void sendAgainAction({Event? event}) {
+    event ??= selectedEvents.first;
     if (event.status.isError) {
       event.sendAgain();
     }
@@ -1165,26 +1135,26 @@ class ChatController extends State<ChatPageWithRoom>
     inputFocus.requestFocus();
   }
 
-  void scrollToEventId(
-    String eventId, {
-    bool highlightEvent = true,
-  }) async {
-    final foundEvent =
-        timeline!.events.firstWhereOrNull((event) => event.eventId == eventId);
+  void scrollToEventId(String eventId, {bool highlightEvent = true}) async {
+    final foundEvent = timeline!.events.firstWhereOrNull(
+      (event) => event.eventId == eventId,
+    );
 
     final eventIndex = foundEvent == null
         ? -1
         : timeline!.events
-            .filterByVisibleInGui(exceptionEventId: eventId)
-            .indexOf(foundEvent);
+              .filterByVisibleInGui(exceptionEventId: eventId)
+              .indexOf(foundEvent);
 
     if (eventIndex == -1) {
       setState(() {
         timeline = null;
         _scrolledUp = false;
         loadTimelineFuture = _getTimeline(eventContextId: eventId).onError(
-          ErrorReporter(context, 'Unable to load timeline after scroll to ID')
-              .onErrorCallback,
+          ErrorReporter(
+            context,
+            'Unable to load timeline after scroll to ID',
+          ).onErrorCallback,
         );
       });
       await loadTimelineFuture;
@@ -1212,8 +1182,10 @@ class ChatController extends State<ChatPageWithRoom>
         timeline = null;
         _scrolledUp = false;
         loadTimelineFuture = _getTimeline().onError(
-          ErrorReporter(context, 'Unable to load timeline after scroll down')
-              .onErrorCallback,
+          ErrorReporter(
+            context,
+            'Unable to load timeline after scroll down',
+          ).onErrorCallback,
         );
       });
       await loadTimelineFuture;
@@ -1288,17 +1260,14 @@ class ChatController extends State<ChatPageWithRoom>
     final events = List<Event>.from(selectedEvents);
     setState(() => selectedEvents.clear());
     for (final event in events) {
-      await room.sendReaction(
-        event.eventId,
-        emoji!,
-      );
+      await room.sendReaction(event.eventId, emoji!);
     }
   }
 
   void clearSelectedEvents() => setState(() {
-        selectedEvents.clear();
-        showEmojiPicker = false;
-      });
+    selectedEvents.clear();
+    showEmojiPicker = false;
+  });
 
   void clearSingleSelectedEvent() {
     if (selectedEvents.length <= 1) {
@@ -1319,12 +1288,13 @@ class ChatController extends State<ChatPageWithRoom>
     setState(() {
       pendingText = sendController.text;
       editEvent = event;
-      sendController.text =
-          editEvent!.getDisplayEvent(timeline!).calcLocalizedBodyFallback(
-                MatrixLocals(L10n.of(context)),
-                withSenderNamePrefix: false,
-                hideReply: true,
-              );
+      sendController.text = editEvent!
+          .getDisplayEvent(timeline!)
+          .calcLocalizedBodyFallback(
+            MatrixLocals(L10n.of(context)),
+            withSenderNamePrefix: false,
+            hideReply: true,
+          );
       selectedEvents.clear();
     });
     inputFocus.requestFocus();
@@ -1359,10 +1329,7 @@ class ChatController extends State<ChatPageWithRoom>
     if (!mounted) return;
     context.go('/rooms/${result.result!}');
 
-    await showFutureLoadingDialog(
-      context: context,
-      future: room.leave,
-    );
+    await showFutureLoadingDialog(context: context, future: room.leave);
   }
 
   ContextMenuController? _contextMenuController;
@@ -1380,17 +1347,9 @@ class ChatController extends State<ChatPageWithRoom>
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
-            Icon(
-              icon,
-              size: 20,
-              color: color,
-            ),
+            Icon(icon, size: 20, color: color),
             const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                label,
-              ),
-            ),
+            Expanded(child: Text(label)),
           ],
         ),
       ),
@@ -1409,10 +1368,7 @@ class ChatController extends State<ChatPageWithRoom>
     final sentReactions = <String>{};
     sentReactions.addAll(
       event
-          .aggregatedEvents(
-            timeline!,
-            RelationshipTypes.reaction,
-          )
+          .aggregatedEvents(timeline!, RelationshipTypes.reaction)
           .where(
             (event) =>
                 event.senderId == event.room.client.userID &&
@@ -1440,303 +1396,313 @@ class ChatController extends State<ChatPageWithRoom>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (room.canSendEvent(EventTypes.Reaction))
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 4.0,
-                    bottom: 4.0,
-                  ),
-                  child: Material(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ...AppConfig.defaultReactions.map(
-                          (emoji) => IconButton(
-                            padding: EdgeInsets.zero,
-                            icon: Center(
-                              child: Opacity(
-                                opacity: sentReactions.contains(
-                                  emoji,
-                                )
-                                    ? 0.33
-                                    : 1,
-                                child: Text(
-                                  emoji,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                            onPressed: sentReactions.contains(
-                              emoji,
-                            )
-                                ? null
-                                : () {
-                                    _contextMenuController?.remove();
-                                    event.room.sendReaction(
-                                      event.eventId,
-                                      emoji,
-                                    );
-                                  },
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.add_reaction_outlined,
-                          ),
-                          tooltip: L10n.of(
-                            context,
-                          ).customReaction,
-                          onPressed: () async {
-                            final emoji = await showAdaptiveBottomSheet<String>(
-                              context: context,
-                              builder: (context) => Scaffold(
-                                appBar: AppBar(
-                                  title: Text(
-                                    L10n.of(context).customReaction,
-                                  ),
-                                  leading: CloseButton(
-                                    onPressed: () => Navigator.of(
-                                      context,
-                                    ).pop(
-                                      null,
-                                    ),
-                                  ),
-                                ),
-                                body: SizedBox(
-                                  height: double.infinity,
-                                  child: EmojiPicker(
-                                    onEmojiSelected: (
-                                      _,
-                                      emoji,
-                                    ) =>
-                                        Navigator.of(
-                                      context,
-                                    ).pop(
-                                      emoji.emoji,
-                                    ),
-                                    config: Config(
-                                      locale: Localizations.localeOf(context),
-                                      emojiViewConfig: const EmojiViewConfig(
-                                        backgroundColor: Colors.transparent,
-                                      ),
-                                      bottomActionBarConfig:
-                                          const BottomActionBarConfig(
-                                        enabled: false,
-                                      ),
-                                      categoryViewConfig: CategoryViewConfig(
-                                        initCategory: Category.SMILEYS,
-                                        backspaceColor:
-                                            theme.colorScheme.primary,
-                                        iconColor:
-                                            theme.colorScheme.primary.withAlpha(
-                                          128,
-                                        ),
-                                        iconColorSelected:
-                                            theme.colorScheme.primary,
-                                        indicatorColor:
-                                            theme.colorScheme.primary,
-                                        backgroundColor:
-                                            theme.colorScheme.surface,
-                                      ),
-                                      skinToneConfig: SkinToneConfig(
-                                        dialogBackgroundColor: Color.lerp(
-                                          theme.colorScheme.surface,
-                                          theme.colorScheme.primaryContainer,
-                                          0.75,
-                                        )!,
-                                        indicatorColor:
-                                            theme.colorScheme.onSurface,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                            if (emoji == null) {
-                              return;
-                            }
-                            if (sentReactions.contains(
-                              emoji,
-                            )) {
-                              return;
-                            }
-                            _contextMenuController?.remove();
-
-                            await event.room.sendReaction(
-                              event.eventId,
-                              emoji,
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              if (receipts.isNotEmpty)
+              if (event.status == EventStatus.error) ...[
                 _buildMenuItem(
                   event: event,
-                  icon: Icons.done_all,
-                  label: L10n.of(context).nViews(receipts.length),
+                  icon: Icons.send_outlined,
+                  label: L10n.of(context).tryToSendAgain,
                   onPressed: () {
                     if (!PlatformInfos.isMobile) _closeMessageMenu();
-                    showReadReceipts(event: event);
+                    sendAgainAction(event: event);
                   },
                 ),
-              if (room.canSendDefaultMessages)
                 _buildMenuItem(
                   event: event,
-                  icon: Icons.reply_outlined,
-                  label: L10n.of(context).reply,
-                  onPressed: () {
-                    _closeMessageMenu();
-                    replyAction(replyTo: event);
-                  },
-                ),
-              if (room.canSendDefaultMessages)
-                _buildMenuItem(
-                  event: event,
-                  icon: Icons.chat_bubble_outline,
-                  label: L10n.of(context).discuss,
-                  onPressed: () {
-                    _closeMessageMenu();
-                    discussAction(threadRootEvent: event);
-                  },
-                ),
-              if (room.canSendDefaultMessages &&
-                  event.senderId == client.userID!)
-                _buildMenuItem(
-                  event: event,
-                  icon: Icons.edit_outlined,
-                  label: L10n.of(context).edit,
-                  onPressed: () {
-                    _closeMessageMenu();
-                    editSelectedEventAction(event: event);
-                  },
-                ),
-              if (event.type == 'org.matrix.msc3381.poll.start' &&
-                  event.senderId == Matrix.of(context).client.userID)
-                _buildMenuItem(
-                  event: event,
-                  icon: Icons.check,
-                  label: L10n.of(context).endPoll,
-                  onPressed: () {
-                    _closeMessageMenu();
-                    endPollAction(event: event);
-                  },
-                ),
-              const Divider(),
-              _buildMenuItem(
-                event: event,
-                icon: Icons.forward_outlined,
-                label: L10n.of(context).forward,
-                onPressed: () {
-                  _closeMessageMenu();
-                  forwardEventsAction(event: event);
-                },
-              ),
-              _buildMenuItem(
-                event: event,
-                icon: Icons.copy_outlined,
-                label: L10n.of(context).copy,
-                onPressed: () {
-                  _closeMessageMenu();
-                  Clipboard.setData(
-                    ClipboardData(
-                      text: event
-                          .getDisplayEvent(timeline!)
-                          .calcLocalizedBodyFallback(
-                            MatrixLocals(L10n.of(context)),
-                          ),
-                    ),
-                  );
-                },
-              ),
-              _buildMenuItem(
-                event: event,
-                icon: Icons.link,
-                label: L10n.of(context).copyLink,
-                onPressed: () {
-                  _closeMessageMenu();
-                  copyLinkAction(event: event);
-                },
-              ),
-              _buildMenuItem(
-                event: event,
-                icon: Icons.check_circle_outline,
-                label: L10n.of(context).select,
-                onPressed: () {
-                  _closeMessageMenu();
-                  onMultiSelect(event);
-                },
-              ),
-              if (!room.encrypted)
-                _buildMenuItem(
-                  event: event,
-                  icon: Icons.translate,
-                  label: L10n.of(context).translate,
-                  onPressed: () {
-                    _closeMessageMenu();
-                    translateEventAction(event: event);
-                  },
-                ),
-              if (event.redacted)
-                _buildMenuItem(
-                  event: event,
-                  icon: Icons.redo,
-                  label: L10n.of(context).recoverMessage,
-                  onPressed: () {
-                    _closeMessageMenu();
-                    recoverEventAction(event: event);
-                  },
-                ),
-              if (room.canChangeStateEvent(EventTypes.RoomPinnedEvents))
-                _buildMenuItem(
-                  event: event,
-                  icon: Icons.push_pin_outlined,
-                  label: room.pinnedEventIds.contains(event.eventId)
-                      ? L10n.of(context).unpin
-                      : L10n.of(context).pin,
-                  onPressed: () {
-                    _closeMessageMenu();
-                    pinEvent(event: event);
-                  },
-                ),
-              _buildMenuItem(
-                event: event,
-                icon: Icons.info_outline,
-                label: L10n.of(context).messageInfo,
-                onPressed: () {
-                  _closeMessageMenu();
-                  showEventInfo(event);
-                },
-              ),
-              const Divider(),
-              if (event.canRedact ||
-                  (clients!.any((cl) => event.senderId == cl!.userID)))
-                _buildMenuItem(
-                  event: event,
-                  icon: Icons.delete_outlined,
+                  icon: Icons.cancel_outlined,
+                  label: L10n.of(context).cancel,
                   color: Colors.red,
-                  label: L10n.of(context).delete,
                   onPressed: () {
-                    _closeMessageMenu();
-                    redactEventsAction(event: event);
+                    if (!PlatformInfos.isMobile) _closeMessageMenu();
+                    event.cancelSend();
                   },
                 ),
-              _buildMenuItem(
-                event: event,
-                icon: Icons.report_outlined,
-                color: Colors.red,
-                label: L10n.of(context).reportMessage,
-                onPressed: () {
-                  _closeMessageMenu();
-                  reportEventAction(event: event);
-                },
-              ),
+              ],
+              if (event.status == EventStatus.sent ||
+                  event.status == EventStatus.synced) ...[
+                if (room.canSendEvent(EventTypes.Reaction))
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+                    child: Material(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ...AppConfig.defaultReactions.map(
+                            (emoji) => IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Center(
+                                child: Opacity(
+                                  opacity: sentReactions.contains(emoji)
+                                      ? 0.33
+                                      : 1,
+                                  child: Text(
+                                    emoji,
+                                    style: const TextStyle(fontSize: 20),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              onPressed: sentReactions.contains(emoji)
+                                  ? null
+                                  : () {
+                                      _contextMenuController?.remove();
+                                      event.room.sendReaction(
+                                        event.eventId,
+                                        emoji,
+                                      );
+                                    },
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add_reaction_outlined),
+                            tooltip: L10n.of(context).customReaction,
+                            onPressed: () async {
+                              final emoji =
+                                  await showAdaptiveBottomSheet<String>(
+                                    context: context,
+                                    builder: (context) => Scaffold(
+                                      appBar: AppBar(
+                                        title: Text(
+                                          L10n.of(context).customReaction,
+                                        ),
+                                        leading: CloseButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(null),
+                                        ),
+                                      ),
+                                      body: SizedBox(
+                                        height: double.infinity,
+                                        child: EmojiPicker(
+                                          onEmojiSelected: (_, emoji) =>
+                                              Navigator.of(
+                                                context,
+                                              ).pop(emoji.emoji),
+                                          config: Config(
+                                            locale: Localizations.localeOf(
+                                              context,
+                                            ),
+                                            emojiViewConfig:
+                                                const EmojiViewConfig(
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                ),
+                                            bottomActionBarConfig:
+                                                const BottomActionBarConfig(
+                                                  enabled: false,
+                                                ),
+                                            categoryViewConfig:
+                                                CategoryViewConfig(
+                                                  initCategory:
+                                                      Category.SMILEYS,
+                                                  backspaceColor:
+                                                      theme.colorScheme.primary,
+                                                  iconColor: theme
+                                                      .colorScheme
+                                                      .primary
+                                                      .withAlpha(128),
+                                                  iconColorSelected:
+                                                      theme.colorScheme.primary,
+                                                  indicatorColor:
+                                                      theme.colorScheme.primary,
+                                                  backgroundColor:
+                                                      theme.colorScheme.surface,
+                                                ),
+                                            skinToneConfig: SkinToneConfig(
+                                              dialogBackgroundColor: Color.lerp(
+                                                theme.colorScheme.surface,
+                                                theme
+                                                    .colorScheme
+                                                    .primaryContainer,
+                                                0.75,
+                                              )!,
+                                              indicatorColor:
+                                                  theme.colorScheme.onSurface,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                              if (emoji == null) {
+                                return;
+                              }
+                              if (sentReactions.contains(emoji)) {
+                                return;
+                              }
+                              _contextMenuController?.remove();
+
+                              await event.room.sendReaction(
+                                event.eventId,
+                                emoji,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                if (receipts.isNotEmpty)
+                  _buildMenuItem(
+                    event: event,
+                    icon: Icons.done_all,
+                    label: L10n.of(context).nViews(receipts.length),
+                    onPressed: () {
+                      if (!PlatformInfos.isMobile) _closeMessageMenu();
+                      showReadReceipts(event: event);
+                    },
+                  ),
+                if (room.canSendDefaultMessages)
+                  _buildMenuItem(
+                    event: event,
+                    icon: Icons.reply_outlined,
+                    label: L10n.of(context).reply,
+                    onPressed: () {
+                      _closeMessageMenu();
+                      replyAction(replyTo: event);
+                    },
+                  ),
+                if (room.canSendDefaultMessages)
+                  _buildMenuItem(
+                    event: event,
+                    icon: Icons.chat_bubble_outline,
+                    label: L10n.of(context).discuss,
+                    onPressed: () {
+                      _closeMessageMenu();
+                      discussAction(threadRootEvent: event);
+                    },
+                  ),
+                if (room.canSendDefaultMessages &&
+                    event.senderId == client.userID!)
+                  _buildMenuItem(
+                    event: event,
+                    icon: Icons.edit_outlined,
+                    label: L10n.of(context).edit,
+                    onPressed: () {
+                      _closeMessageMenu();
+                      editSelectedEventAction(event: event);
+                    },
+                  ),
+                if (event.type == 'org.matrix.msc3381.poll.start' &&
+                    event.senderId == Matrix.of(context).client.userID)
+                  _buildMenuItem(
+                    event: event,
+                    icon: Icons.check,
+                    label: L10n.of(context).endPoll,
+                    onPressed: () {
+                      _closeMessageMenu();
+                      endPollAction(event: event);
+                    },
+                  ),
+                const Divider(),
+                _buildMenuItem(
+                  event: event,
+                  icon: Icons.forward_outlined,
+                  label: L10n.of(context).forward,
+                  onPressed: () {
+                    _closeMessageMenu();
+                    forwardEventsAction(event: event);
+                  },
+                ),
+                _buildMenuItem(
+                  event: event,
+                  icon: Icons.copy_outlined,
+                  label: L10n.of(context).copy,
+                  onPressed: () {
+                    _closeMessageMenu();
+                    Clipboard.setData(
+                      ClipboardData(
+                        text: event
+                            .getDisplayEvent(timeline!)
+                            .calcLocalizedBodyFallback(
+                              MatrixLocals(L10n.of(context)),
+                            ),
+                      ),
+                    );
+                  },
+                ),
+                _buildMenuItem(
+                  event: event,
+                  icon: Icons.link,
+                  label: L10n.of(context).copyLink,
+                  onPressed: () {
+                    _closeMessageMenu();
+                    copyLinkAction(event: event);
+                  },
+                ),
+                _buildMenuItem(
+                  event: event,
+                  icon: Icons.check_circle_outline,
+                  label: L10n.of(context).select,
+                  onPressed: () {
+                    _closeMessageMenu();
+                    onMultiSelect(event);
+                  },
+                ),
+                if (!room.encrypted)
+                  _buildMenuItem(
+                    event: event,
+                    icon: Icons.translate,
+                    label: L10n.of(context).translate,
+                    onPressed: () {
+                      _closeMessageMenu();
+                      translateEventAction(event: event);
+                    },
+                  ),
+                if (event.redacted)
+                  _buildMenuItem(
+                    event: event,
+                    icon: Icons.redo,
+                    label: L10n.of(context).recoverMessage,
+                    onPressed: () {
+                      _closeMessageMenu();
+                      recoverEventAction(event: event);
+                    },
+                  ),
+                if (room.canChangeStateEvent(EventTypes.RoomPinnedEvents))
+                  _buildMenuItem(
+                    event: event,
+                    icon: Icons.push_pin_outlined,
+                    label: room.pinnedEventIds.contains(event.eventId)
+                        ? L10n.of(context).unpin
+                        : L10n.of(context).pin,
+                    onPressed: () {
+                      _closeMessageMenu();
+                      pinEvent(event: event);
+                    },
+                  ),
+                _buildMenuItem(
+                  event: event,
+                  icon: Icons.info_outline,
+                  label: L10n.of(context).messageInfo,
+                  onPressed: () {
+                    _closeMessageMenu();
+                    showEventInfo(event);
+                  },
+                ),
+                const Divider(),
+                if (event.canRedact ||
+                    (clients!.any((cl) => event.senderId == cl!.userID)))
+                  _buildMenuItem(
+                    event: event,
+                    icon: Icons.delete_outlined,
+                    color: Colors.red,
+                    label: L10n.of(context).delete,
+                    onPressed: () {
+                      _closeMessageMenu();
+                      redactEventsAction(event: event);
+                    },
+                  ),
+                _buildMenuItem(
+                  event: event,
+                  icon: Icons.report_outlined,
+                  color: Colors.red,
+                  label: L10n.of(context).reportMessage,
+                  onPressed: () {
+                    _closeMessageMenu();
+                    reportEventAction(event: event);
+                  },
+                ),
+              ],
             ],
           ),
         ),
@@ -1792,11 +1758,7 @@ class ChatController extends State<ChatPageWithRoom>
                 behavior: HitTestBehavior.translucent,
                 child: Container(color: Colors.transparent),
               ),
-              Positioned(
-                left: left,
-                top: top,
-                child: _buildActionList(event),
-              ),
+              Positioned(left: left, top: top, child: _buildActionList(event)),
             ],
           );
         },
@@ -1814,17 +1776,11 @@ class ChatController extends State<ChatPageWithRoom>
 
   void onMultiSelect(Event event) {
     if (selectedEvents.contains(event)) {
-      setState(
-        () => selectedEvents.remove(event),
-      );
+      setState(() => selectedEvents.remove(event));
     } else {
-      setState(
-        () => selectedEvents.add(event),
-      );
+      setState(() => selectedEvents.add(event));
     }
-    selectedEvents.sort(
-      (a, b) => a.originServerTs.compareTo(b.originServerTs),
-    );
+    selectedEvents.sort((a, b) => a.originServerTs.compareTo(b.originServerTs));
   }
 
   void showReadReceipts({Event? event}) {
@@ -1902,7 +1858,8 @@ class ChatController extends State<ChatPageWithRoom>
     final selectedEventIds = event != null
         ? [event.eventId]
         : selectedEvents.map((e) => e.eventId).toSet();
-    final unpin = selectedEventIds.length == 1 &&
+    final unpin =
+        selectedEventIds.length == 1 &&
         pinnedEventIds.contains(selectedEventIds.single);
     if (unpin) {
       pinnedEventIds.removeWhere(selectedEventIds.contains);
@@ -2013,21 +1970,21 @@ class ChatController extends State<ChatPageWithRoom>
       final session = await voipPlugin!.voip.inviteToCall(room, callType);
       voipPlugin.addCallingOverlay(session.callId, session);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toLocalizedString(context))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toLocalizedString(context))));
       Logs().e("onPhoneButtonTap", e);
     }
   }
 
   void cancelReplyEventAction() => setState(() {
-        if (editEvent != null) {
-          sendController.text = pendingText;
-          pendingText = '';
-        }
-        replyEvent = null;
-        editEvent = null;
-      });
+    if (editEvent != null) {
+      sendController.text = pendingText;
+      pendingText = '';
+    }
+    replyEvent = null;
+    editEvent = null;
+  });
 
   late final ValueNotifier<bool> _displayChatDetailsColumn;
 
@@ -2044,9 +2001,7 @@ class ChatController extends State<ChatPageWithRoom>
     final theme = Theme.of(context);
     return Row(
       children: [
-        Expanded(
-          child: ChatView(this),
-        ),
+        Expanded(child: ChatView(this)),
         AnimatedSize(
           duration: FluffyThemes.animationDuration,
           curve: FluffyThemes.animationCurve,
@@ -2056,20 +2011,14 @@ class ChatController extends State<ChatPageWithRoom>
               if (!FluffyThemes.isThreeColumnMode(context) ||
                   room.membership != Membership.join ||
                   !displayChatDetailsColumn) {
-                return const SizedBox(
-                  height: double.infinity,
-                  width: 0,
-                );
+                return const SizedBox(height: double.infinity, width: 0);
               }
               return Container(
                 width: FluffyThemes.columnWidth,
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                   border: Border(
-                    left: BorderSide(
-                      width: 1,
-                      color: theme.dividerColor,
-                    ),
+                    left: BorderSide(width: 1, color: theme.dividerColor),
                   ),
                 ),
                 child: ChatDetails(

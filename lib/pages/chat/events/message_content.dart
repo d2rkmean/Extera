@@ -18,7 +18,6 @@ import 'package:extera_next/widgets/matrix.dart';
 import '../../../config/app_config.dart';
 import '../../../utils/platform_infos.dart';
 import '../../../utils/url_launcher.dart';
-import '../../bootstrap/bootstrap_dialog.dart';
 import 'audio_player.dart';
 import 'cute_events.dart';
 import 'html_message.dart';

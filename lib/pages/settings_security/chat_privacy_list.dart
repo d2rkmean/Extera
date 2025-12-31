@@ -14,6 +14,10 @@ class ChatPrivacyList extends StatelessWidget {
     var keys = client.accountData.keys.toList();
     keys = keys
         .where((s) => s.startsWith('xyz.extera.room_privacy_settings.'))
+        .where((eventKey) {
+          final content = client.accountData[eventKey]!.content;
+          return content.keys.isNotEmpty;
+        })
         .map((s) => s.substring(33))
         .toList();
     return keys;

@@ -16,51 +16,40 @@ class RecoveredEventDialog extends StatefulWidget {
   });
 
   @override
-  RecoveredEventDialogState createState() =>
-      RecoveredEventDialogState(event, timeline);
+  RecoveredEventDialogState createState() => RecoveredEventDialogState();
 }
 
 class RecoveredEventDialogState extends State<RecoveredEventDialog> {
-  final Event event;
-  final Timeline timeline;
-  RecoveredEventDialogState(this.event, this.timeline);
+  Event get event => widget.event;
+  Timeline get timeline => widget.timeline;
+
+  RecoveredEventDialogState();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final colors = [
-      theme.secondaryBubbleColor,
-      theme.bubbleColor,
-    ];
+    final colors = [theme.secondaryBubbleColor, theme.bubbleColor];
 
-	final message = Message(
-                        event,
-                        colors: colors,
-                        onInfoTab: (Event ev) => {},
-                        onMention: () => {},
-                        onSelect: (Event ev, Offset? tapPosition) => {},
-                        onSwipe: () => {},
-                        scrollToEventId: (String p0) => {},
-                        timeline: timeline,
-                        animateIn: false,
-                        displayReadMarker: false,
-                        highlightMarker: false,
-                        longPressSelect: false,
-                        selected: false,
-                        wallpaperMode: false,
-                      );
+    final message = Message(
+      event,
+      colors: colors,
+      onInfoTab: (Event ev) => {},
+      onMention: () => {},
+      onSelect: (Event ev, Offset? tapPosition) => {},
+      onSwipe: () => {},
+      scrollToEventId: (String p0) => {},
+      timeline: timeline,
+      animateIn: false,
+      displayReadMarker: false,
+      highlightMarker: false,
+      longPressSelect: false,
+      selected: false,
+      wallpaperMode: false,
+    );
 
     return Scaffold(
-		appBar: AppBar(
-			title: Text(L10n.of(context).recoveredMessage),
-		),
-		body: Container(
-			child: Column(
-				children: [
-					message,
-				],
-			),
-		),
-	);
+      appBar: AppBar(title: Text(L10n.of(context).recoveredMessage)),
+      body: Column(children: [SingleChildScrollView(child: message)]),
+    );
   }
 }

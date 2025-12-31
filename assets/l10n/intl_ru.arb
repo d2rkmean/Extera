@@ -3589,5 +3589,7 @@
   "changelogButton": "Что нового?",
   "updateCheckTitle": "Проверка обновлений",
   "updateCheckSubtitle": "",
-  "useTwemoji": "Использовать Twemoji"
+  "useTwemoji": "Использовать Twemoji",
+  "callAction": "Звонок",
+  "resetPrivacy": "Сбросить к настройкам по умолчанию"
 }

@@ -16,9 +16,7 @@ class ChatPrivacyView extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.of(context).chatPrivacyTitle),
-      ),
+      appBar: AppBar(title: Text(L10n.of(context).chatPrivacyTitle)),
       body: MaxWidthBody(
         child: StreamBuilder(
           stream: client.onSync.stream
@@ -27,15 +25,15 @@ class ChatPrivacyView extends StatelessWidget {
           builder: (context, _) {
             return Column(
               children: [
-                  ListTile(
-                    title: Text(
-                      L10n.of(context).privacy,
-                      style: TextStyle(
-                        color: theme.colorScheme.secondary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                ListTile(
+                  title: Text(
+                    L10n.of(context).privacy,
+                    style: TextStyle(
+                      color: theme.colorScheme.secondary,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                ),
                 ListTile(
                   title: Text(L10n.of(context).sendReadReceipts),
                   subtitle: Text(L10n.of(context).sendReadReceiptsDescription),
@@ -48,7 +46,9 @@ class ChatPrivacyView extends StatelessWidget {
                 ),
                 ListTile(
                   title: Text(L10n.of(context).sendTypingNotifications),
-                  subtitle: Text(L10n.of(context).sendTypingNotificationsDescription),
+                  subtitle: Text(
+                    L10n.of(context).sendTypingNotificationsDescription,
+                  ),
                   trailing: Switch(
                     value: controller.sendTypingNotifications,
                     onChanged: (value) {
@@ -56,6 +56,22 @@ class ChatPrivacyView extends StatelessWidget {
                     },
                   ),
                 ),
+                if (controller.privacySettingsEnabled)
+                  Padding(
+                    padding: const .symmetric(horizontal: 8),
+                    child: FilledButton.tonal(
+                      onPressed: controller.reset,
+                      child: Row(
+                        mainAxisAlignment: .center,
+                        mainAxisSize: .max,
+                        children: [
+                          const Icon(Icons.restore),
+                          const SizedBox(width: 18),
+                          Text(L10n.of(context).resetPrivacy),
+                        ],
+                      ),
+                    ),
+                  ),
               ],
             );
           },

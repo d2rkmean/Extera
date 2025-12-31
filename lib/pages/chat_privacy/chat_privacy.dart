@@ -24,7 +24,9 @@ class ChatPrivacyController extends State<ChatPrivacy> {
 
   bool get privacySettingsEnabled {
     final client = Matrix.of(context).client;
-    return client.accountData.containsKey(_eventKey);
+    if (!client.accountData.containsKey(_eventKey)) return false;
+    final content = client.accountData[_eventKey]!.content;
+    return content.keys.isNotEmpty;
   }
 
   bool get sendReadReceipts {
@@ -58,6 +60,13 @@ class ChatPrivacyController extends State<ChatPrivacy> {
         'read_receipts': sendReadReceipts,
         'typing_notifications': typingNotifications,
       });
+    });
+  }
+
+  void reset() async {
+    final client = Matrix.of(context).client;
+    setState(() {
+      client.setAccountData(client.userID!, _eventKey, {});
     });
   }
 
