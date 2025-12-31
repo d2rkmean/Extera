@@ -195,6 +195,10 @@ class SendFileDialogState extends State<SendFileDialog> {
             thumbnail: thumbnail,
             shrinkImageMaxDimension: compress ? 1600 : null,
             extraContent: extraContent,
+            threadLastEventId:
+                widget.thread?.lastEvent?.eventId ??
+                widget.thread?.rootEvent.eventId,
+            threadRootEventId: widget.thread?.rootEvent.eventId,
           );
         }
       }
