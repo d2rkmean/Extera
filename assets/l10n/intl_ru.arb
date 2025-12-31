@@ -3591,5 +3591,11 @@
   "updateCheckSubtitle": "",
   "useTwemoji": "Использовать Twemoji",
   "callAction": "Звонок",
-  "resetPrivacy": "Сбросить к настройкам по умолчанию"
+  "resetPrivacy": "Сбросить к настройкам по умолчанию",
+  "widgets": "Виджеты",
+  "widgetsDescription": "Добавьте виджеты в этот чат",
+  "widgetCreatorUser": "Добавил",
+  "deleteWidget": "Убрать виджет",
+  "widgetType": "Тип виджета",
+  "widget": "Виджет"
 }

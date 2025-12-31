@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:extera_next/pages/bootstrap/bootstrap_dialog.dart';
 import 'package:extera_next/pages/chat_privacy/chat_privacy.dart';
 import 'package:extera_next/pages/chat_thread/thread.dart';
+import 'package:extera_next/pages/chat_widgets/chat_widgets.dart';
 import 'package:extera_next/pages/notifications/notifications.dart';
 import 'package:extera_next/pages/profile/profile.dart';
 import 'package:extera_next/pages/settings_ringtone/settings_ringtone.dart';
@@ -470,6 +471,15 @@ abstract class AppRoutes {
                     ChatDetails(roomId: state.pathParameters['roomid']!),
                   ),
                   routes: [
+                    GoRoute(
+                      path: 'widgets',
+                      pageBuilder: (context, state) => defaultPageBuilder(
+                        context,
+                        state,
+                        ChatWidgets(roomId: state.pathParameters['roomid']!),
+                      ),
+                      redirect: loggedOutRedirect,
+                    ),
                     GoRoute(
                       path: 'access',
                       pageBuilder: (context, state) => defaultPageBuilder(

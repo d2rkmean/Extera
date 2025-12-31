@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:blurhash_dart/blurhash_dart.dart';
 import 'package:extera_next/config/app_config.dart';
 import 'package:extera_next/utils/clean_exif.dart';
 import 'package:extera_next/widgets/matrix.dart';
@@ -11,7 +10,6 @@ import 'package:cross_file/cross_file.dart';
 import 'package:extera_next/generated/l10n/l10n.dart';
 import 'package:matrix/matrix.dart';
 import 'package:mime/mime.dart';
-import 'package:image/image.dart' as img;
 
 import 'package:extera_next/utils/localized_exception_extension.dart';
 import 'package:extera_next/utils/matrix_sdk_extensions/matrix_file_extension.dart';

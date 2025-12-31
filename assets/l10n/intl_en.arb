@@ -3487,5 +3487,11 @@
   "updateCheckSubtitle": "Check whether a new version of Extera is out on every start.",
   "useTwemoji": "Enable Twemoji",
   "callAction": "Call",
-  "resetPrivacy": "Reset to default"
+  "resetPrivacy": "Reset to default",
+  "widgets": "Widgets",
+  "widgetsDescription": "Add custom widgets to this room",
+  "widgetCreatorUser": "Added by",
+  "deleteWidget": "Remove widget",
+  "widgetType": "Widget type",
+  "widget": "Widget"
 }
