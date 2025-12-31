@@ -87,7 +87,7 @@ class SeenByDialog extends StatelessWidget {
   final List<Receipt> receipts;
 
   const SeenByDialog(
-    this.receipts,
+    this.receipts, {super.key}
   );
 
   Future<bool?> show(BuildContext context) => showAdaptiveBottomSheet(

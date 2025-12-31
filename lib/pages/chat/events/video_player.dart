@@ -33,7 +33,7 @@ class EventVideoPlayer extends StatelessWidget {
   Widget build(BuildContext context) {
     final supportsVideoPlayer = PlatformInfos.supportsVideoPlayer;
 
-    final blurHash = (event.infoMap as Map<String, dynamic>)
+    final blurHash = (event.thumbnailInfoMap as Map<String, dynamic>)
             .tryGet<String>('xyz.amorgan.blurhash') ??
         fallbackBlurHash;
     final fileDescription = event.fileDescription;
@@ -74,6 +74,7 @@ class EventVideoPlayer extends StatelessWidget {
                   if (event.hasThumbnail)
                     MxcImage(
                       event: event,
+                      uri: event.thumbnailMxcUrl,
                       isThumbnail: true,
                       width: width,
                       height: height,

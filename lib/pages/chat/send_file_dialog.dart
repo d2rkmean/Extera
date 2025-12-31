@@ -1,15 +1,17 @@
 import 'dart:typed_data';
 
+import 'package:blurhash_dart/blurhash_dart.dart';
 import 'package:extera_next/config/app_config.dart';
 import 'package:extera_next/utils/clean_exif.dart';
 import 'package:extera_next/widgets/matrix.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' hide Image;
 import 'package:flutter/material.dart';
 
 import 'package:cross_file/cross_file.dart';
 import 'package:extera_next/generated/l10n/l10n.dart';
 import 'package:matrix/matrix.dart';
 import 'package:mime/mime.dart';
+import 'package:image/image.dart' as img;
 
 import 'package:extera_next/utils/localized_exception_extension.dart';
 import 'package:extera_next/utils/matrix_sdk_extensions/matrix_file_extension.dart';
@@ -78,8 +80,6 @@ class SendFileDialogState extends State<SendFileDialog> {
             compress) {
           scaffoldMessenger.showLoadingSnackBar(l10n.compressVideo);
           file = await xfile.resizeVideo();
-          scaffoldMessenger.showLoadingSnackBar(l10n.generatingVideoThumbnail);
-          thumbnail = await xfile.getVideoThumbnail();
         } else if (mimeType != null &&
             mimeType.startsWith('image') &&
             AppConfig.cleanExif) {
@@ -110,6 +110,20 @@ class SendFileDialogState extends State<SendFileDialog> {
 
         if (file.bytes.length > maxUploadSize) {
           throw FileTooBigMatrixException(length, maxUploadSize);
+        }
+
+        if (PlatformInfos.isMobile &&
+            mimeType != null &&
+            mimeType.startsWith('video')) {
+          try {
+            scaffoldMessenger.showLoadingSnackBar(
+              l10n.generatingVideoThumbnail,
+            );
+            thumbnail = await xfile.getVideoThumbnail();
+          } catch (e) {
+            Logs().e("Failed to generate video thumbnail", e);
+            scaffoldMessenger.showLoadingSnackBar(e.toLocalizedString(context));
+          }
         }
 
         if (widget.files.length > 1) {

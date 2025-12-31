@@ -1,4 +1,8 @@
+import 'package:blurhash_dart/blurhash_dart.dart';
 import 'package:cross_file/cross_file.dart';
+import 'package:extera_next/utils/client_manager.dart';
+import 'package:extera_next/widgets/matrix.dart';
+import 'package:image/image.dart';
 import 'package:matrix/matrix.dart';
 import 'package:video_compress/video_compress.dart';
 
@@ -34,9 +38,11 @@ extension ResizeImage on XFile {
     try {
       final bytes = await VideoCompress.getByteThumbnail(path);
       if (bytes == null) return null;
-      return MatrixImageFile(
+
+      return MatrixImageFile.create(
         bytes: bytes,
         name: name,
+        nativeImplementations: ClientManager.nativeImplementations,
       );
     } catch (e, s) {
       Logs().w('Error while compressing video', e, s);
