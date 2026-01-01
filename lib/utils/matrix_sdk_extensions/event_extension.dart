@@ -32,11 +32,20 @@ extension LocalizedBody on Event {
 
   void downloadInBackground(BuildContext context) async {
     if (canDownloadInBackground) {
-      final dmc = Provider.of<DownloadManagerController>(context, listen: false);
+      final dmc = Provider.of<DownloadManagerController>(
+        context,
+        listen: false,
+      );
       final filename = content.tryGet<String>('filename') ?? body;
-      dmc.download(context, "$filename.${roomId!.substring(1, 5)}.${eventId.substring(1, 5)}.${extensionFromMime(attachmentMimetype)}", attachmentMxcUrl.toString());
+      dmc.download(
+        context,
+        "$filename.${roomId!.substring(1, 5)}.${eventId.substring(1, 5)}.${extensionFromMime(attachmentMimetype) ?? filename.split('.').last}",
+        attachmentMxcUrl.toString(),
+      );
     } else {
-        throw Exception("Cannot download in background $hasAttachment ${room.encrypted}");
+      throw Exception(
+        "Cannot download in background $hasAttachment ${room.encrypted}",
+      );
     }
   }
 
@@ -47,9 +56,7 @@ extension LocalizedBody on Event {
     matrixFile.result?.share(context);
   }
 
-  bool get canDownloadInBackground =>
-      hasAttachment &&
-      !room.encrypted;
+  bool get canDownloadInBackground => hasAttachment && !room.encrypted;
 
   bool get isAttachmentSmallEnough =>
       infoMap['size'] is int &&
@@ -60,8 +67,11 @@ extension LocalizedBody on Event {
       thumbnailInfoMap['size'] < room.client.database.maxFileSize;
 
   bool get showThumbnail =>
-      [MessageTypes.Image, MessageTypes.Sticker, MessageTypes.Video]
-          .contains(messageType) &&
+      [
+        MessageTypes.Image,
+        MessageTypes.Sticker,
+        MessageTypes.Video,
+      ].contains(messageType) &&
       (kIsWeb ||
           isAttachmentSmallEnough ||
           isThumbnailSmallEnough ||
