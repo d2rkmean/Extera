@@ -1,3 +1,13 @@
+## Extera 26.0.0
+- Fixed Auto-update option being buggy.
+- Hide Twemoji option for mobiles as a temporary solution.
+- New ringtone: "Dream of light".
+- Fix foreground service for calls.
+- Simple widget implementation.
+- Fix video thumbnails.
+- Context actions for failed to send messages.
+- Fixed a file trying to send again being outside of thread.
+
 ## Extera 25.1.2
 - Fixed audio messages not playing.
 - Fixed ringtone on Android.
