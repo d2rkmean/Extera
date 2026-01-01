@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:extera_next/config/app_config.dart';
+import 'package:extera_next/config/setting_keys.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
@@ -33,14 +34,14 @@ class SettingsController extends State<Settings> {
     final client = Matrix.of(context).client;
     try {
       final aboutResponse = await client.getProfileField(
-      client.userID!,
-      AppConfig.aboutProfileField,
-    );
-    if (aboutResponse.containsKey(AppConfig.aboutProfileField) &&
-        aboutResponse[AppConfig.aboutProfileField] is String &&
-        aboutResponse[AppConfig.aboutProfileField].toString().length <= 256) {
-      return aboutResponse[AppConfig.aboutProfileField].toString();
-    }
+        client.userID!,
+        AppConfig.aboutProfileField,
+      );
+      if (aboutResponse.containsKey(AppConfig.aboutProfileField) &&
+          aboutResponse[AppConfig.aboutProfileField] is String &&
+          aboutResponse[AppConfig.aboutProfileField].toString().length <= 256) {
+        return aboutResponse[AppConfig.aboutProfileField].toString();
+      }
     } catch (ex) {
       Logs().e("Failed to query About field", ex);
     }
@@ -52,14 +53,14 @@ class SettingsController extends State<Settings> {
   // bool profileUpdated = false;
 
   void updateProfile() => setState(() {
-        // profileUpdated = true;
-        profileFuture = null;
-      });
+    // profileUpdated = true;
+    profileFuture = null;
+  });
 
   void updateAbout() => setState(() {
-        // aboutUpdated = true;
-        aboutFuture = null;
-      });
+    // aboutUpdated = true;
+    aboutFuture = null;
+  });
 
   void setAboutAction() async {
     final about = await aboutFuture;
@@ -88,6 +89,13 @@ class SettingsController extends State<Settings> {
     if (success.error == null) {
       updateAbout();
     }
+  }
+
+  void setCheckForUpdates(bool newValue) {
+    setState(() {
+      AppConfig.checkForUpdates = newValue;
+      Matrix.of(context).store.setBool(SettingKeys.checkForUpdates, newValue);
+    });
   }
 
   void setDisplaynameAction() async {
@@ -189,15 +197,9 @@ class SettingsController extends State<Settings> {
         imageQuality: 50,
       );
       if (result == null) return;
-      file = MatrixFile(
-        bytes: await result.readAsBytes(),
-        name: result.path,
-      );
+      file = MatrixFile(bytes: await result.readAsBytes(), name: result.path);
     } else {
-      final result = await selectFiles(
-        context,
-        type: FileSelectorType.images,
-      );
+      final result = await selectFiles(context, type: FileSelectorType.images);
       final pickedFile = result.firstOrNull;
       if (pickedFile == null) return;
       file = MatrixFile(
@@ -233,8 +235,8 @@ class SettingsController extends State<Settings> {
         await client.encryption?.crossSigning.isCached() ?? false;
     final needsBootstrap =
         await client.encryption?.keyManager.isCached() == false ||
-            client.encryption?.crossSigning.enabled == false ||
-            crossSigning == false;
+        client.encryption?.crossSigning.enabled == false ||
+        crossSigning == false;
     final isUnknownSession = client.isUnknownSession;
     setState(() {
       showChatBackupBanner = needsBootstrap || isUnknownSession;
@@ -261,9 +263,7 @@ class SettingsController extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     final client = Matrix.of(context).client;
-    profileFuture ??= client.getProfileFromUserId(
-      client.userID!,
-    );
+    profileFuture ??= client.getProfileFromUserId(client.userID!);
     aboutFuture ??= _getAbout();
     return SettingsView(this);
   }

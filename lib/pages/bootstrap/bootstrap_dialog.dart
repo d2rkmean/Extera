@@ -320,6 +320,7 @@ class BootstrapDialogState extends State<BootstrapDialog> {
                           : [AutofillHints.password],
                       controller: _recoveryKeyTextEditingController,
                       style: const TextStyle(fontFamily: 'RobotoMono'),
+                      keyboardType: TextInputType.visiblePassword,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(16),
                         hintStyle: TextStyle(
@@ -327,7 +328,7 @@ class BootstrapDialogState extends State<BootstrapDialog> {
                         ),
                         prefixIcon: const Icon(Icons.key_outlined),
                         labelText: L10n.of(context).recoveryKey,
-                        hintText: 'Es** **** **** ****',
+                        hintText: 'Pj** **** **** **sk',
                         errorText: _recoveryKeyInputError,
                         errorMaxLines: 2,
                       ),

@@ -1,4 +1,3 @@
-import 'package:extera_next/config/setting_keys.dart';
 import 'package:flutter/material.dart';
 
 import 'package:extera_next/generated/l10n/l10n.dart';
@@ -204,10 +203,7 @@ class SettingsView extends StatelessWidget {
                     leading: const Icon(Icons.update_outlined),
                     trailing: Switch(
                       value: AppConfig.checkForUpdates,
-                      onChanged: (newValue) {
-                        AppConfig.checkForUpdates = newValue;
-                        Matrix.of(context).store.setBool(SettingKeys.checkForUpdates, newValue);
-                      },
+                      onChanged: controller.setCheckForUpdates,
                     ),
                   ),
                   Divider(color: theme.dividerColor),
