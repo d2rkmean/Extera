@@ -1,3 +1,4 @@
+import 'package:extera_next/utils/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -46,17 +47,7 @@ class ErrorReporter {
             child: Text(L10n.of(context).copy),
           ),
           AdaptiveDialogAction(
-            onPressed: () => launchUrl(
-              AppConfig.newIssueUrl.resolveUri(
-                Uri(
-                  queryParameters: {
-                    'template': 'bug_report.yaml',
-                    'title': '[BUG]: ${message ?? error.toString()}',
-                  },
-                ),
-              ),
-              mode: LaunchMode.externalApplication,
-            ),
+            onPressed: () => UrlLauncher(context, AppConfig.bugReportRoom).openMatrixToUrl(),
             child: Text(L10n.of(context).report),
           ),
         ],

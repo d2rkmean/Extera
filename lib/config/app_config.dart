@@ -41,6 +41,8 @@ abstract class AppConfig {
   static String _privacyUrl =
       'https://git.extera.xyz/OfficialDakari/ExteraNext/src/branch/main/PRIVACY.md';
 
+  static const String bugReportRoom = 'https://matrix.to/#/#bugs:extera.xyz';
+
   static String get privacyUrl => _privacyUrl;
   static const String website = 'https://extera.xyz';
   static const String enablePushTutorial =
