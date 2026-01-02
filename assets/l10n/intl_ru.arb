@@ -3601,5 +3601,6 @@
   "incomingCallsOnLockScreenTitle": "Звонки на заблокированном экране",
   "incomingCallsOnLockScreenSubtitle": "Показывать входящие звонки, когда устройство заблокировано",
   "pushToTalkHotkey": "Кнопка переключения микрофона",
-  "pushToTalkHotkeyDescription": "Нажмите Alt+X чтобы включить/выключить микрофон"
+  "pushToTalkHotkeyDescription": "Нажмите Alt+X чтобы включить/выключить микрофон",
+  "roomAddress": "Адрес комнаты"
 }
