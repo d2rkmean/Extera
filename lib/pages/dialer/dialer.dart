@@ -526,7 +526,7 @@ class CallingView extends State<Calling> {
       case CallState.kInviteSent:
       case CallState.kCreateAnswer:
         return call.isOutgoing
-            ? <Widget>[hangupButton]
+            ? <Widget>[muteMicButton, hangupButton]
             : PlatformInfos.isMobile
             ? <Widget>[actionSlider]
             : <Widget>[answerButton, hangupButton];
