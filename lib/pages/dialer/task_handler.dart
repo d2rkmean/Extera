@@ -15,6 +15,7 @@ class DialerTaskHandler extends TaskHandler {
 
   @override
   void onNotificationButtonPressed(String id) {
+    super.onNotificationButtonPressed(id);
     Logs().w("Task handler $id");
     switch (id) {
       case 'mute':

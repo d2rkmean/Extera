@@ -213,14 +213,6 @@ class CallingView extends State<Calling> {
       ),
     );
 
-    FlutterForegroundTask.setTaskHandler(
-      DialerTaskHandler(
-        muteMicrophone: _muteMic,
-        switchSpeaker: _switchSpeaker,
-        hangUp: _hangUp,
-      ),
-    );
-
     FlutterForegroundTask.startService(
       notificationTitle: L10n.of(widget.context).ongoingCall,
       notificationText: L10n.of(
@@ -235,6 +227,19 @@ class CallingView extends State<Calling> {
           textColor: Colors.red,
         ),
       ],
+      serviceTypes: [
+        ForegroundServiceTypes.microphone,
+        ForegroundServiceTypes.camera,
+      ],
+      callback: () {
+        FlutterForegroundTask.setTaskHandler(
+          DialerTaskHandler(
+            muteMicrophone: _muteMic,
+            switchSpeaker: _switchSpeaker,
+            hangUp: _hangUp,
+          ),
+        );
+      },
     );
 
     if (AppConfig.pushToTalkHotkey) {
@@ -371,7 +376,11 @@ class CallingView extends State<Calling> {
           notificationText: L10n.of(
             widget.context,
           ).screenSharingDetail(room!.getLocalizedDisplayname()),
-          serviceTypes: [ForegroundServiceTypes.mediaProjection],
+          serviceTypes: [
+            ForegroundServiceTypes.mediaProjection,
+            ForegroundServiceTypes.microphone,
+            ForegroundServiceTypes.camera,
+          ],
           notificationButtons: [
             NotificationButton(id: 'mute', text: L10n.of(context).muteMic),
             NotificationButton(
@@ -384,6 +393,15 @@ class CallingView extends State<Calling> {
               textColor: Colors.red,
             ),
           ],
+          callback: () {
+            FlutterForegroundTask.setTaskHandler(
+              DialerTaskHandler(
+                muteMicrophone: _muteMic,
+                switchSpeaker: _switchSpeaker,
+                hangUp: _hangUp,
+              ),
+            );
+          },
         );
       } else {
         await FlutterForegroundTask.stopService();
@@ -392,6 +410,31 @@ class CallingView extends State<Calling> {
           notificationText: L10n.of(
             widget.context,
           ).ongoingCallDetail(room!.getLocalizedDisplayname()),
+          serviceTypes: [
+            ForegroundServiceTypes.microphone,
+            ForegroundServiceTypes.camera,
+          ],
+          notificationButtons: [
+            NotificationButton(id: 'mute', text: L10n.of(context).muteMic),
+            NotificationButton(
+              id: 'speaker',
+              text: L10n.of(context).switchSpeaker,
+            ),
+            NotificationButton(
+              id: 'hangup',
+              text: L10n.of(context).hangUp,
+              textColor: Colors.red,
+            ),
+          ],
+          callback: () {
+            FlutterForegroundTask.setTaskHandler(
+              DialerTaskHandler(
+                muteMicrophone: _muteMic,
+                switchSpeaker: _switchSpeaker,
+                hangUp: _hangUp,
+              ),
+            );
+          },
         );
       }
     }
