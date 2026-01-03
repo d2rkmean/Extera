@@ -586,14 +586,14 @@ class CallingView extends State<Calling> {
             ? <Widget>[actionSlider]
             : <Widget>[answerButton, hangupButton];
       case CallState.kConnecting:
-        return <Widget>[hangupButton];
+        return <Widget>[muteMicButton, hangupButton];
       case CallState.kConnected:
         return <Widget>[
           muteMicButton,
           switchSpeakerButton,
           if (!voiceonly && !kIsWeb) switchCameraButton,
           if (!voiceonly) muteCameraButton,
-          if (PlatformInfos.isMobile || PlatformInfos.isWeb)
+          if (PlatformInfos.isMobile || PlatformInfos.isWeb || PlatformInfos.isLinux)
             screenSharingButton,
           holdButton,
           hangupButton,
