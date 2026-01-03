@@ -1,3 +1,4 @@
+import 'package:extera_next/config/app_config.dart';
 import 'package:extera_next/generated/l10n/l10n.dart';
 import 'package:extera_next/pages/chat_list/chat_list_item.dart';
 import 'package:extera_next/pages/chat_list/search_title.dart';
@@ -8,6 +9,7 @@ import 'package:extera_next/utils/url_launcher.dart';
 import 'package:extera_next/widgets/avatar.dart';
 import 'package:extera_next/widgets/future_loading_dialog.dart';
 import 'package:extera_next/widgets/layouts/max_width_body.dart';
+import 'package:extera_next/widgets/list_divider.dart';
 import 'package:extera_next/widgets/matrix.dart';
 import 'package:extera_next/widgets/mxc_image_viewer.dart';
 import 'package:extera_next/widgets/presence_builder.dart';
@@ -73,9 +75,6 @@ class ProfileView extends StatelessWidget {
               key: Key('mutual_chat_list_item_${room.id}'),
               // filter: filter,
               onTap: () => controller.onChatTap(room),
-              // onLongPress: (context) =>
-              //     controller.chatContextAction(room, context, space),
-              // activeChat: controller.activeChat == room.id,
             );
           },
         );
@@ -87,7 +86,7 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     final profile = controller.widget.profile;
     final client = Matrix.of(context).client;
-    // final dmRoomId = client.getDirectChatFromUserId(profile.userId);
+    final borderRadius = BorderRadius.circular(AppConfig.borderRadius);
     final displayname =
         profile.displayName ??
         profile.userId.localpart ??
@@ -102,83 +101,83 @@ class ProfileView extends StatelessWidget {
         ),
       ),
       body: MaxWidthBody(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            PresenceBuilder(
-              userId: profile.userId,
-              client: Matrix.of(context).client,
-              builder: (context, presence) {
-                if (presence == null) return const SizedBox.shrink();
-                final statusMsg = presence.statusMsg;
-                final lastActiveTimestamp = presence.lastActiveTimestamp;
-                final presenceText = presence.currentlyActive == true
-                    ? L10n.of(context).currentlyActive
-                    : lastActiveTimestamp != null
-                    ? L10n.of(context).lastActiveAgo(
-                        lastActiveTimestamp.localizedTimeShort(context),
-                      )
-                    : null;
-                return SingleChildScrollView(
-                  child: Column(
-                    spacing: 4,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Center(
-                        child: Avatar(
-                          mxContent: avatar,
-                          name: displayname,
-                          size: Avatar.defaultSize * 2,
-                          onTap: avatar != null
-                              ? () => showDialog(
-                                  context: context,
-                                  builder: (_) => MxcImageViewer(avatar),
-                                )
-                              : null,
+        child: Padding(
+          padding: const .symmetric(horizontal: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              PresenceBuilder(
+                userId: profile.userId,
+                client: Matrix.of(context).client,
+                builder: (context, presence) {
+                  if (presence == null) return const SizedBox.shrink();
+                  final statusMsg = presence.statusMsg;
+                  final lastActiveTimestamp = presence.lastActiveTimestamp;
+                  final presenceText = presence.currentlyActive == true
+                      ? L10n.of(context).currentlyActive
+                      : lastActiveTimestamp != null
+                      ? L10n.of(context).lastActiveAgo(
+                          lastActiveTimestamp.localizedTimeShort(context),
+                        )
+                      : null;
+                  return SingleChildScrollView(
+                    child: Column(
+                      spacing: 4,
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Center(
+                          child: Avatar(
+                            mxContent: avatar,
+                            name: displayname,
+                            size: Avatar.defaultSize * 2,
+                            onTap: avatar != null
+                                ? () => showDialog(
+                                    context: context,
+                                    builder: (_) => MxcImageViewer(avatar),
+                                  )
+                                : null,
+                          ),
                         ),
-                      ),
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 256),
-                        child: Center(
-                          child: Text(
-                            displayname,
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 256),
+                          child: Center(
+                            child: Text(
+                              displayname,
+                              textAlign: TextAlign.center,
+                              textScaler: const TextScaler.linear(1.67),
+                            ),
+                          ),
+                        ),
+                        if (presenceText != null)
+                          Text(
+                            presenceText,
+                            style: const TextStyle(fontSize: 10),
                             textAlign: TextAlign.center,
-                            textScaler: const TextScaler.linear(1.67),
                           ),
-                        ),
-                      ),
-                      if (presenceText != null)
-                        Text(
-                          presenceText,
-                          style: const TextStyle(fontSize: 10),
-                          textAlign: TextAlign.center,
-                        ),
-                      if (statusMsg != null)
-                        SelectableLinkify(
-                          text: statusMsg,
-                          textScaleFactor: MediaQuery.textScalerOf(
-                            context,
-                          ).scale(1),
-                          textAlign: TextAlign.center,
-                          options: const LinkifyOptions(humanize: false),
-                          linkStyle: TextStyle(
-                            color: theme.colorScheme.primary,
-                            decoration: TextDecoration.underline,
-                            decorationColor: theme.colorScheme.primary,
+                        if (statusMsg != null)
+                          SelectableLinkify(
+                            text: statusMsg,
+                            textScaleFactor: MediaQuery.textScalerOf(
+                              context,
+                            ).scale(1),
+                            textAlign: TextAlign.center,
+                            options: const LinkifyOptions(humanize: false),
+                            linkStyle: TextStyle(
+                              color: theme.colorScheme.primary,
+                              decoration: TextDecoration.underline,
+                              decorationColor: theme.colorScheme.primary,
+                            ),
+                            onOpen: (url) =>
+                                UrlLauncher(context, url.url).launchUrl(),
                           ),
-                          onOpen: (url) =>
-                              UrlLauncher(context, url.url).launchUrl(),
-                        ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsetsGeometry.symmetric(horizontal: 16),
-              child: LayoutBuilder(
+                      ],
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 8),
+              LayoutBuilder(
                 builder: (context, constraints) {
                   return ConstrainedBox(
                     constraints: constraints,
@@ -202,7 +201,9 @@ class ProfileView extends StatelessWidget {
                                   );
                               final roomId = roomIdResult.result;
                               if (roomId == null) return;
-                              if (context.mounted) Navigator.of(context).pop();
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
                               router.go('/rooms/$roomId');
                             },
                           ),
@@ -221,7 +222,9 @@ class ProfileView extends StatelessWidget {
                             label: L10n.of(context).ignoreUser,
                             onPressed: () async {
                               final router = GoRouter.of(context);
-                              Navigator.of(context).pop();
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
                               router.go(
                                 '/rooms/settings/security/ignorelist',
                                 extra: profile.userId,
@@ -234,40 +237,79 @@ class ProfileView extends StatelessWidget {
                   );
                 },
               ),
-            ),
-            const SizedBox(height: 8),
-            ListTile(
-              leading: const Icon(Icons.alternate_email),
-              trailing: const Icon(Icons.copy),
-              title: Text(profile.userId),
-              subtitle: Text(L10n.of(context).matrixId),
-              onTap: () {
-                Clipboard.setData(ClipboardData(text: profile.userId));
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(L10n.of(context).copiedToClipboard)),
-                );
-              },
-            ),
-            if (controller.about != null && controller.about!.isNotEmpty)
-              ListTile(
-                leading: const Icon(Icons.wysiwyg),
-                title: Text(controller.about!),
-                subtitle: Text(L10n.of(context).aboutUser),
-              ),
-            const SizedBox(height: 8),
-            if (controller.mutualRooms.isNotEmpty)
-              SearchTitle(
-                title: L10n.of(context).mutualRooms,
-                icon: const Icon(Icons.chat_bubble_outline),
-              ),
-            if (profile.userId != client.userID)
-              controller.isQueryingMutualRooms
-                  ? const CircularProgressIndicator.adaptive()
-                  : _buildMutualChatList(
-                      context: context,
-                      userId: profile.userId,
+              const SizedBox(height: 8),
+              Material(
+                clipBehavior: .hardEdge,
+                color: theme.colorScheme.surfaceContainerHigh,
+                borderRadius: borderRadius,
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: theme.colorScheme.primary,
+                        child: Icon(
+                          Icons.alternate_email,
+                          color: theme.colorScheme.onPrimary,
+                        ),
+                      ),
+                      trailing: const Icon(Icons.copy),
+                      title: Text(profile.userId),
+                      subtitle: Text(L10n.of(context).matrixId),
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(text: profile.userId));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(L10n.of(context).copiedToClipboard),
+                          ),
+                        );
+                      },
                     ),
-          ],
+                    if (controller.about != null &&
+                        controller.about!.isNotEmpty) ...[
+                      const ListDivider(),
+                      ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: theme.colorScheme.secondary,
+                          child: Icon(
+                            Icons.wysiwyg,
+                            color: theme.colorScheme.onSecondary,
+                          ),
+                        ),
+                        title: Text(controller.about!),
+                        subtitle: Text(L10n.of(context).aboutUser),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              if (profile.userId != client.userID &&
+                  !controller.isQueryingMutualRooms &&
+                  controller.mutualRooms.isNotEmpty)
+                Material(
+                  clipBehavior: .hardEdge,
+                  color: theme.colorScheme.surfaceContainerHigh,
+                  borderRadius: borderRadius,
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          L10n.of(context).mutualRooms,
+                          style: TextStyle(
+                            color: theme.colorScheme.secondary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      _buildMutualChatList(
+                        context: context,
+                        userId: profile.userId,
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

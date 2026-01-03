@@ -70,23 +70,27 @@ class ChatListItem extends StatelessWidget {
 
     var borderRadius = BorderRadius.circular(AppConfig.borderRadius);
 
-    if (firstElement) {
-      borderRadius = borderRadius.copyWith(
-        bottomLeft: Radius.zero,
-        bottomRight: Radius.zero,
-      );
-    } else if (lastElement) {
-      borderRadius = borderRadius.copyWith(
-        topLeft: Radius.zero,
-        topRight: Radius.zero,
-      );
-    } else if (!activeChat) {
-      borderRadius = borderRadius.copyWith(
-        topLeft: Radius.zero,
-        topRight: Radius.zero,
-        bottomLeft: Radius.zero,
-        bottomRight: Radius.zero,
-      );
+    if (!activeChat) {
+      if (firstElement) {
+        borderRadius = borderRadius.copyWith(
+          bottomLeft: Radius.zero,
+          bottomRight: Radius.zero,
+        );
+      }
+      if (lastElement) {
+        borderRadius = borderRadius.copyWith(
+          topLeft: Radius.zero,
+          topRight: Radius.zero,
+        );
+      }
+      if (!firstElement && !lastElement) {
+        borderRadius = borderRadius.copyWith(
+          topLeft: Radius.zero,
+          topRight: Radius.zero,
+          bottomLeft: Radius.zero,
+          bottomRight: Radius.zero,
+        );
+      }
     }
 
     return Padding(
@@ -119,9 +123,7 @@ class ChatListItem extends StatelessWidget {
                             child: Avatar(
                               border: BorderSide(
                                 width: 2,
-                                color:
-                                    backgroundColor ??
-                                    theme.colorScheme.surface,
+                                color: backgroundColor,
                               ),
                               borderRadius: BorderRadius.circular(
                                 AppConfig.borderRadius / 4,
@@ -143,12 +145,7 @@ class ChatListItem extends StatelessWidget {
                                           color: theme.dividerColor,
                                         )
                                       : null
-                                : BorderSide(
-                                    width: 2,
-                                    color:
-                                        backgroundColor ??
-                                        theme.colorScheme.surface,
-                                  ),
+                                : BorderSide(width: 2, color: backgroundColor),
                             borderRadius: room.isSpace
                                 ? BorderRadius.circular(
                                     AppConfig.borderRadius / 4,
