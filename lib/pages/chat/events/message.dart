@@ -204,14 +204,10 @@ class Message extends StatelessWidget {
       RelationshipTypes.reaction,
     );
 
-    // if there is a next event from another person, assume it's read
     // if it's not own message, do not check receipts bc its too heavy operation
     final hasBeenRead =
         ownMessage &&
-        (!nextEventSameSender ||
-            event.room
-                .getReceipts(timeline, eventId: event.eventId)
-                .isNotEmpty);
+        event.room.getReceipts(timeline, eventId: event.eventId).isNotEmpty;
 
     final messageStatusRow = Row(
       mainAxisSize: MainAxisSize.min,
