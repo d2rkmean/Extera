@@ -1,3 +1,8 @@
+## Extera 26.0.2
+- Image editor. You can now edit images before sending them.
+- Add call actions in notification on mobiles. Hang up, switch speaker, mute/unmute from notification.
+- Optimised chat event list.
+
 ## Extera 26.0.1
 - Fixed emoji settings lagging, when there are a lot of emojis added.
 - Always show mute toggle in calls.
