@@ -1,6 +1,7 @@
 import 'package:extera_next/generated/l10n/l10n.dart';
 import 'package:extera_next/pages/download_manager/download_manager.dart';
 import 'package:extera_next/utils/adaptive_bottom_sheet.dart';
+import 'package:extera_next/widgets/layouts/max_width_body.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,9 +18,8 @@ class DownloadManagerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog.adaptive(
-      content: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 256, maxWidth: 512),
+    return Scaffold(
+      body: MaxWidthBody(
         child: ListView.builder(
           itemCount: controller.downloads.length,
           itemBuilder: (context, index) {
@@ -41,9 +41,8 @@ class DownloadManagerView extends StatelessWidget {
           },
         ),
       ),
-      title: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 256),
-        child: Center(child: Text(L10n.of(context).downloads, textAlign: TextAlign.center)),
+      appBar: AppBar(
+        title: Text(L10n.of(context).downloads, textAlign: TextAlign.center),
       ),
     );
   }

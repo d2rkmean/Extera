@@ -1,3 +1,4 @@
+import 'package:extera_next/config/app_config.dart';
 import 'package:extera_next/generated/l10n/l10n.dart';
 import 'package:extera_next/pages/chat/add_widget_tile.dart';
 import 'package:extera_next/pages/chat_widgets/chat_widgets.dart';
@@ -16,69 +17,88 @@ class ChatWidgetsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final client = Matrix.of(context).client;
+    final theme = Theme.of(context);
+    final borderRadius = BorderRadius.circular(AppConfig.borderRadius);
 
     return Scaffold(
       appBar: AppBar(title: Text(L10n.of(context).widgets)),
       body: MaxWidthBody(
         child: SingleChildScrollView(
-          child: ListView(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              StreamBuilder(
-                stream: client.onRoomState.stream
-                    .where((event) => event.roomId == controller.widget.roomId)
-                    .rateLimit(const Duration(seconds: 1)),
-                builder: (context, _) {
-                  return Column(
-                    children: controller.widgetEvents
-                        .map(
-                          (event) => ListTile(
-                            leading: Icon(
-                              ({
-                                    'm.jitsi': Icons.video_call_outlined,
-                                    'm.tradingview': Icons.trending_up,
-                                    'm.spotify': Icons.music_note,
-                                    'm.video': Icons.video_collection_outlined,
-                                    'm.googledoc': Icons.edit_document,
-                                    'm.googlecalendar': Icons.calendar_month,
-                                    'm.etherpad': Icons.note_alt_outlined,
-                                    'm.grafana': Icons.analytics_outlined,
-                                    'm.custom': Icons.widgets_outlined,
-                                  }).tryGet(
-                                    event.content.tryGet('type') ?? 'm.custom',
-                                  ) ??
-                                  Icons.widgets_outlined,
-                            ),
-                            title: Text(
-                              event.content.tryGet('name') ?? "Widget",
-                            ),
-                            // subtitle: ,
-                            onTap: () {
-                              controller.onWidgetTap(event);
-                            },
-                          ),
+          child: Padding(
+            padding: const .symmetric(horizontal: 8),
+            child: ListView(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                Material(
+                  borderRadius: borderRadius,
+                  color: theme.colorScheme.surfaceContainerHigh,
+                  child: StreamBuilder(
+                    stream: client.onRoomState.stream
+                        .where(
+                          (event) => event.roomId == controller.widget.roomId,
                         )
-                        .toList(),
-                  );
-                },
-              ),
-              if (controller.room.canChangeStateEvent(
-                'im.vector.modular.widgets',
-              ))
-                ListTile(
-                  leading: const Icon(Icons.add),
-                  title: Text(L10n.of(context).addWidget),
-                  onTap: () {
-                    showAdaptiveBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return AddWidgetTile(room: controller.room);
-                      },
-                    );
-                  },
+                        .rateLimit(const Duration(seconds: 1)),
+                    builder: (context, _) {
+                      return Column(
+                        children: controller.widgetEvents
+                            .map(
+                              (event) => ListTile(
+                                leading: Icon(
+                                  ({
+                                        'm.jitsi': Icons.video_call_outlined,
+                                        'm.tradingview': Icons.trending_up,
+                                        'm.spotify': Icons.music_note,
+                                        'm.video':
+                                            Icons.video_collection_outlined,
+                                        'm.googledoc': Icons.edit_document,
+                                        'm.googlecalendar':
+                                            Icons.calendar_month,
+                                        'm.etherpad': Icons.note_alt_outlined,
+                                        'm.grafana': Icons.analytics_outlined,
+                                        'm.custom': Icons.widgets_outlined,
+                                      }).tryGet(
+                                        event.content.tryGet('type') ??
+                                            'm.custom',
+                                      ) ??
+                                      Icons.widgets_outlined,
+                                ),
+                                title: Text(
+                                  event.content.tryGet('name') ?? "Widget",
+                                ),
+                                // subtitle: ,
+                                onTap: () {
+                                  controller.onWidgetTap(event);
+                                },
+                              ),
+                            )
+                            .toList(),
+                      );
+                    },
+                  ),
                 ),
-            ],
+                const SizedBox(height: 8),
+                if (controller.room.canChangeStateEvent(
+                  'im.vector.modular.widgets',
+                ))
+                  Material(
+                    borderRadius: borderRadius,
+                    color: theme.colorScheme.surfaceContainerHigh,
+                    child: ListTile(
+                      leading: const Icon(Icons.add),
+                      title: Text(L10n.of(context).addWidget),
+                      onTap: () {
+                        showAdaptiveBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return AddWidgetTile(room: controller.room);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

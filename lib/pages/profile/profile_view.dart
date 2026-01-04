@@ -1,7 +1,6 @@
 import 'package:extera_next/config/app_config.dart';
 import 'package:extera_next/generated/l10n/l10n.dart';
 import 'package:extera_next/pages/chat_list/chat_list_item.dart';
-import 'package:extera_next/pages/chat_list/search_title.dart';
 import 'package:extera_next/pages/profile/profile.dart';
 import 'package:extera_next/utils/date_time_extension.dart';
 import 'package:extera_next/utils/stream_extension.dart';

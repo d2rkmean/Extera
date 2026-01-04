@@ -1,5 +1,6 @@
 import 'package:extera_next/pages/settings_security/chat_privacy_list.dart';
 import 'package:extera_next/utils/adaptive_bottom_sheet.dart';
+import 'package:extera_next/widgets/list_divider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:extera_next/generated/l10n/l10n.dart';
@@ -24,6 +25,7 @@ class SettingsSecurityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final borderRadius = BorderRadius.circular(AppConfig.borderRadius);
 
     return Scaffold(
       appBar: AppBar(
@@ -49,194 +51,284 @@ class SettingsSecurityView extends StatelessWidget {
                   ),
                 );
               }
-              return Column(
-                children: [
-                  ListTile(
-                    title: Text(
-                      L10n.of(context).security,
-                      style: TextStyle(
-                        color: theme.colorScheme.secondary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SettingsSwitchListTile.adaptive(
-                    title: L10n.of(context).hideAvatarsInInvites,
-                    subtitle: L10n.of(context).hideAvatarsInInvitesDescription,
-                    onChanged: (b) => AppConfig.hideAvatarsInInvites = b,
-                    storeKey: SettingKeys.hideAvatarsInInvites,
-                    defaultValue: AppConfig.hideAvatarsInInvites,
-                  ),
-                  if (PlatformInfos.isMobile)
-                    SettingsSwitchListTile.adaptive(
-                      title: L10n.of(context).incomingCallsOnLockScreenTitle,
-                      subtitle: L10n.of(
-                        context,
-                      ).incomingCallsOnLockScreenSubtitle,
-                      onChanged: (b) => AppConfig.incomingCallsOnLockScreen = b,
-                      storeKey: SettingKeys.incomingCallsOnLockScreen,
-                      defaultValue: AppConfig.incomingCallsOnLockScreen,
-                    ),
-                  ListTile(
-                    title: Text(
-                      L10n.of(context).privacy,
-                      style: TextStyle(
-                        color: theme.colorScheme.secondary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SettingsSwitchListTile.adaptive(
-                    title: L10n.of(context).cleanExif,
-                    subtitle: L10n.of(context).cleanExifDescription,
-                    onChanged: (b) => AppConfig.cleanExif = b,
-                    storeKey: SettingKeys.cleanExif,
-                    defaultValue: AppConfig.cleanExif,
-                  ),
-                  SettingsSwitchListTile.adaptive(
-                    title: L10n.of(context).doNotSendIfCantClean,
-                    subtitle: L10n.of(context).doNotSendIfCantCleanDescription,
-                    onChanged: (b) => AppConfig.doNotSendIfCantClean = b,
-                    storeKey: SettingKeys.doNotSendIfCantClean,
-                    defaultValue: AppConfig.doNotSendIfCantClean,
-                  ),
-                  SettingsSwitchListTile.adaptive(
-                    title: L10n.of(context).sendTypingNotifications,
-                    subtitle: L10n.of(
-                      context,
-                    ).sendTypingNotificationsDescription,
-                    onChanged: (b) => AppConfig.sendTypingNotifications = b,
-                    storeKey: SettingKeys.sendTypingNotifications,
-                    defaultValue: AppConfig.sendTypingNotifications,
-                  ),
-                  SettingsSwitchListTile.adaptive(
-                    title: L10n.of(context).sendReadReceipts,
-                    subtitle: L10n.of(context).sendReadReceiptsDescription,
-                    onChanged: (b) => AppConfig.sendPublicReadReceipts = b,
-                    storeKey: SettingKeys.sendPublicReadReceipts,
-                    defaultValue: AppConfig.sendPublicReadReceipts,
-                  ),
-                  ListTile(
-                    trailing: const Icon(Icons.chevron_right_outlined),
-                    title: Text(L10n.of(context).individualChatPrivacySettings),
-                    subtitle: Text(
-                      L10n.of(context).individualChatPrivacySettingsDescription,
-                    ),
-                    onTap: () {
-                      showAdaptiveBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return ChatPrivacyList(
-                            client: Matrix.of(context).client,
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  ListTile(
-                    trailing: const Icon(Icons.chevron_right_outlined),
-                    title: Text(L10n.of(context).blockedUsers),
-                    subtitle: Text(
-                      L10n.of(context).thereAreCountUsersBlocked(
-                        Matrix.of(context).client.ignoredUsers.length,
-                      ),
-                    ),
-                    onTap: () =>
-                        context.push('/rooms/settings/security/ignorelist'),
-                  ),
-                  if (Matrix.of(context).client.encryption != null) ...{
-                    if (PlatformInfos.isMobile)
-                      ListTile(
-                        trailing: const Icon(Icons.chevron_right_outlined),
-                        title: Text(L10n.of(context).appLock),
-                        subtitle: Text(L10n.of(context).appLockDescription),
-                        onTap: controller.setAppLockAction,
-                      ),
-                  },
-                  Divider(color: theme.dividerColor),
-                  ListTile(
-                    title: Text(
-                      L10n.of(context).shareKeysWith,
-                      style: TextStyle(
-                        color: theme.colorScheme.secondary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text(L10n.of(context).shareKeysWithDescription),
-                  ),
-                  ListTile(
-                    title: Material(
-                      borderRadius: BorderRadius.circular(
-                        AppConfig.borderRadius / 2,
-                      ),
-                      color: theme.colorScheme.onInverseSurface,
-                      child: DropdownButton<ShareKeysWith>(
-                        isExpanded: true,
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        borderRadius: BorderRadius.circular(
-                          AppConfig.borderRadius / 2,
-                        ),
-                        underline: const SizedBox.shrink(),
-                        value: Matrix.of(context).client.shareKeysWith,
-                        items: ShareKeysWith.values
-                            .map(
-                              (share) => DropdownMenuItem(
-                                value: share,
-                                child: Text(share.localized(L10n.of(context))),
+              return Padding(
+                padding: const .symmetric(horizontal: 8),
+                child: Column(
+                  children: [
+                    Material(
+                      clipBehavior: .hardEdge,
+                      color: theme.colorScheme.surfaceContainerHigh,
+                      borderRadius: borderRadius,
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text(
+                              L10n.of(context).security,
+                              style: TextStyle(
+                                color: theme.colorScheme.secondary,
+                                fontWeight: FontWeight.bold,
                               ),
-                            )
-                            .toList(),
-                        onChanged: controller.changeShareKeysWith,
+                            ),
+                          ),
+                          SettingsSwitchListTile.adaptive(
+                            title: L10n.of(context).hideAvatarsInInvites,
+                            subtitle: L10n.of(
+                              context,
+                            ).hideAvatarsInInvitesDescription,
+                            onChanged: (b) =>
+                                AppConfig.hideAvatarsInInvites = b,
+                            storeKey: SettingKeys.hideAvatarsInInvites,
+                            defaultValue: AppConfig.hideAvatarsInInvites,
+                          ),
+                          if (PlatformInfos.isMobile) ...[
+                            const ListDivider(),
+                            SettingsSwitchListTile.adaptive(
+                              title: L10n.of(
+                                context,
+                              ).incomingCallsOnLockScreenTitle,
+                              subtitle: L10n.of(
+                                context,
+                              ).incomingCallsOnLockScreenSubtitle,
+                              onChanged: (b) =>
+                                  AppConfig.incomingCallsOnLockScreen = b,
+                              storeKey: SettingKeys.incomingCallsOnLockScreen,
+                              defaultValue: AppConfig.incomingCallsOnLockScreen,
+                            ),
+                          ],
+                        ],
                       ),
                     ),
-                  ),
-                  Divider(color: theme.dividerColor),
-                  ListTile(
-                    title: Text(
-                      L10n.of(context).account,
-                      style: TextStyle(
-                        color: theme.colorScheme.secondary,
-                        fontWeight: FontWeight.bold,
+                    const SizedBox(height: 8),
+                    Material(
+                      clipBehavior: .hardEdge,
+                      color: theme.colorScheme.surfaceContainerHigh,
+                      borderRadius: borderRadius,
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text(
+                              L10n.of(context).privacy,
+                              style: TextStyle(
+                                color: theme.colorScheme.secondary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SettingsSwitchListTile.adaptive(
+                            title: L10n.of(context).cleanExif,
+                            subtitle: L10n.of(context).cleanExifDescription,
+                            onChanged: (b) => AppConfig.cleanExif = b,
+                            storeKey: SettingKeys.cleanExif,
+                            defaultValue: AppConfig.cleanExif,
+                          ),
+                          const ListDivider(),
+                          SettingsSwitchListTile.adaptive(
+                            title: L10n.of(context).doNotSendIfCantClean,
+                            subtitle: L10n.of(
+                              context,
+                            ).doNotSendIfCantCleanDescription,
+                            onChanged: (b) =>
+                                AppConfig.doNotSendIfCantClean = b,
+                            storeKey: SettingKeys.doNotSendIfCantClean,
+                            defaultValue: AppConfig.doNotSendIfCantClean,
+                          ),
+                          const ListDivider(),
+                          SettingsSwitchListTile.adaptive(
+                            title: L10n.of(context).sendTypingNotifications,
+                            subtitle: L10n.of(
+                              context,
+                            ).sendTypingNotificationsDescription,
+                            onChanged: (b) =>
+                                AppConfig.sendTypingNotifications = b,
+                            storeKey: SettingKeys.sendTypingNotifications,
+                            defaultValue: AppConfig.sendTypingNotifications,
+                          ),
+                          const ListDivider(),
+                          SettingsSwitchListTile.adaptive(
+                            title: L10n.of(context).sendReadReceipts,
+                            subtitle: L10n.of(
+                              context,
+                            ).sendReadReceiptsDescription,
+                            onChanged: (b) =>
+                                AppConfig.sendPublicReadReceipts = b,
+                            storeKey: SettingKeys.sendPublicReadReceipts,
+                            defaultValue: AppConfig.sendPublicReadReceipts,
+                          ),
+                          const ListDivider(),
+                          ListTile(
+                            trailing: const Icon(Icons.chevron_right_outlined),
+                            title: Text(
+                              L10n.of(context).individualChatPrivacySettings,
+                            ),
+                            subtitle: Text(
+                              L10n.of(
+                                context,
+                              ).individualChatPrivacySettingsDescription,
+                            ),
+                            onTap: () {
+                              showAdaptiveBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return ChatPrivacyList(
+                                    client: Matrix.of(context).client,
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                          const ListDivider(),
+                          ListTile(
+                            trailing: const Icon(Icons.chevron_right_outlined),
+                            title: Text(L10n.of(context).blockedUsers),
+                            subtitle: Text(
+                              L10n.of(context).thereAreCountUsersBlocked(
+                                Matrix.of(context).client.ignoredUsers.length,
+                              ),
+                            ),
+                            onTap: () => context.push(
+                              '/rooms/settings/security/ignorelist',
+                            ),
+                          ),
+                          if (Matrix.of(context).client.encryption != null) ...{
+                            if (PlatformInfos.isMobile) ...[
+                              const ListDivider(),
+                              ListTile(
+                                trailing: const Icon(
+                                  Icons.chevron_right_outlined,
+                                ),
+                                title: Text(L10n.of(context).appLock),
+                                subtitle: Text(
+                                  L10n.of(context).appLockDescription,
+                                ),
+                                onTap: controller.setAppLockAction,
+                              ),
+                            ],
+                          },
+                        ],
                       ),
                     ),
-                  ),
-                  ListTile(
-                    title: Text(L10n.of(context).yourPublicKey),
-                    leading: const Icon(Icons.vpn_key_outlined),
-                    subtitle: SelectableText(
-                      Matrix.of(context).client.fingerprintKey.beautified,
-                      style: const TextStyle(fontFamily: 'RobotoMono'),
+                    const SizedBox(height: 8),
+                    Material(
+                      clipBehavior: .hardEdge,
+                      color: theme.colorScheme.surfaceContainerHigh,
+                      borderRadius: borderRadius,
+                      child: Padding(
+                        padding: const .symmetric(vertical: 8),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                L10n.of(context).shareKeysWith,
+                                style: TextStyle(
+                                  color: theme.colorScheme.secondary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                L10n.of(context).shareKeysWithDescription,
+                              ),
+                            ),
+                            ListTile(
+                              title: Material(
+                                borderRadius: BorderRadius.circular(
+                                  AppConfig.borderRadius / 2,
+                                ),
+                                color: theme.colorScheme.surfaceContainerLow,
+                                child: DropdownButton<ShareKeysWith>(
+                                  isExpanded: true,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                    AppConfig.borderRadius / 2,
+                                  ),
+                                  underline: const SizedBox.shrink(),
+                                  value: Matrix.of(
+                                    context,
+                                  ).client.shareKeysWith,
+                                  items: ShareKeysWith.values
+                                      .map(
+                                        (share) => DropdownMenuItem(
+                                          value: share,
+                                          child: Text(
+                                            share.localized(L10n.of(context)),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                  onChanged: controller.changeShareKeysWith,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                  if (capabilities?.mChangePassword?.enabled != false ||
-                      error != null)
-                    ListTile(
-                      leading: const Icon(Icons.password_outlined),
-                      trailing: const Icon(Icons.chevron_right_outlined),
-                      title: Text(L10n.of(context).changePassword),
-                      onTap: () =>
-                          context.push('/rooms/settings/security/password'),
+                    const SizedBox(height: 8),
+                    Material(
+                      clipBehavior: .hardEdge,
+                      color: theme.colorScheme.surfaceContainerHigh,
+                      borderRadius: borderRadius,
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text(
+                              L10n.of(context).account,
+                              style: TextStyle(
+                                color: theme.colorScheme.secondary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          ListTile(
+                            title: Text(L10n.of(context).yourPublicKey),
+                            leading: const Icon(Icons.vpn_key_outlined),
+                            subtitle: SelectableText(
+                              Matrix.of(
+                                context,
+                              ).client.fingerprintKey.beautified,
+                              style: const TextStyle(fontFamily: 'RobotoMono'),
+                            ),
+                          ),
+                          const ListDivider(),
+                          if (capabilities?.mChangePassword?.enabled != false ||
+                              error != null) ...[
+                            ListTile(
+                              leading: const Icon(Icons.password_outlined),
+                              trailing: const Icon(
+                                Icons.chevron_right_outlined,
+                              ),
+                              title: Text(L10n.of(context).changePassword),
+                              onTap: () => context.push(
+                                '/rooms/settings/security/password',
+                              ),
+                            ),
+                            const ListDivider(),
+                          ],
+                          ListTile(
+                            iconColor: Colors.orange,
+                            leading: const Icon(Icons.delete_sweep_outlined),
+                            title: Text(
+                              L10n.of(context).dehydrate,
+                              style: const TextStyle(color: Colors.orange),
+                            ),
+                            onTap: controller.dehydrateAction,
+                          ),
+                          const ListDivider(),
+                          ListTile(
+                            iconColor: Colors.red,
+                            leading: const Icon(Icons.delete_outlined),
+                            title: Text(
+                              L10n.of(context).deleteAccount,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                            onTap: controller.deleteAccountAction,
+                          ),
+                        ],
+                      ),
                     ),
-                  ListTile(
-                    iconColor: Colors.orange,
-                    leading: const Icon(Icons.delete_sweep_outlined),
-                    title: Text(
-                      L10n.of(context).dehydrate,
-                      style: const TextStyle(color: Colors.orange),
-                    ),
-                    onTap: controller.dehydrateAction,
-                  ),
-                  Divider(color: theme.dividerColor),
-                  ListTile(
-                    iconColor: Colors.red,
-                    leading: const Icon(Icons.delete_outlined),
-                    title: Text(
-                      L10n.of(context).deleteAccount,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                    onTap: controller.deleteAccountAction,
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           ),

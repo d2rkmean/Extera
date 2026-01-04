@@ -386,14 +386,15 @@ class ChatDetailsView extends StatelessWidget {
                     color: theme.colorScheme.surfaceContainerHigh,
                     child: Column(
                       children: [
-                        const SizedBox(height: 8),
-                        Text(
-                          L10n.of(
-                            context,
-                          ).countParticipants(actualMembersCount),
-                          style: TextStyle(
-                            color: theme.colorScheme.secondary,
-                            fontWeight: FontWeight.bold,
+                        ListTile(
+                          title: Text(
+                            L10n.of(
+                              context,
+                            ).countParticipants(actualMembersCount),
+                            style: TextStyle(
+                              color: theme.colorScheme.secondary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         ListView.builder(
@@ -416,7 +417,7 @@ class ChatDetailsView extends StatelessWidget {
                                   ),
                                   leading: CircleAvatar(
                                     backgroundColor:
-                                        theme.scaffoldBackgroundColor,
+                                        theme.colorScheme.surfaceContainerHigh,
                                     child: const Icon(
                                       Icons.group_outlined,
                                       color: Colors.grey,

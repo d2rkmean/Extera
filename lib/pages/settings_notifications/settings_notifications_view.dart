@@ -1,3 +1,5 @@
+import 'package:extera_next/config/app_config.dart';
+import 'package:extera_next/widgets/list_divider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:extera_next/generated/l10n/l10n.dart';
@@ -17,6 +19,7 @@ class SettingsNotificationsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final borderRadius = BorderRadius.circular(AppConfig.borderRadius);
     final pushRules = Matrix.of(context).client.globalPushRules;
     final pushCategories = [
       if (pushRules?.override?.isNotEmpty ?? false)
@@ -37,126 +40,153 @@ class SettingsNotificationsView extends StatelessWidget {
       body: MaxWidthBody(
         child: StreamBuilder(
           stream: Matrix.of(context).client.onSync.stream.where(
-                (syncUpdate) =>
-                    syncUpdate.accountData?.any(
-                      (accountData) => accountData.type == 'm.push_rules',
-                    ) ??
-                    false,
-              ),
+            (syncUpdate) =>
+                syncUpdate.accountData?.any(
+                  (accountData) => accountData.type == 'm.push_rules',
+                ) ??
+                false,
+          ),
           builder: (BuildContext context, _) {
             final theme = Theme.of(context);
-            return SelectionArea(
+            return Padding(
+              padding: const .symmetric(horizontal: 8),
               child: Column(
                 children: [
                   if (pushRules != null)
-                    for (final category in pushCategories) ...[
-                      ListTile(
-                        title: Text(
-                          category.kind.localized(L10n.of(context)),
-                          style: TextStyle(
-                            color: theme.colorScheme.secondary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      for (final rule in category.rules)
-                        ListTile(
-                          title: Text(rule.getPushRuleName(L10n.of(context))),
-                          subtitle: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: rule.getPushRuleDescription(
-                                    L10n.of(context),
-                                  ),
+                    Material(
+                      borderRadius: borderRadius,
+                      clipBehavior: .hardEdge,
+                      color: theme.colorScheme.surfaceContainerHigh,
+                      child: Column(
+                        children: [
+                          for (final category in pushCategories) ...[
+                            ListTile(
+                              title: Text(
+                                category.kind.localized(L10n.of(context)),
+                                style: TextStyle(
+                                  color: theme.colorScheme.secondary,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                const TextSpan(text: ' '),
-                                WidgetSpan(
-                                  child: InkWell(
-                                    onTap: () => controller.editPushRule(
-                                      rule,
-                                      category.kind,
-                                    ),
-                                    child: Text(
-                                      L10n.of(context).more,
-                                      style: TextStyle(
-                                        color: theme.colorScheme.primary,
-                                        decoration: TextDecoration.underline,
-                                        decorationColor:
-                                            theme.colorScheme.primary,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                          trailing: Switch.adaptive(
-                            value: rule.enabled,
-                            onChanged: controller.isLoading
-                                ? null
-                                : rule.ruleId != '.m.rule.master' &&
-                                        Matrix.of(context)
-                                            .client
-                                            .allPushNotificationsMuted
-                                    ? null
-                                    : (_) => controller.togglePushRule(
+                            for (final rule in category.rules)
+                              ListTile(
+                                title: Text(
+                                  rule.getPushRuleName(L10n.of(context)),
+                                ),
+                                subtitle: Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: rule.getPushRuleDescription(
+                                          L10n.of(context),
+                                        ),
+                                      ),
+                                      const TextSpan(text: ' '),
+                                      WidgetSpan(
+                                        child: InkWell(
+                                          onTap: () => controller.editPushRule(
+                                            rule,
+                                            category.kind,
+                                          ),
+                                          child: Text(
+                                            L10n.of(context).more,
+                                            style: TextStyle(
+                                              color: theme.colorScheme.primary,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              decorationColor:
+                                                  theme.colorScheme.primary,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                trailing: Switch.adaptive(
+                                  value: rule.enabled,
+                                  onChanged: controller.isLoading
+                                      ? null
+                                      : rule.ruleId != '.m.rule.master' &&
+                                            Matrix.of(
+                                              context,
+                                            ).client.allPushNotificationsMuted
+                                      ? null
+                                      : (_) => controller.togglePushRule(
                                           category.kind,
                                           rule,
                                         ),
-                          ),
-                        ),
-                      Divider(color: theme.dividerColor),
-                    ],
-                  ListTile(
-                    title: Text(
-                      L10n.of(context).devices,
-                      style: TextStyle(
-                        color: theme.colorScheme.secondary,
-                        fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            const ListDivider(),
+                          ],
+                        ],
                       ),
                     ),
-                  ),
-                  FutureBuilder<List<Pusher>?>(
-                    future: controller.pusherFuture ??=
-                        Matrix.of(context).client.getPushers(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        Center(
-                          child: Text(
-                            snapshot.error!.toLocalizedString(context),
-                          ),
-                        );
-                      }
-                      if (snapshot.connectionState != ConnectionState.done) {
-                        const Center(
-                          child: CircularProgressIndicator.adaptive(
-                            strokeWidth: 2,
-                          ),
-                        );
-                      }
-                      final pushers = snapshot.data ?? [];
-                      if (pushers.isEmpty) {
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: Text(L10n.of(context).noOtherDevicesFound),
-                          ),
-                        );
-                      }
-                      return ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: pushers.length,
-                        itemBuilder: (_, i) => ListTile(
+                  const SizedBox(height: 8),
+                  Material(
+                    borderRadius: borderRadius,
+                    clipBehavior: .hardEdge,
+                    color: theme.colorScheme.surfaceContainerHigh,
+                    child: Column(
+                      children: [
+                        ListTile(
                           title: Text(
-                            '${pushers[i].appDisplayName} - ${pushers[i].appId}',
+                            L10n.of(context).devices,
+                            style: TextStyle(
+                              color: theme.colorScheme.secondary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          subtitle: Text(pushers[i].data.url.toString()),
-                          onTap: () => controller.onPusherTap(pushers[i]),
                         ),
-                      );
-                    },
+                        FutureBuilder<List<Pusher>?>(
+                          future: controller.pusherFuture ??= Matrix.of(
+                            context,
+                          ).client.getPushers(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              Center(
+                                child: Text(
+                                  snapshot.error!.toLocalizedString(context),
+                                ),
+                              );
+                            }
+                            if (snapshot.connectionState !=
+                                ConnectionState.done) {
+                              const Center(
+                                child: CircularProgressIndicator.adaptive(
+                                  strokeWidth: 2,
+                                ),
+                              );
+                            }
+                            final pushers = snapshot.data ?? [];
+                            if (pushers.isEmpty) {
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 16.0),
+                                  child: Text(
+                                    L10n.of(context).noOtherDevicesFound,
+                                  ),
+                                ),
+                              );
+                            }
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: pushers.length,
+                              itemBuilder: (_, i) => ListTile(
+                                title: Text(
+                                  '${pushers[i].appDisplayName} - ${pushers[i].appId}',
+                                ),
+                                subtitle: Text(pushers[i].data.url.toString()),
+                                onTap: () => controller.onPusherTap(pushers[i]),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

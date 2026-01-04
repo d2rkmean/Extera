@@ -1,3 +1,5 @@
+import 'package:extera_next/config/app_config.dart';
+import 'package:extera_next/widgets/list_divider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:extera_next/generated/l10n/l10n.dart';
@@ -25,6 +27,7 @@ class DevicesSettingsView extends StatelessWidget {
           future: controller.loadUserDevices(context),
           builder: (BuildContext context, snapshot) {
             final theme = Theme.of(context);
+            final borderRadius = BorderRadius.circular(AppConfig.borderRadius);
             if (snapshot.hasError) {
               return Center(
                 child: Column(
@@ -41,46 +44,110 @@ class DevicesSettingsView extends StatelessWidget {
                 child: CircularProgressIndicator.adaptive(strokeWidth: 2),
               );
             }
-            return ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.notThisDevice.length + 1,
-              itemBuilder: (BuildContext context, int i) {
-                if (i == 0) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (controller.chatBackupEnabled == false)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: ListTile(
-                            leading: const CircleAvatar(
-                              child: Icon(Icons.info_outlined),
+            return Padding(
+              padding: const .symmetric(horizontal: 8),
+              child: Material(
+                color: theme.colorScheme.surfaceContainerHigh,
+                borderRadius: borderRadius,
+                clipBehavior: .hardEdge,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.notThisDevice.length + 1,
+                  itemBuilder: (BuildContext context, int i) {
+                    if (i == 0) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (controller.chatBackupEnabled == false)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                              ),
+                              child: ListTile(
+                                leading: const CircleAvatar(
+                                  child: Icon(Icons.info_outlined),
+                                ),
+                                subtitle: Text(
+                                  L10n.of(
+                                    context,
+                                  ).noticeChatBackupDeviceVerification,
+                                ),
+                              ),
                             ),
-                            subtitle: Text(
-                              L10n.of(context)
-                                  .noticeChatBackupDeviceVerification,
+                          if (controller.thisDevice != null) ...[
+                            const SizedBox(height: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 8.0,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                L10n.of(context).thisDevice,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: theme.colorScheme.primary,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
                             ),
-                          ),
-                        ),
-                      if (controller.thisDevice != null) ...[
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0,
-                            vertical: 8.0,
-                          ),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            L10n.of(context).thisDevice,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: theme.colorScheme.primary,
+                            UserDeviceListItem(
+                              controller.thisDevice!,
+                              rename: controller.renameDeviceAction,
+                              remove: (d) =>
+                                  controller.removeDevicesAction([d]),
+                              verify: controller.verifyDeviceAction,
+                              block: controller.blockDeviceAction,
+                              unblock: controller.unblockDeviceAction,
                             ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
+                          ],
+                          if (controller.notThisDevice.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 8.0,
+                              ),
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: TextButton.icon(
+                                  label: Text(
+                                    L10n.of(context).removeAllOtherDevices,
+                                  ),
+                                  style: TextButton.styleFrom(
+                                    iconColor:
+                                        theme.colorScheme.onErrorContainer,
+                                    foregroundColor:
+                                        theme.colorScheme.onErrorContainer,
+                                    backgroundColor:
+                                        theme.colorScheme.errorContainer,
+                                  ),
+                                  icon: const Icon(Icons.delete_outline),
+                                  onPressed: () =>
+                                      controller.removeDevicesAction(
+                                        controller.notThisDevice,
+                                      ),
+                                ),
+                              ),
+                            )
+                          else
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  L10n.of(context).noOtherDevicesFound,
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    }
+                    i--;
+                    return Column(
+                      children: [
+                        const ListDivider(),
                         UserDeviceListItem(
-                          controller.thisDevice!,
+                          controller.notThisDevice[i],
                           rename: controller.renameDeviceAction,
                           remove: (d) => controller.removeDevicesAction([d]),
                           verify: controller.verifyDeviceAction,
@@ -88,52 +155,10 @@ class DevicesSettingsView extends StatelessWidget {
                           unblock: controller.unblockDeviceAction,
                         ),
                       ],
-                      if (controller.notThisDevice.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0,
-                            vertical: 8.0,
-                          ),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: TextButton.icon(
-                              label: Text(
-                                L10n.of(context).removeAllOtherDevices,
-                              ),
-                              style: TextButton.styleFrom(
-                                iconColor: theme.colorScheme.onErrorContainer,
-                                foregroundColor:
-                                    theme.colorScheme.onErrorContainer,
-                                backgroundColor:
-                                    theme.colorScheme.errorContainer,
-                              ),
-                              icon: const Icon(Icons.delete_outline),
-                              onPressed: () => controller.removeDevicesAction(
-                                controller.notThisDevice,
-                              ),
-                            ),
-                          ),
-                        )
-                      else
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(L10n.of(context).noOtherDevicesFound),
-                          ),
-                        ),
-                    ],
-                  );
-                }
-                i--;
-                return UserDeviceListItem(
-                  controller.notThisDevice[i],
-                  rename: controller.renameDeviceAction,
-                  remove: (d) => controller.removeDevicesAction([d]),
-                  verify: controller.verifyDeviceAction,
-                  block: controller.blockDeviceAction,
-                  unblock: controller.unblockDeviceAction,
-                );
-              },
+                    );
+                  },
+                ),
+              ),
             );
           },
         ),
