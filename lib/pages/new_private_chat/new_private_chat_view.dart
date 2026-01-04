@@ -1,3 +1,4 @@
+import 'package:extera_next/widgets/list_divider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -24,6 +25,7 @@ class NewPrivateChatView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final borderRadius = BorderRadius.circular(AppConfig.borderRadius);
 
     final searchResponse = controller.searchResponse;
     final userId = Matrix.of(context).client.userID!;
@@ -35,8 +37,10 @@ class NewPrivateChatView extends StatelessWidget {
         backgroundColor: theme.scaffoldBackgroundColor,
         actions: [
           TextButton(
-            onPressed:
-                UrlLauncher(context, AppConfig.startChatTutorial).launchUrl,
+            onPressed: UrlLauncher(
+              context,
+              AppConfig.startChatTutorial,
+            ).launchUrl,
             child: Text(L10n.of(context).help),
           ),
         ],
@@ -44,162 +48,195 @@ class NewPrivateChatView extends StatelessWidget {
       body: MaxWidthBody(
         withScrolling: false,
         innerPadding: const EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
-              ),
-              child: TextField(
-                controller: controller.controller,
-                onChanged: controller.searchUsers,
-                decoration: InputDecoration(
-                  hintText: L10n.of(context).searchForUsers,
-                  filled: true,
-                  fillColor: theme.colorScheme.secondaryContainer,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(99),
-                  ),
-                  hintStyle: TextStyle(
-                    color: theme.colorScheme.onPrimaryContainer,
-                    fontWeight: FontWeight.normal,
-                  ),
-                  prefixIcon: searchResponse == null
-                      ? const Icon(Icons.search_outlined)
-                      : FutureBuilder(
-                          future: searchResponse,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState !=
-                                ConnectionState.done) {
-                              return const Padding(
-                                padding: EdgeInsets.all(10.0),
-                                child: SizedBox.square(
-                                  dimension: 24,
-                                  child: CircularProgressIndicator.adaptive(
-                                    strokeWidth: 1,
-                                  ),
-                                ),
-                              );
-                            }
-                            return const Icon(Icons.search_outlined);
-                          },
-                        ),
-                  suffixIcon: controller.controller.text.isEmpty
-                      ? null
-                      : IconButton(
-                          icon: const Icon(Icons.clear_outlined),
-                          onPressed: () {
-                            controller.controller.clear();
-                            controller.searchUsers();
-                          },
-                        ),
+        child: Padding(
+          padding: const .symmetric(horizontal: 8),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
                 ),
-              ),
-            ),
-            Expanded(
-              child: AnimatedSwitcher(
-                duration: FluffyThemes.animationDuration,
-                child: searchResponse == null
-                    ? ListView(
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 18.0),
-                            child: SelectableText.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: L10n.of(context).yourGlobalUserIdIs,
-                                  ),
-                                  TextSpan(
-                                    text: Matrix.of(context).client.userID,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
+                child: TextField(
+                  controller: controller.controller,
+                  onChanged: controller.searchUsers,
+                  decoration: InputDecoration(
+                    hintText: L10n.of(context).searchForUsers,
+                    filled: true,
+                    fillColor: theme.colorScheme.secondaryContainer,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(99),
+                    ),
+                    hintStyle: TextStyle(
+                      color: theme.colorScheme.onPrimaryContainer,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    prefixIcon: searchResponse == null
+                        ? const Icon(Icons.search_outlined)
+                        : FutureBuilder(
+                            future: searchResponse,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState !=
+                                  ConnectionState.done) {
+                                return const Padding(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: SizedBox.square(
+                                    dimension: 24,
+                                    child: CircularProgressIndicator.adaptive(
+                                      strokeWidth: 1,
                                     ),
                                   ),
-                                ],
-                              ),
-                              style: TextStyle(
-                                color: theme.colorScheme.onSurface,
-                                fontSize: 12,
-                              ),
-                            ),
+                                );
+                              }
+                              return const Icon(Icons.search_outlined);
+                            },
                           ),
-                          const SizedBox(height: 8),
-                          ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor:
-                                  theme.colorScheme.secondaryContainer,
-                              foregroundColor:
-                                  theme.colorScheme.onSecondaryContainer,
-                              child: Icon(Icons.adaptive.share_outlined),
-                            ),
-                            title: Text(L10n.of(context).shareInviteLink),
-                            onTap: controller.inviteAction,
+                    suffixIcon: controller.controller.text.isEmpty
+                        ? null
+                        : IconButton(
+                            icon: const Icon(Icons.clear_outlined),
+                            onPressed: () {
+                              controller.controller.clear();
+                              controller.searchUsers();
+                            },
                           ),
-                          ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor:
-                                  theme.colorScheme.tertiaryContainer,
-                              foregroundColor:
-                                  theme.colorScheme.onTertiaryContainer,
-                              child: const Icon(Icons.group_add_outlined),
-                            ),
-                            title: Text(L10n.of(context).createGroup),
-                            onTap: () => context.go('/rooms/newgroup'),
-                          ),
-                          if (PlatformInfos.isMobile)
-                            ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor:
-                                    theme.colorScheme.primaryContainer,
-                                foregroundColor:
-                                    theme.colorScheme.onPrimaryContainer,
-                                child:
-                                    const Icon(Icons.qr_code_scanner_outlined),
-                              ),
-                              title: Text(L10n.of(context).scanQrCode),
-                              onTap: controller.openScannerAction,
-                            ),
-                          Center(
-                            child: Padding(
+                  ),
+                ),
+              ),
+              Expanded(
+                child: AnimatedSwitcher(
+                  duration: FluffyThemes.animationDuration,
+                  child: searchResponse == null
+                      ? ListView(
+                          children: [
+                            Padding(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 64.0,
-                                vertical: 24.0,
+                                horizontal: 18.0,
                               ),
-                              child: Material(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    AppConfig.borderRadius,
-                                  ),
-                                  side: BorderSide(
-                                    width: 3,
-                                    color: theme.colorScheme.primary,
-                                  ),
+                              child: SelectableText.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: L10n.of(context).yourGlobalUserIdIs,
+                                    ),
+                                    TextSpan(
+                                      text: Matrix.of(context).client.userID,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                color: Colors.transparent,
-                                clipBehavior: Clip.hardEdge,
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(
-                                    AppConfig.borderRadius,
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Material(
+                              clipBehavior: .hardEdge,
+                              color: theme.colorScheme.surfaceContainerHigh,
+                              borderRadius: borderRadius,
+                              child: ListTileTheme(
+                                contentPadding: const .symmetric(vertical: 4, horizontal: 16),
+                                child: Column(
+                                  children: [
+                                    ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundColor: theme
+                                            .colorScheme
+                                            .secondaryContainer,
+                                        foregroundColor: theme
+                                            .colorScheme
+                                            .onSecondaryContainer,
+                                        child: Icon(
+                                          Icons.adaptive.share_outlined,
+                                        ),
+                                      ),
+                                      title: Text(
+                                        L10n.of(context).shareInviteLink,
+                                      ),
+                                      onTap: controller.inviteAction,
+                                    ),
+                                    const ListDivider(),
+                                    ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundColor:
+                                            theme.colorScheme.tertiaryContainer,
+                                        foregroundColor: theme
+                                            .colorScheme
+                                            .onTertiaryContainer,
+                                        child: const Icon(
+                                          Icons.group_add_outlined,
+                                        ),
+                                      ),
+                                      title: Text(L10n.of(context).createGroup),
+                                      onTap: () =>
+                                          context.go('/rooms/newgroup'),
+                                    ),
+                                    if (PlatformInfos.isMobile) ...[
+                                      const ListDivider(),
+                                      ListTile(
+                                        leading: CircleAvatar(
+                                          backgroundColor: theme
+                                              .colorScheme
+                                              .primaryContainer,
+                                          foregroundColor: theme
+                                              .colorScheme
+                                              .onPrimaryContainer,
+                                          child: const Icon(
+                                            Icons.qr_code_scanner_outlined,
+                                          ),
+                                        ),
+                                        title: Text(
+                                          L10n.of(context).scanQrCode,
+                                        ),
+                                        onTap: controller.openScannerAction,
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 64.0,
+                                  vertical: 24.0,
+                                ),
+                                child: Material(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      AppConfig.borderRadius,
+                                    ),
+                                    side: BorderSide(
+                                      width: 3,
+                                      color: theme.colorScheme.primary,
+                                    ),
                                   ),
-                                  onTap: () => showQrCodeViewer(
-                                    context,
-                                    userId,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: ConstrainedBox(
-                                      constraints:
-                                          const BoxConstraints(maxWidth: 200),
-                                      child: PrettyQrView.data(
-                                        data: 'https://matrix.to/#/$userId',
-                                        decoration: PrettyQrDecoration(
-                                          shape: PrettyQrSmoothSymbol(
-                                            roundFactor: 1,
-                                            color: theme.colorScheme.primary,
+                                  color: Colors.transparent,
+                                  clipBehavior: Clip.hardEdge,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(
+                                      AppConfig.borderRadius,
+                                    ),
+                                    onTap: () =>
+                                        showQrCodeViewer(context, userId),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: ConstrainedBox(
+                                        constraints: const BoxConstraints(
+                                          maxWidth: 200,
+                                        ),
+                                        child: PrettyQrView.data(
+                                          data: 'https://matrix.to/#/$userId',
+                                          decoration: PrettyQrDecoration(
+                                            shape: PrettyQrSmoothSymbol(
+                                              roundFactor: 1,
+                                              color: theme.colorScheme.primary,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -208,83 +245,85 @@ class NewPrivateChatView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    : FutureBuilder(
-                        future: searchResponse,
-                        builder: (context, snapshot) {
-                          final result = snapshot.data;
-                          final error = snapshot.error;
-                          if (error != null) {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  error.toLocalizedString(context),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: theme.colorScheme.error,
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                OutlinedButton.icon(
-                                  onPressed: controller.searchUsers,
-                                  icon: const Icon(Icons.refresh_outlined),
-                                  label: Text(L10n.of(context).tryAgain),
-                                ),
-                              ],
-                            );
-                          }
-                          if (result == null) {
-                            return const Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            );
-                          }
-                          if (result.isEmpty) {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.search_outlined, size: 86),
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Text(
-                                    L10n.of(context).noUsersFoundWithQuery(
-                                      controller.controller.text,
-                                    ),
-                                    style: TextStyle(
-                                      color: theme.colorScheme.primary,
-                                    ),
+                          ],
+                        )
+                      : FutureBuilder(
+                          future: searchResponse,
+                          builder: (context, snapshot) {
+                            final result = snapshot.data;
+                            final error = snapshot.error;
+                            if (error != null) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    error.toLocalizedString(context),
                                     textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: theme.colorScheme.error,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            );
-                          }
-                          return ListView.builder(
-                            itemCount: result.length,
-                            itemBuilder: (context, i) {
-                              final contact = result[i];
-                              final displayname = contact.displayName ??
-                                  contact.userId.localpart ??
-                                  contact.userId;
-                              return ListTile(
-                                leading: Avatar(
-                                  name: displayname,
-                                  mxContent: contact.avatarUrl,
-                                  presenceUserId: contact.userId,
-                                ),
-                                title: Text(displayname),
-                                subtitle: Text(contact.userId),
-                                onTap: () => controller.openUserModal(contact),
+                                  const SizedBox(height: 12),
+                                  OutlinedButton.icon(
+                                    onPressed: controller.searchUsers,
+                                    icon: const Icon(Icons.refresh_outlined),
+                                    label: Text(L10n.of(context).tryAgain),
+                                  ),
+                                ],
                               );
-                            },
-                          );
-                        },
-                      ),
+                            }
+                            if (result == null) {
+                              return const Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              );
+                            }
+                            if (result.isEmpty) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.search_outlined, size: 86),
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Text(
+                                      L10n.of(context).noUsersFoundWithQuery(
+                                        controller.controller.text,
+                                      ),
+                                      style: TextStyle(
+                                        color: theme.colorScheme.primary,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                            return ListView.builder(
+                              itemCount: result.length,
+                              itemBuilder: (context, i) {
+                                final contact = result[i];
+                                final displayname =
+                                    contact.displayName ??
+                                    contact.userId.localpart ??
+                                    contact.userId;
+                                return ListTile(
+                                  leading: Avatar(
+                                    name: displayname,
+                                    mxContent: contact.avatarUrl,
+                                    presenceUserId: contact.userId,
+                                  ),
+                                  title: Text(displayname),
+                                  subtitle: Text(contact.userId),
+                                  onTap: () =>
+                                      controller.openUserModal(contact),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -326,7 +326,7 @@ class ChatDetailsView extends StatelessWidget {
                           ),
                           const ListDivider(),
                         ],
-                        if (!room.isDirectChat)
+                        if (!room.isDirectChat) ...[
                           ListTile(
                             title: Text(L10n.of(context).chatPermissions),
                             subtitle: Text(
@@ -344,7 +344,8 @@ class ChatDetailsView extends StatelessWidget {
                               '/rooms/${room.id}/details/permissions',
                             ),
                           ),
-                        const ListDivider(),
+                          const ListDivider(),
+                        ],
                         ListTile(
                           title: Text(L10n.of(context).widgets),
                           subtitle: Text(L10n.of(context).widgetsDescription),

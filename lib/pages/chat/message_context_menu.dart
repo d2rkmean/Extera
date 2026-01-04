@@ -1,0 +1,479 @@
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:extera_next/config/app_config.dart';
+import 'package:extera_next/generated/l10n/l10n.dart';
+import 'package:extera_next/pages/chat/chat.dart';
+import 'package:extera_next/utils/adaptive_bottom_sheet.dart';
+import 'package:extera_next/utils/matrix_sdk_extensions/matrix_locals.dart';
+import 'package:extera_next/utils/platform_infos.dart';
+import 'package:extera_next/utils/room_status_extension.dart';
+import 'package:extera_next/widgets/list_divider.dart';
+import 'package:extera_next/widgets/matrix.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:matrix/matrix.dart';
+
+class MessageContextMenu extends StatelessWidget {
+  final ChatController controller;
+  final Event event;
+  Room get room => controller.room;
+  Timeline? get timeline => controller.timeline;
+
+  const MessageContextMenu({
+    required this.controller,
+    required this.event,
+    super.key,
+  });
+
+  Widget _buildMenuItem({
+    required Event event,
+    required String label,
+    required IconData icon,
+    Color? color,
+    required void Function() onPressed,
+  }) {
+    return InkWell(
+      onTap: onPressed,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: color),
+            const SizedBox(width: 12),
+            Expanded(child: Text(label)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final client = Matrix.of(context).client;
+    final clients = Matrix.of(context).currentBundle;
+    final theme = Theme.of(context);
+    final borderRadius = BorderRadius.circular(AppConfig.borderRadius);
+
+    final receipts = room
+        .getReceipts(timeline!, eventId: event.eventId)
+        .where((receipt) => receipt.user.id != client.userID!);
+
+    final sentReactions = <String>{};
+    sentReactions.addAll(
+      event
+          .aggregatedEvents(timeline!, RelationshipTypes.reaction)
+          .where(
+            (event) =>
+                event.senderId == event.room.client.userID &&
+                event.type == 'm.reaction',
+          )
+          .map(
+            (event) => event.content
+                .tryGetMap<String, Object?>('m.relates_to')
+                ?.tryGet<String>('key'),
+          )
+          .whereType<String>(),
+    );
+
+    return Material(
+      elevation: 8.0,
+      borderRadius: BorderRadius.circular(12),
+      clipBehavior: Clip.antiAlias, // Ensures ink splashes don't bleed
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: 200,
+          maxWidth: PlatformInfos.isMobile ? double.infinity : 280,
+          maxHeight: 580,
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const .all(8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (event.status == EventStatus.error)
+                  Material(
+                    color: theme.colorScheme.surfaceContainerHigh,
+                    clipBehavior: .hardEdge,
+                    borderRadius: borderRadius,
+                    child: Column(
+                      children: [
+                        _buildMenuItem(
+                          event: event,
+                          icon: Icons.send_outlined,
+                          label: L10n.of(context).tryToSendAgain,
+                          onPressed: () {
+                            if (!PlatformInfos.isMobile) {
+                              controller.closeMessageMenu();
+                            }
+                            controller.sendAgainAction(event: event);
+                          },
+                        ),
+                        _buildMenuItem(
+                          event: event,
+                          icon: Icons.cancel_outlined,
+                          label: L10n.of(context).cancel,
+                          color: Colors.red,
+                          onPressed: () {
+                            if (!PlatformInfos.isMobile) {
+                              controller.closeMessageMenu();
+                            }
+                            event.cancelSend();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                if (event.status == EventStatus.sent ||
+                    event.status == EventStatus.synced) ...[
+                  if (room.canSendEvent(EventTypes.Reaction))
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+                      child: Material(
+                        color: theme.colorScheme.surfaceContainerHigh,
+                        clipBehavior: .hardEdge,
+                        borderRadius: borderRadius,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ...AppConfig.defaultReactions.map(
+                              (emoji) => IconButton(
+                                padding: EdgeInsets.zero,
+                                icon: Center(
+                                  child: Opacity(
+                                    opacity: sentReactions.contains(emoji)
+                                        ? 0.33
+                                        : 1,
+                                    child: Text(
+                                      emoji,
+                                      style: const TextStyle(fontSize: 20),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                                onPressed: sentReactions.contains(emoji)
+                                    ? null
+                                    : () {
+                                        controller.closeMessageMenu();
+                                        event.room.sendReaction(
+                                          event.eventId,
+                                          emoji,
+                                        );
+                                      },
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add_reaction_outlined),
+                              tooltip: L10n.of(context).customReaction,
+                              onPressed: () async {
+                                final emoji =
+                                    await showAdaptiveBottomSheet<String>(
+                                      context: context,
+                                      builder: (context) => Scaffold(
+                                        appBar: AppBar(
+                                          title: Text(
+                                            L10n.of(context).customReaction,
+                                          ),
+                                          leading: CloseButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(null),
+                                          ),
+                                        ),
+                                        body: SizedBox(
+                                          height: double.infinity,
+                                          child: EmojiPicker(
+                                            onEmojiSelected: (_, emoji) =>
+                                                Navigator.of(
+                                                  context,
+                                                ).pop(emoji.emoji),
+                                            config: Config(
+                                              locale: Localizations.localeOf(
+                                                context,
+                                              ),
+                                              emojiViewConfig:
+                                                  const EmojiViewConfig(
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                  ),
+                                              bottomActionBarConfig:
+                                                  const BottomActionBarConfig(
+                                                    enabled: false,
+                                                  ),
+                                              categoryViewConfig:
+                                                  CategoryViewConfig(
+                                                    initCategory:
+                                                        Category.SMILEYS,
+                                                    backspaceColor: theme
+                                                        .colorScheme
+                                                        .primary,
+                                                    iconColor: theme
+                                                        .colorScheme
+                                                        .primary
+                                                        .withAlpha(128),
+                                                    iconColorSelected: theme
+                                                        .colorScheme
+                                                        .primary,
+                                                    indicatorColor: theme
+                                                        .colorScheme
+                                                        .primary,
+                                                    backgroundColor: theme
+                                                        .colorScheme
+                                                        .surface,
+                                                  ),
+                                              skinToneConfig: SkinToneConfig(
+                                                dialogBackgroundColor:
+                                                    Color.lerp(
+                                                      theme.colorScheme.surface,
+                                                      theme
+                                                          .colorScheme
+                                                          .primaryContainer,
+                                                      0.75,
+                                                    )!,
+                                                indicatorColor:
+                                                    theme.colorScheme.onSurface,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                if (emoji == null) {
+                                  return;
+                                }
+                                if (sentReactions.contains(emoji)) {
+                                  return;
+                                }
+                                controller.closeMessageMenu();
+
+                                await event.room.sendReaction(
+                                  event.eventId,
+                                  emoji,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  Material(
+                    color: theme.colorScheme.surfaceContainerHigh,
+                    clipBehavior: .hardEdge,
+                    borderRadius: borderRadius,
+                    child: Column(
+                      children: [
+                        if (receipts.isNotEmpty) ...[
+                          _buildMenuItem(
+                            event: event,
+                            icon: Icons.done_all,
+                            label: L10n.of(context).nViews(receipts.length),
+                            onPressed: () {
+                              if (!PlatformInfos.isMobile)
+                                controller.closeMessageMenu();
+                              controller.showReadReceipts(event: event);
+                            },
+                          ),
+                          const ListDivider(),
+                        ],
+                        if (room.canSendDefaultMessages) ...[
+                          _buildMenuItem(
+                            event: event,
+                            icon: Icons.reply_outlined,
+                            label: L10n.of(context).reply,
+                            onPressed: () {
+                              controller.closeMessageMenu();
+                              controller.replyAction(replyTo: event);
+                            },
+                          ),
+                          const ListDivider(),
+                        ],
+                        if (room.canSendDefaultMessages) ...[
+                          _buildMenuItem(
+                            event: event,
+                            icon: Icons.chat_bubble_outline,
+                            label: L10n.of(context).discuss,
+                            onPressed: () {
+                              controller.closeMessageMenu();
+                              controller.discussAction(threadRootEvent: event);
+                            },
+                          ),
+                          const ListDivider(),
+                        ],
+                        if (room.canSendDefaultMessages &&
+                            event.senderId == client.userID!) ...[
+                          _buildMenuItem(
+                            event: event,
+                            icon: Icons.edit_outlined,
+                            label: L10n.of(context).edit,
+                            onPressed: () {
+                              controller.closeMessageMenu();
+                              controller.editSelectedEventAction(event: event);
+                            },
+                          ),
+                          const ListDivider(),
+                        ],
+                        if (event.type == 'org.matrix.msc3381.poll.start' &&
+                            event.senderId == Matrix.of(context).client.userID)
+                          _buildMenuItem(
+                            event: event,
+                            icon: Icons.check,
+                            label: L10n.of(context).endPoll,
+                            onPressed: () {
+                              controller.closeMessageMenu();
+                              controller.endPollAction(event: event);
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Material(
+                    color: theme.colorScheme.surfaceContainerHigh,
+                    clipBehavior: .hardEdge,
+                    borderRadius: borderRadius,
+                    child: Column(
+                      children: [
+                        _buildMenuItem(
+                          event: event,
+                          icon: Icons.forward_outlined,
+                          label: L10n.of(context).forward,
+                          onPressed: () {
+                            controller.closeMessageMenu();
+                            controller.forwardEventsAction(event: event);
+                          },
+                        ),
+                        const ListDivider(),
+                        _buildMenuItem(
+                          event: event,
+                          icon: Icons.copy_outlined,
+                          label: L10n.of(context).copy,
+                          onPressed: () {
+                            controller.closeMessageMenu();
+                            Clipboard.setData(
+                              ClipboardData(
+                                text: event
+                                    .getDisplayEvent(timeline!)
+                                    .calcLocalizedBodyFallback(
+                                      MatrixLocals(L10n.of(context)),
+                                    ),
+                              ),
+                            );
+                          },
+                        ),
+                        const ListDivider(),
+                        _buildMenuItem(
+                          event: event,
+                          icon: Icons.link,
+                          label: L10n.of(context).copyLink,
+                          onPressed: () {
+                            controller.closeMessageMenu();
+                            controller.copyLinkAction(event: event);
+                          },
+                        ),
+                        const ListDivider(),
+                        _buildMenuItem(
+                          event: event,
+                          icon: Icons.check_circle_outline,
+                          label: L10n.of(context).select,
+                          onPressed: () {
+                            controller.closeMessageMenu();
+                            controller.onMultiSelect(event);
+                          },
+                        ),
+                        const ListDivider(),
+                        if (!room.encrypted) ...[
+                          _buildMenuItem(
+                            event: event,
+                            icon: Icons.translate,
+                            label: L10n.of(context).translate,
+                            onPressed: () {
+                              controller.closeMessageMenu();
+                              controller.translateEventAction(event: event);
+                            },
+                          ),
+                          const ListDivider(),
+                        ],
+                        if (event.redacted) ...[
+                          _buildMenuItem(
+                            event: event,
+                            icon: Icons.redo,
+                            label: L10n.of(context).recoverMessage,
+                            onPressed: () {
+                              controller.closeMessageMenu();
+                              controller.recoverEventAction(event: event);
+                            },
+                          ),
+                          const ListDivider(),
+                        ],
+                        if (room.canChangeStateEvent(
+                          EventTypes.RoomPinnedEvents,
+                        )) ...[
+                          _buildMenuItem(
+                            event: event,
+                            icon: Icons.push_pin_outlined,
+                            label: room.pinnedEventIds.contains(event.eventId)
+                                ? L10n.of(context).unpin
+                                : L10n.of(context).pin,
+                            onPressed: () {
+                              controller.closeMessageMenu();
+                              controller.pinEvent(event: event);
+                            },
+                          ),
+                          const ListDivider(),
+                        ],
+                        _buildMenuItem(
+                          event: event,
+                          icon: Icons.info_outline,
+                          label: L10n.of(context).messageInfo,
+                          onPressed: () {
+                            controller.closeMessageMenu();
+                            controller.showEventInfo(event);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Material(
+                    color: theme.colorScheme.surfaceContainerHigh,
+                    clipBehavior: .hardEdge,
+                    borderRadius: borderRadius,
+                    child: Column(
+                      children: [
+                        if (event.canRedact ||
+                            (clients!.any(
+                              (cl) => event.senderId == cl!.userID,
+                            ))) ...[
+                          _buildMenuItem(
+                            event: event,
+                            icon: Icons.delete_outlined,
+                            color: Colors.red,
+                            label: L10n.of(context).delete,
+                            onPressed: () {
+                              controller.closeMessageMenu();
+                              controller.redactEventsAction(event: event);
+                            },
+                          ),
+                          const ListDivider(),
+                        ],
+                        _buildMenuItem(
+                          event: event,
+                          icon: Icons.report_outlined,
+                          color: Colors.red,
+                          label: L10n.of(context).reportMessage,
+                          onPressed: () {
+                            controller.closeMessageMenu();
+                            controller.reportEventAction(event: event);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
