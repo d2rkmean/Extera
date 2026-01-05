@@ -16,7 +16,6 @@ import 'package:extera_next/utils/localized_exception_extension.dart';
 import 'package:extera_next/utils/matrix_sdk_extensions/matrix_file_extension.dart';
 import 'package:extera_next/utils/platform_infos.dart';
 import 'package:extera_next/utils/size_string.dart';
-import 'package:extera_next/widgets/adaptive_dialogs/adaptive_dialog_action.dart';
 import 'package:extera_next/widgets/adaptive_dialogs/dialog_text_field.dart';
 import '../../utils/resize_video.dart';
 // ignore: implementation_imports
@@ -521,13 +520,18 @@ class SendFileDialogState extends State<SendFileDialog> {
           ),
           actions: <Widget>[
             if (!isSending)
-              AdaptiveDialogAction(
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24.0),
+                  ),
+                ),
                 onPressed: () =>
                     Navigator.of(context, rootNavigator: false).pop(),
                 child: Text(L10n.of(context).cancel),
               ),
             if (!isSending)
-              AdaptiveDialogAction(
+              FilledButton(
                 onPressed: _send,
                 child: Text(L10n.of(context).send),
               ),

@@ -3499,5 +3499,7 @@
   "pushToTalkHotkey": "Push to talk",
   "pushToTalkHotkeyDescription": "Press Alt+X to toggle microphone",
   "roomAddress": "Room address",
-  "imageEditFailed": "Failed to edit image"
+  "imageEditFailed": "Failed to edit image",
+  "autoMarkUnavailable": "Set unavailable when AFK",
+  "autoMarkUnavailableDescription": "Automatically set unavailable status when the app is unfocused"
 }

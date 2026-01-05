@@ -1,7 +1,9 @@
+import 'package:extera_next/config/app_config.dart';
 import 'package:extera_next/generated/l10n/l10n.dart';
 import 'package:extera_next/utils/adaptive_bottom_sheet.dart';
 import 'package:extera_next/utils/date_time_extension.dart';
 import 'package:extera_next/utils/platform_infos.dart';
+import 'package:extera_next/widgets/list_divider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:extera_next/config/themes.dart';
@@ -25,13 +27,16 @@ class SeenByRow extends StatelessWidget {
       width: double.infinity,
       alignment: Alignment.center,
       child: AnimatedContainer(
-        constraints:
-            const BoxConstraints(maxWidth: FluffyThemes.columnWidth * 2.5),
+        constraints: const BoxConstraints(
+          maxWidth: FluffyThemes.columnWidth * 2.5,
+        ),
         height: receipts.isEmpty ? 0 : 24,
-        duration:
-            receipts.isEmpty ? Duration.zero : FluffyThemes.animationDuration,
+        duration: receipts.isEmpty
+            ? Duration.zero
+            : FluffyThemes.animationDuration,
         curve: FluffyThemes.animationCurve,
-        alignment: controller.timeline!.events.isNotEmpty &&
+        alignment:
+            controller.timeline!.events.isNotEmpty &&
                 controller.timeline!.events.first.senderId ==
                     Matrix.of(context).client.userID
             ? Alignment.topRight
@@ -54,12 +59,12 @@ class SeenByRow extends StatelessWidget {
                       ? receipts.sublist(0, maxAvatars)
                       : receipts)
                   .map(
-                (receipt) => Avatar(
-                  mxContent: receipt.user.avatarUrl,
-                  name: receipt.user.calcDisplayname(),
-                  size: 16,
-                ),
-              ),
+                    (receipt) => Avatar(
+                      mxContent: receipt.user.avatarUrl,
+                      name: receipt.user.calcDisplayname(),
+                      size: 16,
+                    ),
+                  ),
               if (receipts.length > maxAvatars)
                 SizedBox(
                   width: 16,
@@ -86,37 +91,44 @@ class SeenByRow extends StatelessWidget {
 class SeenByDialog extends StatelessWidget {
   final List<Receipt> receipts;
 
-  const SeenByDialog(
-    this.receipts, {super.key}
-  );
+  const SeenByDialog(this.receipts, {super.key});
 
-  Future<bool?> show(BuildContext context) => showAdaptiveBottomSheet(
-        context: context,
-        builder: (context) => this,
-      );
+  Future<bool?> show(BuildContext context) =>
+      showAdaptiveBottomSheet(context: context, builder: (context) => this);
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.of(context).readReceipts),
-      ),
-      body: ListView.builder(
-        itemCount: receipts.length,
-        itemBuilder: (context, i) {
-          final receipt = receipts[i];
-          return ListTile(
-            leading: Avatar(
-              mxContent: receipt.user.avatarUrl,
-              name: receipt.user.displayName,
-              size: 24,
-            ),
-            title: Text(receipt.user.calcDisplayname()),
-            subtitle: Text(
-              receipt.time.localizedTime(context),
-            ),
-          );
-        },
+      appBar: AppBar(title: Text(L10n.of(context).readReceipts)),
+      body: Padding(
+        padding: const .all(8),
+        child: Material(
+          clipBehavior: .hardEdge,
+          color: theme.colorScheme.surfaceContainerHigh,
+          borderRadius: BorderRadius.circular(AppConfig.borderRadius),
+          child: ListView.builder(
+            itemCount: receipts.length,
+            itemBuilder: (context, i) {
+              final receipt = receipts[i];
+              return Column(
+                children: [
+                  ListTile(
+                    leading: Avatar(
+                      mxContent: receipt.user.avatarUrl,
+                      name: receipt.user.displayName,
+                      size: 24,
+                    ),
+                    title: Text(receipt.user.calcDisplayname()),
+                    subtitle: Text(receipt.time.localizedTime(context)),
+                  ),
+                  const ListDivider(),
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }

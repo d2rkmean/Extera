@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class SettingKeys {
+  static const String autoMarkUnavailable = 'xyz.extera.next.autoMarkUnavailable';
   static const String pushToTalkHotkey = 'xyz.extera.next.pushToTalkHotkey';
   static const String incomingCallsOnLockScreen = 'xyz.extera.next.incomingCallsOnLockScreen';
   static const String checkForUpdates = 'xyz.extera.next.checkForUpdates';
@@ -50,6 +51,7 @@ abstract class SettingKeys {
 }
 
 enum AppSettings<T> {
+  autoMarkUnavailable<bool>('xyz.extera.next.autoMarkUnavailable', true),
   incomingCallsOnLockScreen<bool>('xyz.extera.next.incomingCallsOnLockScreen', true),
   pushToTalkHotkey<bool>('xyz.extera.next.pushToTalkHotkey', false),
   twemojiFont<bool>('xyz.extera.next.twemojiFont', false),

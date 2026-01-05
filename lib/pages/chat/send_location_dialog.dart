@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:extera_next/generated/l10n/l10n.dart';
@@ -8,7 +7,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:matrix/matrix.dart';
 
 import 'package:extera_next/pages/chat/events/map_bubble.dart';
-import 'package:extera_next/widgets/adaptive_dialogs/adaptive_dialog_action.dart';
 import 'package:extera_next/widgets/future_loading_dialog.dart';
 
 class SendLocationDialog extends StatefulWidget {
@@ -111,8 +109,9 @@ class SendLocationDialogState extends State<SendLocationDialog> {
     } else if (denied) {
       contentWidget = Text(L10n.of(context).locationPermissionDeniedNotice);
     } else if (error != null) {
-      contentWidget =
-          Text(L10n.of(context).errorObtainingLocation(error.toString()));
+      contentWidget = Text(
+        L10n.of(context).errorObtainingLocation(error.toString()),
+      );
     } else {
       contentWidget = Row(
         mainAxisSize: MainAxisSize.min,
@@ -128,14 +127,22 @@ class SendLocationDialogState extends State<SendLocationDialog> {
       title: Text(L10n.of(context).shareLocation),
       content: contentWidget,
       actions: [
-        AdaptiveDialogAction(
+        OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24.0),
+            ),
+          ),
           onPressed: Navigator.of(context, rootNavigator: false).pop,
           child: Text(L10n.of(context).cancel),
         ),
         if (error != null)
-          AdaptiveDialogAction(onPressed: requestLocation, child: Text(L10n.of(context).retry)),
+          FilledButton(
+            onPressed: requestLocation,
+            child: Text(L10n.of(context).retry),
+          ),
         if (position != null)
-          AdaptiveDialogAction(
+          FilledButton(
             onPressed: isSending ? null : sendAction,
             child: Text(L10n.of(context).send),
           ),

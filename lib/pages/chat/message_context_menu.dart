@@ -156,7 +156,7 @@ class MessageContextMenu extends StatelessWidget {
                                 onPressed: sentReactions.contains(emoji)
                                     ? null
                                     : () {
-                                        // controller.closeMessageMenu();
+                                        Navigator.of(context, rootNavigator: true).pop();
                                         event.room.sendReaction(
                                           event.eventId,
                                           emoji,
@@ -168,7 +168,9 @@ class MessageContextMenu extends StatelessWidget {
                               icon: const Icon(Icons.add_reaction_outlined),
                               tooltip: L10n.of(context).customReaction,
                               onPressed: () async {
-                                controller.closeMessageMenu();
+                                if (!PlatformInfos.isMobile) {
+                                  controller.closeMessageMenu();
+                                }
                                 final emoji =
                                     await showAdaptiveBottomSheet<String>(
                                       context: context,

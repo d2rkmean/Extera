@@ -80,6 +80,7 @@ abstract class AppConfig {
   static bool swipeRightToLeftToReply = true;
   static bool pushToTalkHotkey = true;
   static bool hideAvatarsInInvites = true;
+  static bool autoMarkUnavailable = true;
   static bool? sendOnEnter;
   static bool showPresences = true;
   static bool experimentalVoip = false;

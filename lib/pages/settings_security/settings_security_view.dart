@@ -155,6 +155,16 @@ class SettingsSecurityView extends StatelessWidget {
                             defaultValue: AppConfig.sendPublicReadReceipts,
                           ),
                           const ListDivider(),
+                          SettingsSwitchListTile.adaptive(
+                            title: L10n.of(context).autoMarkUnavailable,
+                            subtitle: L10n.of(
+                              context,
+                            ).autoMarkUnavailableDescription,
+                            onChanged: (b) => AppConfig.autoMarkUnavailable = b,
+                            storeKey: SettingKeys.autoMarkUnavailable,
+                            defaultValue: AppConfig.autoMarkUnavailable,
+                          ),
+                          const ListDivider(),
                           ListTile(
                             trailing: const Icon(Icons.chevron_right_outlined),
                             title: Text(

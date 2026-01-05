@@ -464,6 +464,9 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
 
     AppConfig.pushToTalkHotkey = 
         store.getBool(SettingKeys.pushToTalkHotkey) ?? AppConfig.pushToTalkHotkey;
+
+    AppConfig.autoMarkUnavailable = 
+        store.getBool(SettingKeys.autoMarkUnavailable) ?? AppConfig.autoMarkUnavailable;
   }
 
   @override

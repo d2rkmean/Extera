@@ -3603,5 +3603,7 @@
   "pushToTalkHotkey": "Кнопка переключения микрофона",
   "pushToTalkHotkeyDescription": "Нажмите Alt+X чтобы включить/выключить микрофон",
   "roomAddress": "Адрес комнаты",
-  "imageEditFailed": "Не удалось отредактировать изображение"
+  "imageEditFailed": "Не удалось отредактировать изображение",
+  "autoMarkUnavailable": "Автоматический статус \"Недоступен\"",
+  "autoMarkUnavailableDescription": "Устанавливать статус \"Недоступен\", когда приложение свёрнуто"
 }

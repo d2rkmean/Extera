@@ -4,7 +4,6 @@ import 'package:extera_next/generated/l10n/l10n.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 
 import 'package:extera_next/utils/url_launcher.dart';
-import 'package:extera_next/widgets/adaptive_dialogs/adaptive_dialog_action.dart';
 import 'package:extera_next/widgets/adaptive_dialogs/dialog_text_field.dart';
 
 Future<String?> showTextInputDialog({
@@ -81,11 +80,16 @@ Future<String?> showTextInputDialog({
             ),
           ),
           actions: [
-            AdaptiveDialogAction(
+            OutlinedButton(
               onPressed: () => Navigator.of(context).pop(null),
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24.0),
+                ),
+              ),
               child: Text(cancelLabel ?? L10n.of(context).cancel),
             ),
-            AdaptiveDialogAction(
+            FilledButton(
               onPressed: () {
                 final input = controller.text;
                 final errorText = validator?.call(input);
@@ -96,11 +100,9 @@ Future<String?> showTextInputDialog({
                 Navigator.of(context).pop<String>(input);
               },
               autofocus: true,
+              style: FilledButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.error, foregroundColor: Theme.of(context).colorScheme.onError),
               child: Text(
                 okLabel ?? L10n.of(context).ok,
-                style: isDestructive
-                    ? TextStyle(color: Theme.of(context).colorScheme.error)
-                    : null,
               ),
             ),
           ],

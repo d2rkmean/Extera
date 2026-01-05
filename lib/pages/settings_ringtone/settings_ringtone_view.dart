@@ -11,14 +11,21 @@ class SettingsRingtoneView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.of(context).ringtone),
-      ),
+      appBar: AppBar(title: Text(L10n.of(context).ringtone)),
       body: MaxWidthBody(
         child: Column(
           children: [
-            Text(L10n.of(context).chooseRingtone),
+            ListTile(
+              title: Text(
+                L10n.of(context).chooseRingtone,
+                style: TextStyle(
+                  color: theme.colorScheme.secondary,
+                  fontWeight: .bold,
+                ),
+              ),
+            ),
             if (controller.isSystemRingtoneAvailable)
               ListTile(
                 leading: const Icon(Icons.music_note_outlined),
@@ -31,24 +38,40 @@ class SettingsRingtoneView extends StatelessWidget {
                   controller.setRingtone('system');
                 },
               ),
-            ListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: AppConfig.ringtoneFiles.entries
-                  .map(
-                    (entry) => ListTile(
-                      leading: const Icon(Icons.music_note_outlined),
-                      title: Text(entry.key),
-                      selected: controller.currentRingtone == entry.key,
-                      trailing: controller.currentRingtone == entry.key
-                          ? const Icon(Icons.check_circle)
-                          : null,
-                      onTap: () {
-                        controller.setRingtone(entry.key);
-                      },
-                    ),
-                  )
-                  .toList(),
+            Padding(
+              padding: const .symmetric(horizontal: 8),
+              child: Material(
+                color: theme.colorScheme.surfaceContainerHigh,
+                borderRadius: BorderRadius.circular(AppConfig.borderRadius),
+                clipBehavior: .hardEdge,
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: AppConfig.ringtoneFiles.entries
+                      .map(
+                        (entry) => ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: AppConfig.ringtone == entry.key
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.secondary,
+                            foregroundColor: AppConfig.ringtone == entry.key
+                                ? theme.colorScheme.onPrimary
+                                : theme.colorScheme.onSecondary,
+                            child: const Icon(Icons.music_note_outlined),
+                          ),
+                          title: Text(entry.key),
+                          selected: controller.currentRingtone == entry.key,
+                          trailing: controller.currentRingtone == entry.key
+                              ? const Icon(Icons.check_circle)
+                              : null,
+                          onTap: () {
+                            controller.setRingtone(entry.key);
+                          },
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
             ),
           ],
         ),

@@ -95,7 +95,8 @@ class SendPollDialogState extends State<SendPollDialog> {
       await widget.room.sendEvent(
         pollContent,
         type: 'org.matrix.msc3381.poll.start',
-        threadLastEventId: widget.thread?.lastEvent?.eventId ??
+        threadLastEventId:
+            widget.thread?.lastEvent?.eventId ??
             widget.thread?.rootEvent.eventId,
         threadRootEventId: widget.thread?.rootEvent.eventId,
       );
@@ -103,9 +104,9 @@ class SendPollDialogState extends State<SendPollDialog> {
       Navigator.of(context).pop();
     } catch (e) {
       // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to send poll: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to send poll: $e')));
     }
   }
 
@@ -200,9 +201,9 @@ class SendPollDialogState extends State<SendPollDialog> {
                   Text(
                     '$_maxSelections',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ],
               ),
@@ -259,14 +260,16 @@ class SendPollDialogState extends State<SendPollDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        OutlinedButton(
           onPressed: Navigator.of(context).pop,
+          style: OutlinedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24.0),
+            ),
+          ),
           child: Text(l10n.cancel),
         ),
-        FilledButton(
-          onPressed: _sendPoll,
-          child: Text(l10n.send),
-        ),
+        FilledButton(onPressed: _sendPoll, child: Text(l10n.send)),
       ],
     );
   }
