@@ -1,4 +1,3 @@
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:extera_next/config/app_config.dart';
 import 'package:extera_next/generated/l10n/l10n.dart';
 import 'package:extera_next/pages/chat/chat.dart';
@@ -6,8 +5,10 @@ import 'package:extera_next/utils/adaptive_bottom_sheet.dart';
 import 'package:extera_next/utils/matrix_sdk_extensions/matrix_locals.dart';
 import 'package:extera_next/utils/platform_infos.dart';
 import 'package:extera_next/utils/room_status_extension.dart';
+import 'package:extera_next/widgets/emoji_picker.dart';
 import 'package:extera_next/widgets/list_divider.dart';
 import 'package:extera_next/widgets/matrix.dart';
+import 'package:extera_next/widgets/mxc_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:matrix/matrix.dart';
@@ -52,6 +53,7 @@ class MessageContextMenu extends StatelessWidget {
     final clients = Matrix.of(context).currentBundle;
     final theme = Theme.of(context);
     final borderRadius = BorderRadius.circular(AppConfig.borderRadius);
+    final imagePacks = controller.room.getImagePacks(ImagePackUsage.emoticon);
 
     final receipts = room
         .getReceipts(timeline!, eventId: event.eventId)
@@ -154,7 +156,7 @@ class MessageContextMenu extends StatelessWidget {
                                 onPressed: sentReactions.contains(emoji)
                                     ? null
                                     : () {
-                                        controller.closeMessageMenu();
+                                        // controller.closeMessageMenu();
                                         event.room.sendReaction(
                                           event.eventId,
                                           emoji,
@@ -166,6 +168,7 @@ class MessageContextMenu extends StatelessWidget {
                               icon: const Icon(Icons.add_reaction_outlined),
                               tooltip: L10n.of(context).customReaction,
                               onPressed: () async {
+                                controller.closeMessageMenu();
                                 final emoji =
                                     await showAdaptiveBottomSheet<String>(
                                       context: context,
@@ -181,58 +184,52 @@ class MessageContextMenu extends StatelessWidget {
                                         ),
                                         body: SizedBox(
                                           height: double.infinity,
-                                          child: EmojiPicker(
+                                          child: MatrixEmojiPicker(
                                             onEmojiSelected: (_, emoji) =>
-                                                Navigator.of(
-                                                  context,
-                                                ).pop(emoji.emoji),
-                                            config: Config(
-                                              locale: Localizations.localeOf(
-                                                context,
-                                              ),
-                                              emojiViewConfig:
-                                                  const EmojiViewConfig(
-                                                    backgroundColor:
-                                                        Colors.transparent,
+                                                Navigator.of(context).pop(
+                                                  emoji.customData ??
+                                                      emoji.standardEmoji!.char,
+                                                ),
+                                            onBackspacePressed: () {},
+                                            customCategories: imagePacks.entries
+                                                .map(
+                                                  (entry) => CustomCategory(
+                                                    id: entry.key,
+                                                    name: entry
+                                                        .value
+                                                        .pack
+                                                        .displayName!,
+                                                    icon: CircleAvatar(
+                                                      child: MxcImage(
+                                                        uri: entry
+                                                            .value
+                                                            .images
+                                                            .values
+                                                            .first
+                                                            .url,
+                                                        width: 32,
+                                                        height: 32,
+                                                      ),
+                                                    ),
+                                                    emojis: entry.value.images
+                                                        .map((name, content) {
+                                                          return MapEntry(
+                                                            name,
+                                                            content.url
+                                                                .toString(),
+                                                          );
+                                                        }),
                                                   ),
-                                              bottomActionBarConfig:
-                                                  const BottomActionBarConfig(
-                                                    enabled: false,
-                                                  ),
-                                              categoryViewConfig:
-                                                  CategoryViewConfig(
-                                                    initCategory:
-                                                        Category.SMILEYS,
-                                                    backspaceColor: theme
-                                                        .colorScheme
-                                                        .primary,
-                                                    iconColor: theme
-                                                        .colorScheme
-                                                        .primary
-                                                        .withAlpha(128),
-                                                    iconColorSelected: theme
-                                                        .colorScheme
-                                                        .primary,
-                                                    indicatorColor: theme
-                                                        .colorScheme
-                                                        .primary,
-                                                    backgroundColor: theme
-                                                        .colorScheme
-                                                        .surface,
-                                                  ),
-                                              skinToneConfig: SkinToneConfig(
-                                                dialogBackgroundColor:
-                                                    Color.lerp(
-                                                      theme.colorScheme.surface,
-                                                      theme
-                                                          .colorScheme
-                                                          .primaryContainer,
-                                                      0.75,
-                                                    )!,
-                                                indicatorColor:
-                                                    theme.colorScheme.onSurface,
-                                              ),
-                                            ),
+                                                )
+                                                .toList(),
+                                            customEmojiBuilder:
+                                                (context, name, size) {
+                                                  return MxcImage(
+                                                    uri: Uri.parse(name),
+                                                    width: 32,
+                                                    height: 32,
+                                                  );
+                                                },
                                           ),
                                         ),
                                       ),
@@ -267,8 +264,9 @@ class MessageContextMenu extends StatelessWidget {
                             icon: Icons.done_all,
                             label: L10n.of(context).nViews(receipts.length),
                             onPressed: () {
-                              if (!PlatformInfos.isMobile)
+                              if (!PlatformInfos.isMobile) {
                                 controller.closeMessageMenu();
+                              }
                               controller.showReadReceipts(event: event);
                             },
                           ),

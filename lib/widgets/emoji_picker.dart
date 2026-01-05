@@ -270,7 +270,8 @@ class MatrixEmojiPickerState extends State<MatrixEmojiPicker>
           final matchesCategory = currentTab.category.groups.contains(
             e.standardEmoji!.emojiGroup,
           );
-          final isVariation = e.displayName.contains(':') &&
+          final isVariation =
+              e.displayName.contains(':') &&
               e.displayName.contains('skin tone');
           return matchesCategory && !isVariation;
         }).toList();
@@ -306,7 +307,11 @@ class MatrixEmojiPickerState extends State<MatrixEmojiPicker>
     widget.onEmojiSelected(cat, emoji);
   }
 
-  void _showSkinToneMenu(BuildContext context, PickerEmoji baseEmoji, Offset globalPosition) {
+  void _showSkinToneMenu(
+    BuildContext context,
+    PickerEmoji baseEmoji,
+    Offset globalPosition,
+  ) {
     if (baseEmoji.type != PickerEmojiType.standard) return;
     var lookupName = baseEmoji.standardEmoji!.name;
     if (lookupName.contains(':')) {
@@ -314,9 +319,9 @@ class MatrixEmojiPickerState extends State<MatrixEmojiPicker>
     }
     final variations = _variationsMap[lookupName];
     if (variations == null || variations.isEmpty) return;
-    
+
     // ... Menu showing logic same as before ...
-     final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
     final position = RelativeRect.fromRect(
       Rect.fromPoints(globalPosition - const Offset(0, 50), globalPosition),
       Offset.zero & overlay.size,
@@ -358,7 +363,6 @@ class MatrixEmojiPickerState extends State<MatrixEmojiPicker>
       ],
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -412,8 +416,9 @@ class MatrixEmojiPickerState extends State<MatrixEmojiPicker>
             labelColor: theme.colorScheme.secondary,
             unselectedLabelColor: Colors.grey,
             indicatorColor: theme.colorScheme.secondary,
-            // FIX: Explicit onTap to force state update immediately
-            onTap: _onTabTapped, 
+            padding: .zero,
+            tabAlignment: .start,
+            onTap: _onTabTapped,
             tabs: _tabs.map((tab) {
               return Tooltip(
                 message: tab.name,
@@ -428,28 +433,28 @@ class MatrixEmojiPickerState extends State<MatrixEmojiPicker>
           child: _isLoading
               ? const Center(child: CircularProgressIndicator())
               : _displayedEmojis.isEmpty
-                  ? Center(child: Text(L10n.of(context).nothingFound))
-                  : CustomScrollView(
-                      // Add a Key based on tab index to force scroll position reset on tab switch
-                      key: ValueKey(_selectedTabIndex), 
-                      slivers: [
-                        SliverPadding(
-                          padding: const EdgeInsets.all(6.0),
-                          sliver: SliverGrid(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
+              ? Center(child: Text(L10n.of(context).nothingFound))
+              : CustomScrollView(
+                  // Add a Key based on tab index to force scroll position reset on tab switch
+                  key: ValueKey(_selectedTabIndex),
+                  slivers: [
+                    SliverPadding(
+                      padding: const EdgeInsets.all(6.0),
+                      sliver: SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 8,
                               mainAxisSpacing: 6,
                               crossAxisSpacing: 6,
                               childAspectRatio: 1.0,
                             ),
-                            delegate: SliverChildBuilderDelegate((context, index) {
-                              return _buildEmojiTile(_displayedEmojis[index]);
-                            }, childCount: _displayedEmojis.length),
-                          ),
-                        ),
-                      ],
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          return _buildEmojiTile(_displayedEmojis[index]);
+                        }, childCount: _displayedEmojis.length),
+                      ),
                     ),
+                  ],
+                ),
         ),
       ],
     );
