@@ -1,3 +1,7 @@
+## Extera 26.0.3
+- Did some redesign to make it look like Material 3 Expressive.
+- Get rid of emoji_picker_flutter, so now you can choose custom emojis from the picker.
+
 ## Extera 26.0.2
 - Image editor. You can now edit images before sending them.
 - Add call actions in notification on mobiles. Hang up, switch speaker, mute/unmute from notification.

@@ -157,73 +157,76 @@ class EmotesSettingsView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Material(
-                      borderRadius: BorderRadius.circular(
-                        AppConfig.borderRadius,
-                      ),
-                      clipBehavior: .hardEdge,
-                      color: theme.colorScheme.surfaceContainerHigh,
-                      child: Column(
-                        children: [
-                          if (controller.room != null) ...[
-                            const SizedBox(height: 16),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                              ),
-                              child: TextField(
-                                maxLength: 256,
-                                controller:
-                                    controller.packDisplayNameController,
-                                readOnly: controller.readonly,
-                                onSubmitted: (_) =>
-                                    controller.submitDisplaynameAction(),
-                                decoration: InputDecoration(
-                                  counter: const SizedBox.shrink(),
-                                  hintText: controller.stateKey,
-                                  labelText: L10n.of(context).stickerPackName,
+                    Padding(
+                      padding: const .symmetric(horizontal: 8),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(
+                          AppConfig.borderRadius,
+                        ),
+                        clipBehavior: .hardEdge,
+                        color: theme.colorScheme.surfaceContainerHigh,
+                        child: Column(
+                          children: [
+                            if (controller.room != null) ...[
+                              const SizedBox(height: 16),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                ),
+                                child: TextField(
+                                  maxLength: 256,
+                                  controller:
+                                      controller.packDisplayNameController,
+                                  readOnly: controller.readonly,
+                                  onSubmitted: (_) =>
+                                      controller.submitDisplaynameAction(),
+                                  decoration: InputDecoration(
+                                    counter: const SizedBox.shrink(),
+                                    hintText: controller.stateKey,
+                                    labelText: L10n.of(context).stickerPackName,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                              ),
-                              child: TextField(
-                                maxLength: 256,
-                                controller:
-                                    controller.packAttributionController,
-                                readOnly: controller.readonly,
-                                onSubmitted: (_) =>
-                                    controller.submitAttributionAction(),
-                                decoration: InputDecoration(
-                                  counter: const SizedBox.shrink(),
-                                  labelText: L10n.of(context).attribution,
+                              const SizedBox(height: 8),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                ),
+                                child: TextField(
+                                  maxLength: 256,
+                                  controller:
+                                      controller.packAttributionController,
+                                  readOnly: controller.readonly,
+                                  onSubmitted: (_) =>
+                                      controller.submitAttributionAction(),
+                                  decoration: InputDecoration(
+                                    counter: const SizedBox.shrink(),
+                                    labelText: L10n.of(context).attribution,
+                                  ),
                                 ),
                               ),
-                            ),
-                          const SizedBox(height: 16),
-                          ],
-                          if (!controller.readonly) ...[
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: ElevatedButton.icon(
-                                onPressed: controller.createStickers,
-                                icon: const Icon(Icons.upload_outlined),
-                                label: Text(L10n.of(context).createSticker),
+                              const SizedBox(height: 16),
+                            ],
+                            if (!controller.readonly) ...[
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: ElevatedButton.icon(
+                                  onPressed: controller.createStickers,
+                                  icon: const Icon(Icons.upload_outlined),
+                                  label: Text(L10n.of(context).createSticker),
+                                ),
                               ),
-                            ),
-                          ],
-                          if (controller.room != null && imageKeys.isNotEmpty)
-                            SwitchListTile.adaptive(
-                              title: Text(
-                                L10n.of(context).enableEmotesGlobally,
+                            ],
+                            if (controller.room != null && imageKeys.isNotEmpty)
+                              SwitchListTile.adaptive(
+                                title: Text(
+                                  L10n.of(context).enableEmotesGlobally,
+                                ),
+                                value: controller.isGloballyActive(client),
+                                onChanged: controller.setIsGloballyActive,
                               ),
-                              value: controller.isGloballyActive(client),
-                              onChanged: controller.setIsGloballyActive,
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
