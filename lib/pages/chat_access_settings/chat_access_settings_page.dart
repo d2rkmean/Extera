@@ -75,6 +75,7 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                                       MatrixLocals(L10n.of(context)),
                                     ),
                                   ),
+                                  enabled: room.canChangeHistoryVisibility,
                                   value: historyVisibility,
                                 ),
                             ],
