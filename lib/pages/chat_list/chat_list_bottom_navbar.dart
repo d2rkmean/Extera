@@ -50,7 +50,7 @@ class ChatListBottomNavbar extends StatelessWidget {
 
     return BottomNavigationBar(
       currentIndex: filters.indexOf(controller.activeFilter),
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: theme.colorScheme.surfaceContainer,
       selectedItemColor: theme.colorScheme.primary,
       unselectedItemColor: theme.colorScheme.secondary,
       enableFeedback: true,
