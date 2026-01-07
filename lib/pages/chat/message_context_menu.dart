@@ -130,7 +130,7 @@ class MessageContextMenu extends StatelessWidget {
                       event.status == EventStatus.synced) ...[
                     if (room.canSendEvent(EventTypes.Reaction))
                       Padding(
-                        padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+                        padding: const EdgeInsets.only(top: 4.0),
                         child: Material(
                           color: theme.colorScheme.surfaceContainerHigh,
                           clipBehavior: .hardEdge,
@@ -262,6 +262,7 @@ class MessageContextMenu extends StatelessWidget {
                           ),
                         ),
                       ),
+                    const SizedBox(height: 8),
                     Material(
                       color: theme.colorScheme.surfaceContainerHigh,
                       clipBehavior: .hardEdge,
