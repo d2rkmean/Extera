@@ -39,9 +39,7 @@ abstract class AppConfig {
   static const Color primaryColorLight = Color(0xFFCCBDEA);
   static const Color secondaryColor = Color(0xFF41a2bc);
   static String _privacyUrl =
-      'https://git.extera.xyz/OfficialDakari/ExteraNext/src/branch/main/PRIVACY.md';
-
-  static const String bugReportRoom = 'https://matrix.to/#/#bugs:extera.xyz';
+      'https://github.com/ExteraApp/Extera/blob/main/PRIVACY.md';
 
   static String get privacyUrl => _privacyUrl;
   static const String website = 'https://extera.xyz';
@@ -57,15 +55,15 @@ abstract class AppConfig {
 
   static String get webBaseUrl => _webBaseUrl;
   static const String sourceCodeUrl =
-      'https://git.extera.xyz/OfficialDakari/ExteraNext';
+      'https://github.com/ExteraApp/Extera';
   static const String supportUrl =
-      'https://github.com/krille-chan/fluffychat/issues';
+      'https://github.com/ExteraApp/Extera/issues';
   static const String changelogUrl =
-      'https://git.extera.xyz/OfficialDakari/ExteraNext/src/branch/main/CHANGELOG.md';
+      'https://github.com/ExteraApp/Extera/blob/main/CHANGELOG.md';
   static final Uri newIssueUrl = Uri(
     scheme: 'https',
-    host: 'git.extera.xyz',
-    path: '/OfficialDakari/ExteraNext/issues',
+    host: 'github.com',
+    path: '/ExteraApp/Extera/issues',
   );
 
   static bool incomingCallsOnLockScreen = true;
