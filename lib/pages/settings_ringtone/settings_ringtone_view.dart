@@ -26,50 +26,63 @@ class SettingsRingtoneView extends StatelessWidget {
                 ),
               ),
             ),
-            if (controller.isSystemRingtoneAvailable)
-              ListTile(
-                leading: const Icon(Icons.music_note_outlined),
-                trailing: controller.currentRingtone == 'system'
-                    ? const Icon(Icons.check_circle)
-                    : null,
-                selected: controller.currentRingtone == 'system',
-                title: Text(L10n.of(context).systemRingtone),
-                onTap: () {
-                  controller.setRingtone('system');
-                },
-              ),
             Padding(
               padding: const .symmetric(horizontal: 8),
               child: Material(
                 color: theme.colorScheme.surfaceContainerHigh,
                 borderRadius: BorderRadius.circular(AppConfig.borderRadius),
                 clipBehavior: .hardEdge,
-                child: ListView(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: AppConfig.ringtoneFiles.entries
-                      .map(
-                        (entry) => ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: AppConfig.ringtone == entry.key
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.secondary,
-                            foregroundColor: AppConfig.ringtone == entry.key
-                                ? theme.colorScheme.onPrimary
-                                : theme.colorScheme.onSecondary,
-                            child: const Icon(Icons.music_note_outlined),
-                          ),
-                          title: Text(entry.key),
-                          selected: controller.currentRingtone == entry.key,
-                          trailing: controller.currentRingtone == entry.key
-                              ? const Icon(Icons.check_circle)
-                              : null,
-                          onTap: () {
-                            controller.setRingtone(entry.key);
-                          },
-                        ),
-                      )
-                      .toList(),
+                child: Column(
+                  mainAxisSize: .min,
+                  children: [
+                    if (controller.isSystemRingtoneAvailable)
+                      ListTile(
+                        leading: CircleAvatar(
+                                backgroundColor: AppConfig.ringtone == 'system'
+                                    ? theme.colorScheme.primary
+                                    : theme.colorScheme.secondary,
+                                foregroundColor: AppConfig.ringtone == 'system'
+                                    ? theme.colorScheme.onPrimary
+                                    : theme.colorScheme.onSecondary,
+                                child: const Icon(Icons.music_note_outlined),
+                              ),
+                        trailing: controller.currentRingtone == 'system'
+                            ? const Icon(Icons.check_circle)
+                            : null,
+                        selected: controller.currentRingtone == 'system',
+                        title: Text(L10n.of(context).systemRingtone),
+                        onTap: () {
+                          controller.setRingtone('system');
+                        },
+                      ),
+                    ListView(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: AppConfig.ringtoneFiles.entries
+                          .map(
+                            (entry) => ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: AppConfig.ringtone == entry.key
+                                    ? theme.colorScheme.primary
+                                    : theme.colorScheme.secondary,
+                                foregroundColor: AppConfig.ringtone == entry.key
+                                    ? theme.colorScheme.onPrimary
+                                    : theme.colorScheme.onSecondary,
+                                child: const Icon(Icons.music_note_outlined),
+                              ),
+                              title: Text(entry.key),
+                              selected: controller.currentRingtone == entry.key,
+                              trailing: controller.currentRingtone == entry.key
+                                  ? const Icon(Icons.check_circle)
+                                  : null,
+                              onTap: () {
+                                controller.setRingtone(entry.key);
+                              },
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ],
                 ),
               ),
             ),
