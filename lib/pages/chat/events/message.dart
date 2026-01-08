@@ -130,16 +130,6 @@ class Message extends StatelessWidget {
         previousEvent!.senderId == event.senderId &&
         previousEvent!.originServerTs.sameEnvironment(event.originServerTs);
 
-    final textColor = ownMessage
-        ? theme.onBubbleColor
-        : theme.colorScheme.onSurface;
-
-    final linkColor = ownMessage
-        ? theme.brightness == Brightness.light
-              ? theme.colorScheme.primaryFixed
-              : theme.colorScheme.onTertiaryContainer
-        : theme.colorScheme.primary;
-
     final rowMainAxisAlignment = ownMessage
         ? MainAxisAlignment.end
         : MainAxisAlignment.start;
@@ -176,6 +166,26 @@ class Message extends StatelessWidget {
           ? Colors.redAccent
           : theme.bubbleColor;
     }
+
+    final textColor = ownMessage
+        ? theme.onBubbleColor
+        : theme.colorScheme.onSurface;
+    
+    final statusColor = theme.brightness == Brightness.dark
+        ? (noBubble
+              ? theme.colorScheme.onSurface
+              : (ownMessage
+                    ? theme.colorScheme.onPrimaryContainer
+                    : theme.colorScheme.onSecondaryContainer))
+        : ownMessage
+        ? theme.colorScheme.tertiaryContainer
+        : theme.colorScheme.tertiary;
+
+    final linkColor = ownMessage
+        ? theme.brightness == Brightness.light
+              ? theme.colorScheme.primaryFixed
+              : theme.colorScheme.onTertiaryContainer
+        : theme.colorScheme.primary;
 
     final resetAnimateIn = this.resetAnimateIn;
     var animateIn = this.animateIn;
@@ -214,14 +224,14 @@ class Message extends StatelessWidget {
       children: [
         Text(
           event.originServerTs.localizedTimeOfDay(context),
-          style: TextStyle(color: textColor.withAlpha(200), fontSize: 11),
+          style: TextStyle(color: statusColor, fontSize: 11),
         ),
         if (event.hasAggregatedEvents(timeline, RelationshipTypes.edit))
           Padding(
             padding: const EdgeInsets.only(left: 4.0),
             child: Icon(
               Icons.edit_outlined,
-              color: textColor.withAlpha(200),
+              color: statusColor,
               size: 14,
             ),
           ),
@@ -236,7 +246,7 @@ class Message extends StatelessWidget {
                   : hasBeenRead
                   ? Icons.done_all
                   : Icons.check,
-              color: textColor.withAlpha(200),
+              color: statusColor,
               size: 14,
             ),
           ),
@@ -518,7 +528,7 @@ class Message extends StatelessWidget {
                                                                       child: AbsorbPointer(
                                                                         child: ReplyContent(
                                                                           replyEvent,
-                                                                          textColor: textColor,
+                                                                          noBubble: noBubble,
                                                                           ownMessage:
                                                                               ownMessage,
                                                                           timeline:

@@ -11,10 +11,12 @@ class ReplyContent extends StatelessWidget {
   final bool ownMessage;
   final Timeline? timeline;
   final Color? textColor;
+  final bool noBubble;
 
   const ReplyContent(
     this.replyEvent, {
-    this.textColor = null,
+    this.textColor,
+    this.noBubble = false,
     this.ownMessage = false,
     super.key,
     this.timeline,
@@ -34,10 +36,13 @@ class ReplyContent extends StatelessWidget {
         ? replyEvent.getDisplayEvent(timeline)
         : replyEvent;
     final fontSize = AppConfig.messageFontSize * AppConfig.fontSizeFactor;
+
     final color = theme.brightness == Brightness.dark
-        ? ownMessage
-              ? theme.colorScheme.onPrimaryContainer
-              : theme.colorScheme.onSecondaryContainer
+        ? (noBubble
+              ? theme.colorScheme.onSurface
+              : (ownMessage
+                    ? theme.colorScheme.onPrimaryContainer
+                    : theme.colorScheme.onSecondaryContainer))
         : ownMessage
         ? theme.colorScheme.tertiaryContainer
         : theme.colorScheme.tertiary;

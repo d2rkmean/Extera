@@ -40,119 +40,200 @@ class Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    final name = this.name;
-    final fallbackLetters =
-        name == null || name.isEmpty ? '@' : name.substring(0, 1);
-
-    final noPic = mxContent == null ||
-        mxContent.toString().isEmpty ||
-        mxContent.toString() == 'null';
-    final borderRadius = this.borderRadius ?? BorderRadius.circular((size / 2) * AppConfig.avatarBorderRadius);
-    final presenceUserId = this.presenceUserId;
-    
+    // 1. Calculate expensive or logic-heavy primitives once
+    final borderRadius = this.borderRadius ??
+        BorderRadius.circular((size / 2) * AppConfig.avatarBorderRadius);
+        
+    // 2. Wrap the layout in a Stack
     final container = Stack(
       children: [
-        SizedBox(
-          width: size,
-          height: size,
-          child: Material(
-            color: theme.brightness == Brightness.light
-                ? Colors.white
-                : Colors.black,
-            shape: RoundedRectangleBorder(
-              borderRadius: borderRadius,
-              side: border ?? BorderSide.none,
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: MxcImage(
-              client: client,
-              borderRadius: borderRadius,
-              key: ValueKey(mxContent.toString()),
-              cacheKey: '${mxContent}_$size',
-              uri: mxContent,
-              fit: BoxFit.cover,
-              width: size,
-              height: size,
-              placeholder: (_) => noPic
-                  ? Container(
-                      decoration: BoxDecoration(
-                        color: backgroundColor ?? name?.lightColorAvatar,
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        fallbackLetters,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'RobotoMono',
-                          color: textColor ?? Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: (size / 2.5).roundToDouble(),
-                        ),
-                      ),
-                    )
-                  : Center(
-                      child: Icon(
-                        Icons.person_2,
-                        color: theme.colorScheme.tertiary,
-                        size: size / 1.5,
-                      ),
-                    ),
-            ),
+        // 3. Optimization: RepaintBoundary
+        // This isolates the heavy image painting. Even if 'Avatar' is rebuilt 
+        // 2500 times, the GPU will reuse the texture of this child 
+        // as long as the widget parameters here don't change visually.
+        RepaintBoundary(
+          child: _AvatarVisuals(
+            mxContent: mxContent,
+            name: name,
+            size: size,
+            client: client,
+            borderRadius: borderRadius,
+            border: border,
+            backgroundColor: backgroundColor,
+            textColor: textColor,
           ),
         ),
+        
+        // Presence is dynamic and sits on top
         if (presenceUserId != null)
-          PresenceBuilder(
+          _AvatarPresence(
             client: client,
-            userId: presenceUserId,
-            builder: (context, presence) {
-              if (presence == null ||
-                  (presence.presence == PresenceType.offline &&
-                      presence.lastActiveTimestamp == null)) {
-                return const SizedBox.shrink();
-              }
-              final dotColor = presence.presence.isOnline
-                  ? Colors.green
-                  : presence.presence.isUnavailable
-                      ? Colors.orange
-                      : Colors.grey;
-              return Positioned(
-                bottom: -3,
-                right: -3,
-                child: Container(
-                  width: 16,
-                  height: 16,
-                  decoration: BoxDecoration(
-                    color: presenceBackgroundColor ?? theme.colorScheme.surface,
-                    borderRadius: BorderRadius.circular(32),
-                  ),
-                  alignment: Alignment.center,
-                  child: Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: dotColor,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        width: 1,
-                        color: theme.colorScheme.surface,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
+            userId: presenceUserId!,
+            presenceBackgroundColor: presenceBackgroundColor,
           ),
       ],
     );
+
     if (onTap == null) return container;
+    
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: onTap,
         child: container,
       ),
+    );
+  }
+}
+
+// Extracted to keep the main build method clean and allow for specific optimization
+class _AvatarVisuals extends StatelessWidget {
+  final Uri? mxContent;
+  final String? name;
+  final double size;
+  final Client? client;
+  final BorderRadius borderRadius;
+  final BorderSide? border;
+  final Color? backgroundColor;
+  final Color? textColor;
+
+  const _AvatarVisuals({
+    required this.mxContent,
+    required this.name,
+    required this.size,
+    required this.client,
+    required this.borderRadius,
+    this.border,
+    this.backgroundColor,
+    this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
+    // Efficient fallback logic
+    final hasNoPic = mxContent == null ||
+        mxContent!.path.isEmpty ||
+        mxContent.toString() == 'null';
+
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Material(
+        color: theme.brightness == Brightness.light ? Colors.white : Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: borderRadius,
+          side: border ?? BorderSide.none,
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: MxcImage(
+          client: client,
+          borderRadius: borderRadius,
+          // Optimization: Use Object key directly, avoid .toString() allocation
+          key: ValueKey(mxContent), 
+          cacheKey: '${mxContent}_$size',
+          uri: mxContent,
+          fit: BoxFit.cover,
+          width: size,
+          height: size,
+          // Optimization: Extract placeholder to method to keep indentation clean
+          placeholder: (_) => hasNoPic
+              ? _buildFallback(theme)
+              : Center(
+                  child: Icon(
+                    Icons.person_2,
+                    color: theme.colorScheme.tertiary,
+                    size: size / 1.5,
+                  ),
+                ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFallback(ThemeData theme) {
+    final displayName = name;
+    final fallbackLetters = (displayName == null || displayName.isEmpty)
+        ? '@'
+        : displayName.substring(0, 1);
+        
+    return Container(
+      decoration: BoxDecoration(
+        color: backgroundColor ?? displayName?.lightColorAvatar,
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        fallbackLetters,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontFamily: 'RobotoMono',
+          color: textColor ?? Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: (size / 2.5).roundToDouble(),
+        ),
+      ),
+    );
+  }
+}
+
+// Extracted Presence logic
+class _AvatarPresence extends StatelessWidget {
+  final Client? client;
+  final String userId;
+  final Color? presenceBackgroundColor;
+
+  const _AvatarPresence({
+    required this.client,
+    required this.userId,
+    this.presenceBackgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return PresenceBuilder(
+      client: client,
+      userId: userId,
+      builder: (context, presence) {
+        if (presence == null ||
+            (presence.presence == PresenceType.offline &&
+                presence.lastActiveTimestamp == null)) {
+          return const SizedBox.shrink();
+        }
+
+        final theme = Theme.of(context);
+        final dotColor = presence.presence.isOnline
+            ? Colors.green
+            : presence.presence.isUnavailable
+                ? Colors.orange
+                : Colors.grey;
+
+        return Positioned(
+          bottom: -3,
+          right: -3,
+          child: Container(
+            width: 16,
+            height: 16,
+            decoration: BoxDecoration(
+              color: presenceBackgroundColor ?? theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(32),
+            ),
+            alignment: Alignment.center,
+            child: Container(
+              width: 10,
+              height: 10,
+              decoration: BoxDecoration(
+                color: dotColor,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  width: 1,
+                  color: theme.colorScheme.surface,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

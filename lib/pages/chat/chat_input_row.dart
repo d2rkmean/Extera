@@ -26,7 +26,7 @@ class ChatInputRow extends StatelessWidget {
     const height = 48.0;
 
     final selectedTextButtonStyle = TextButton.styleFrom(
-      foregroundColor: theme.colorScheme.onTertiaryContainer,
+      foregroundColor: theme.colorScheme.onSurface,
     );
 
     return RecordingViewModel(
